@@ -1,3 +1,5 @@
+import Home from 'pages/Home';
+import Root from 'pages/root';
 import React from 'react';
 import {
   RouteObject,
@@ -6,7 +8,13 @@ import {
 const routerConfig: RouteObject[] = [
   {
     path: '/',
-    element: <div>Hello world!</div>,
+    element: <Root />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+    ],
   },
 ];
 
