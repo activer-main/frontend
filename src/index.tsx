@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import routerConfig from 'utils/router';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import './index.scss';
 
 const router = createBrowserRouter(routerConfig);
 

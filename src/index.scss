@@ -1,0 +1,97 @@
+@import "/src/styles/variables";
+@import "/src/styles/global";
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-size: calc(13px + 0.3906vw);
+  font-family: "Noto Sans CJK TC", "Microsoft JhengHei", PingFang, STHeiti, sans-serif, serif;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  background-color: white !important;
+  color: black !important;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  color: $primary-font-color;
+  font-weight: 400;
+  box-sizing: border-box;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
+  &:nth-child(1) {
+    flex-grow: 1;
+  }
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: none;
+}
+
+h1 {
+  font-size: 1.8rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+h4 {
+  font-size: 1.1rem;
+}
+
+p {
+  font-size: 1em;
+  white-space: pre-line;
+}
+
+a {
+  font-size: 1rem;
+  text-decoration: none;
+
+  // wrap
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+mark {
+  all: unset;
+}
+
+// disable select
+
+// disable
+.no-select {
+  user-select: none;
+  -webkit-touch-callout: none;
+}
