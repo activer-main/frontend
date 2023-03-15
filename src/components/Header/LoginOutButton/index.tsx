@@ -1,9 +1,10 @@
+import Button from 'components/Button';
 import React from 'react';
 
 function LoginOutButton() {
   return (
     <div className="login-out-button">
-      Login/ out
+      <Button text="登入/註冊" />
     </div>
   );
 }

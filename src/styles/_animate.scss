@@ -1,0 +1,16 @@
+@use "sass:color";
+
+@mixin ripple($_color, $_hover-ligntness) {
+  &:hover {
+    background:
+      color.adjust($_color, $lightness: $_hover-ligntness)
+      radial-gradient(circle, transparent 1%, color.adjust($_color, $lightness: $_hover-ligntness) 1%)
+      center/15000%;
+  }
+
+  &:active {
+    background-color: color.adjust($_color, $lightness: calc($_hover-ligntness - 20%));
+    background-size: 100%;
+    transition: background 0s;
+  }
+}

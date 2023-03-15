@@ -1,0 +1,42 @@
+// color
+$colors: primary,
+  secondary,
+  success;
+$primary-color: #f3b755;
+$secondary-color: #699ff1;
+$success-color: #93c586;
+$danger-color: #f44;
+$primary-font-color: #4a4949;
+$secondary-font-color: #a5a5a5;
+$tertiary-font-color: #e3e3e3;
+$primary-dilute-color: rgb(255 245 228);
+$secondary-dilute-color: rgb(226 244 253);
+$content-background-color: rgb(255 254 254);
+
+// height
+$header-height: 60px;
+$footer-height: 10rem;
+$home-section-height: 80vh;
+$search-panel-height: 30rem;
+$search-panel-mobile-height: 56rem;
+
+// sidebar
+$sidebar-width: 9rem;
+$sidebar-height: 4rem;
+
+// font-weight:
+$fontweight-bold: 500;
+
+// z-index
+$zindex-after-marker: -1;
+$zindex-base: 1;
+$zindex-dropdown-label: 990;
+$zindex-dropdown-backdrop: 995;
+$zindex-dropdown: 1000;
+$zindex-navbar: 1030;
+$zindex-modal-backdrop: 1040;
+$zindex-modal-panel: 1050;
+$zindex-modal-close-btn: 1055;
+$zindex-popover: 1060;
+$zindex-tooltip: 1070;
+$zindex-footer: 1080;
