@@ -37,8 +37,7 @@ const userSlice = createSlice({
 });
 
 export const getUserData = (state: RootState) => state.user;
-export const selectAvatar = (state: RootState) => state.user.avatar;
 
-export const { updateUser, updateSingleUserData } = userSlice.actions;
+export const { updateUser } = userSlice.actions;
 
 export default userSlice.reducer;
