@@ -1,0 +1,200 @@
+@use "sass:map";
+@use "sass:color";
+@import "/src/styles/variables";
+@import "/src/styles/global";
+@import "/src/styles/animate";
+
+$btn-config: (
+  primary:(
+    class: "primary",
+    color: white,
+    bg: $primary-color,
+  ),
+  secondary:(
+    class: "secondary",
+    color: white,
+    bg: $secondary-color,
+  ),
+  success:(
+    class: "success",
+    color: white,
+    bg: $success-color,
+  ),
+  dark:(
+    class: "dark",
+    color: white,
+    bg: $primary-font-color,
+  ),
+  white:(
+    class: "white",
+    color:$primary-font-color,
+    bg: white
+  ),
+  danger:(
+    class:"danger",
+    color: white,
+    bg:$danger-color
+  ),
+  transparent: (
+    class: "transparent",
+    color: $primary-font-color,
+    bg: transparent,
+  )
+);
+
+@mixin set-color($borderColor, $textColor, $bgColor) {
+  border: 2px $borderColor solid;
+  background-color: $bgColor;
+  color: $textColor;
+  stroke: $textColor;
+}
+
+.button {
+  // default variant
+  @each $name,
+    $value in $btn-config {
+    $class: map.get($value, class);
+    $color: map.get($value, color);
+    $bg: map.get($value, bg);
+
+    &--#{$class} {
+      @include set-color($bg, $color, $bg);
+
+      @if $class == "transparent" {
+        &:hover:not([disabled]) {
+          @include ripple($tertiary-font-color, -10%);
+        }
+      } @else {
+        &:hover:not([disabled]) {
+          @include ripple($bg, -10%);
+        }
+      }
+    }
+  }
+
+  position: relative;
+  display: flex;
+  gap: 0.5em;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  padding: 0.5em 1em;
+  border-radius: 0.25em;
+  font-size: 1em;
+  line-height: 1em;
+  cursor: pointer;
+  transition-duration: 0.3s;
+
+  // outline variant
+  &.button--outline {
+    @each $name,
+      $value in $btn-config {
+      $class: map.get($value, class);
+      $color: map.get($value, color);
+      $bg: map.get($value, bg);
+
+      &.button--#{$class} {
+        @include set-color($bg, $bg, $color);
+
+        &:not([disabled]) {
+          @include ripple($bg, 30%);
+        }
+      }
+    }
+  }
+
+  // round variant
+  &.button--round {
+    width: 3em;
+    height: 3em;
+    padding: 1em;
+    border-radius: 50%;
+  }
+
+  // reverse color variant
+  &.button--reverse-color {
+    @each $name,
+      $value in $btn-config {
+      $class: map.get($value, class);
+      $color: map.get($value, color);
+      $bg: map.get($value, bg);
+
+      &.button--#{$class} {
+        @include set-color($color, $bg, $color);
+
+        &:not([disabled]) {
+          @include ripple($bg, 30%);
+        }
+      }
+    }
+  }
+
+  // square variant
+  &.button--square {
+    width: 3em;
+    height: 3em;
+  }
+
+  // underline variant
+  &.button--underline {
+    @each $name,
+      $value in $btn-config {
+      $class: map.get($value, class);
+      $color: map.get($value, color);
+      $bg: map.get($value, bg);
+
+      &.button--#{$class} {
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 0.2em;
+          display: none;
+          display: block;
+          width: 75%;
+          height: 1px;
+          background-color: $color;
+        }
+
+        &:hover {
+          color: color.adjust($color, $lightness: 30%);
+          background: $bg;
+
+          &::after {
+            background-color: color.adjust($color, $lightness: 30%);
+          }
+        }
+
+        &:active {
+          background: $bg;
+        }
+      }
+    }
+  }
+
+  * {
+    background-color: transparent;
+    color: inherit;
+    text-align: center;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    width: 1em;
+    height: 1em;
+    stroke: inherit;
+
+    svg,
+    path {
+      display: block;
+      width: 100%;
+      height: 100%;
+      stroke: inherit;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}

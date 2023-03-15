@@ -1,0 +1,84 @@
+@import "/src/styles/variables";
+
+// responsive
+$min-breakpoints: (mobile: 0,
+tablet: 481px,
+laptop: 769px,
+desktop: 1025px);
+$max-breakpoints: (mobile : 480px,
+tablet:768px,
+laptop: 1024px,
+desktop: 3000px);
+
+@mixin media($keys...) {
+  @each $key in $keys {
+    @media (max-width: map-get($max-breakpoints, $key)) and (min-width: map-get($min-breakpoints, $key)) {
+      @content;
+    }
+  }
+}
+
+// scoll
+@mixin scrollbar() {
+  &::-webkit-scrollbar-track {
+    border-radius: 1.5px;
+    background-color: #f5f5f5;
+  }
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 1.5px;
+    background-color: $primary-font-color;
+  }
+}
+
+// container
+@mixin container-main {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0turn);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0turn);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@mixin load-button-animation() {
+  width: 50px;
+  height: 50px;
+  margin: auto;
+  border: solid 9px $primary-color;
+
+  // border-right-color: transparent;
+  // border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-radius: 50%;
+
+  // transition: all 0.5s ease-in;
+  animation-name: rotate;
+
+  // -webkit-transition: all 0.5s ease-in;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: infinite;
+}
