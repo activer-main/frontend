@@ -29,11 +29,15 @@ const userSlice = createSlice({
       ...state,
       ...action.payload,
     }),
+    updateSingleUserData: (state, action: PayloadAction<Partial<UserDataType>>) => ({
+      ...state,
+      ...action.payload,
+    }),
   },
 });
 
 export const getUserData = (state: RootState) => state.user;
 
-export const { updateUser } = userSlice.actions;
+export const { updateUser, updateSingleUserData } = userSlice.actions;
 
 export default userSlice.reducer;
