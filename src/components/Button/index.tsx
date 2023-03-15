@@ -56,13 +56,5 @@ function Button({
   );
 }
 
-Button.defaultProps = {
-  color: 'primary',
-  text: null,
-  variant: undefined,
-  iconAfter: null,
-  iconBefore: null,
-};
-
 export default Button;
 export type { ButtonType };
