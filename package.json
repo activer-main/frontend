@@ -17,6 +17,8 @@
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
     "sass": "^1.59.3",
+    "stylelint-config-standard-scss": "^7.0.1",
+    "stylelint-order": "^6.0.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
