@@ -2,6 +2,7 @@ import React from 'react';
 import Logo from './Logo';
 import Navigation from './Navigation';
 import LoginOutButton from './LoginOutButton';
+import './index.scss';
 
 function Haeder() {
   return (

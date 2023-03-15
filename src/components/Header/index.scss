@@ -1,0 +1,10 @@
+@import '/src/styles/variables';
+@import '/src/styles/global';
+
+.header{
+  @include container-main;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
