@@ -1,0 +1,84 @@
+@use "sass:color";
+@use "sass:map";
+@import "/src/styles/variables";
+@import "/src/styles/global";
+@import "/src/styles/animate";
+
+$tag-config: (
+  primary: (class: "primary",
+  color: $primary-color),
+  secondary: (class:"secondary",
+  color: $secondary-color),
+  success: (class :"success",
+  color: $success-color)
+);
+
+.tag {
+  @each $key,
+    $value in $tag-config {
+    $class: map.get($value, class);
+    $color: map.get($value, color);
+
+    &--#{$class} {
+      @include ripple($color, 30%);
+
+      border-color: $color;
+      background-color: white;
+      color: $color;
+    }
+  }
+
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  gap: 0.5em;
+  justify-content: space-between;
+  overflow: hidden;
+  width: fit-content;
+  height: 2.5em;
+  margin: 0;
+  padding: 0.7em 1em;
+  border: 1.2px solid;
+  border-radius: 1.25em;
+  background-position: center;
+  font-size: 1em;
+  line-height: 1em;
+  cursor: pointer;
+  transition: background 0.5s;
+
+  // reverse
+  &--reverse {
+    @each $key,
+      $value in $tag-config {
+      $class: map.get($value, class);
+      $color: map.get($value, color);
+
+      &.tag--#{$class} {
+        @include ripple($color, -10%);
+
+        border-color: $color;
+        background-color: $color;
+        color: white;
+      }
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    color: currentcolor;
+
+    * {
+      color: currentcolor;
+    }
+  }
+
+  &__text {
+    width: 100%;
+    height: 1em;
+    color: inherit;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+}
