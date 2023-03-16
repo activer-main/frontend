@@ -1,0 +1,101 @@
+// components/Card/Row
+@import "/src/styles/variables";
+@import "/src/styles/global";
+
+.card {
+  @include media(mobile, tablet) {
+    flex-direction: row;
+    width: 100%;
+    height: 10em;
+  }
+
+  @include media(laptop) {
+    width: 14em;
+  }
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  width: 11.5em;
+  border-radius: 0.2em;
+  box-shadow: rgb(0 0 0 / 16%) 0 1px 4px;
+
+  &__image {
+    @include media(mobilt, tablet) {
+      flex: 0 0 10em;
+      padding-bottom: 2px; // escape ::after color bar
+    }
+
+    @include media(laptop) {
+      flex: 0 0 8em;
+    }
+
+    flex: 0 0 6em;
+    overflow: hidden;
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s;
+    }
+  }
+
+  &__content {
+    @include media(mobile, tablet) {
+      flex: 1 1 auto;
+    }
+
+    display: flex;
+    flex: 1 1 12em;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.5em;
+  }
+
+  &__title {
+    flex: 0 0 2.5em;
+    overflow: hidden;
+    font-weight: bold;
+  }
+
+  &__detail {
+    flex: 1 1 5em;
+    overflow: hidden;
+    color: $secondary-font-color;
+    font-size: 0.6em;
+    line-height: 1.5em;
+  }
+
+  &__tags {
+    display: flex;
+    flex: 2 0 2em;
+    flex-wrap: wrap;
+    gap: 1em;
+    font-size: 0.4em;
+  }
+
+  &__control {
+    flex: 0 0 1em;
+    height: 1em;
+  }
+
+  // bottom color bar
+  &::after {
+    @include media(mobile, tablet) {
+      position: absolute;
+    }
+
+    content: "";
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: $primary-color;
+  }
+
+  // hovering make image scale
+  &:hover {
+    img { transform: scale(1.2); }
+  }
+}
