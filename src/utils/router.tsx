@@ -1,3 +1,4 @@
+import MobileSidebar from 'components/Header/MobileSideBar';
 import Home from 'pages/Home';
 import Root from 'pages/root';
 import React from 'react';
@@ -13,6 +14,12 @@ const routerConfig: RouteObject[] = [
       {
         path: '/',
         element: <Home />,
+        children: [
+          {
+            path: '/sidebar',
+            element: <MobileSidebar />,
+          },
+        ],
       },
     ],
   },
