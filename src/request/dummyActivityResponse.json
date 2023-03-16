@@ -1,0 +1,78 @@
+{
+  "maxSegment": 5,
+  "minSegment": 1,
+  "currentSegment": 2,
+  "countPerSegment": 10,
+  "totalCount": 47,
+  "searchResultData": [
+    {
+      "id": 1,
+      "title": "Summer Camp 2023",
+      "subTitle": "Experience the great outdoors with our exciting summer camp!",
+      "images": [
+        "https://example.com/summer-camp-1.jpg",
+        "https://example.com/summer-camp-2.jpg"
+      ],
+      "tags": [
+        {
+          "id": 1,
+          "type": "area",
+          "text": "outdoor activities",
+          "tagVoteCount": 3,
+          "userVoted": true
+        },
+        {
+          "id": 2,
+          "type": "location",
+          "text": "nearby lake",
+          "tagVoteCount": 2,
+          "userVoted": false
+        },
+        {
+          "id": 3,
+          "type": "other",
+          "text": "campfire stories",
+          "tagVoteCount": 1,
+          "userVoted": false
+        }
+      ],
+      "branches": [
+        {
+          "id": 1,
+          "branchName": "Summer Camp 2023",
+          "dateStart": {
+            "2023-06-15": "9:00 AM",
+            "2023-06-30": "10:00 AM"
+          },
+          "dateEnd": [
+            "2023-06-20",
+            "2023-07-05"
+          ],
+          "applyStart": [
+            "2023-04-01"
+          ],
+          "applyEnd": [
+            "2023-05-31"
+          ],
+          "applyFee": [
+            "200 USD"
+          ],
+          "location": [
+            "Forest Grove Campground"
+          ],
+          "status": "open"
+        }
+      ],
+      "content": "Join us for a week of fun and adventure in the great outdoors! Our summer camp is perfect for kids and teens who love hiking, swimming, and exploring nature. We have experienced counselors who will lead exciting activities, including campfire nights and outdoor games. Register now and create unforgettable memories!",
+      "connection": null,
+      "holder": null,
+      "objective": [
+        "To provide a fun and safe outdoor experience for kids and teens"
+      ],
+      "sources": [
+        "https://example.com/summer-camp"
+      ],
+      "trend": 10
+    }
+  ]
+}
