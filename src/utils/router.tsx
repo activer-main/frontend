@@ -1,4 +1,5 @@
 import Home from 'pages/Home';
+import { loader as homeLoader } from 'pages/Home/loader';
 import Root from 'pages/root';
 import React from 'react';
 import {
@@ -13,6 +14,7 @@ const routerConfig: RouteObject[] = [
       {
         path: '/',
         element: <Home />,
+        loader: homeLoader,
       },
     ],
   },
