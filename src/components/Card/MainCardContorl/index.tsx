@@ -11,7 +11,7 @@ interface MainCardControlType {
 }
 
 function MainCardControl({
-  onClickFollow, trend, status
+  onClickFollow, trend, status,
 }: MainCardControlType) {
   return (
     <div className="main-card-control">
