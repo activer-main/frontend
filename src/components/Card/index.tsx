@@ -8,7 +8,7 @@ export interface CardType {
   imgUrl: string,
   title: string,
   altText: string,
-  tags: TagType[],
+  tags?: TagType[],
   detail?: string | null,
   control? : React.ReactNode;
 }
@@ -33,8 +33,8 @@ function Card({
 
           {/* tags */}
           <div className="card__tags">
-            {
-              tags.map((tag) => (
+            {tags
+              && tags.map((tag) => (
                 <Tag
                   key={`${id}-${tag.id}`}
                   type={tag.type}
@@ -43,8 +43,7 @@ function Card({
                   id={`${id}-${tag.id}`}
                   link
                 />
-              ))
-            }
+              ))}
           </div>
 
           {/* Contorls */}

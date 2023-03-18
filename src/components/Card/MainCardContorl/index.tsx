@@ -5,14 +5,13 @@ import Button from 'components/Button';
 import './index.scss';
 
 interface MainCardControlType {
-  id: string;
   onClickFollow? :React.MouseEventHandler<HTMLButtonElement> | undefined;
   trend: number;
   status?: BranchDataType['status'];
 }
 
 function MainCardControl({
-  onClickFollow, trend, status, id,
+  onClickFollow, trend, status
 }: MainCardControlType) {
   return (
     <div className="main-card-control">
@@ -22,7 +21,6 @@ function MainCardControl({
       </div>
       <Button
         iconBefore={<AiTwotoneHeart />}
-        id={id}
         type="button"
         text={status !== '未註冊' ? '取消收藏' : '收藏'}
         onClick={onClickFollow}
