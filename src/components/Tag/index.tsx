@@ -74,7 +74,7 @@ function Tag({
           });
         }
       }}
-      id={id.toString()}
+      id={`tag-${id.toString()}`}
       disabled={disabled}
     >
       <p className="tag__text">
