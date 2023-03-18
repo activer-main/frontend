@@ -30,9 +30,8 @@ function Card({
           <div className="card__detail">
             {detail}
           </div>
-          {id}
-          {/* tags */}
 
+          {/* tags */}
           <div className="card__tags">
             {
               tags.map((tag) => (

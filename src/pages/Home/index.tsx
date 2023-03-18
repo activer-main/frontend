@@ -3,6 +3,7 @@ import { useLoaderData } from 'react-router-dom';
 import { homeLoaderType } from 'types/loader';
 import './index.scss';
 import Card from 'components/Card';
+import MainCardControl from 'components/Card/MainCardContorl';
 
 // import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
 
@@ -24,6 +25,7 @@ function Home() {
               imgUrl={activity.images ? activity.images[0] : '/DefaultActivityImage.svg'}
               altText="test"
               detail={activity.subTitle}
+              control={<MainCardControl id="card-contol" trend={20} />}
 
             />
           ))
