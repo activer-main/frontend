@@ -3,23 +3,48 @@
 @import "/src/styles/global";
 
 .card {
-  @include media(mobile, tablet) {
+  @include media(mobile) {
     flex-direction: row;
     width: 100%;
     height: 10em;
   }
 
-  @include media(laptop) {
-    width: 14em;
+  @include media(tablet){
+    width: 50%;
   }
 
+  @include media(laptop) {
+    width: 25%;
+  }
+
+  display: flex;
+  width: 20%;
+
+  // padding: 1rem;
+
+
+  &__container{
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
-  width: 11.5em;
-  border-radius: 0.2em;
-  box-shadow: rgb(0 0 0 / 16%) 0 1px 4px;
+  overflow: hidden;
+    height: 20em;
+   margin: 1rem;
+  border-radius: 0.25rem;
+    background-color: white;
+  box-shadow: 0 20px 40px -14px rgb(0 0 0 / 25%);
+
+  // bottom color bar
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: $primary-color;
+  }
+
+  }
 
   &__image {
     @include media(mobilt, tablet) {
@@ -43,15 +68,10 @@
   }
 
   &__content {
-    @include media(mobile, tablet) {
-      flex: 1 1 auto;
-    }
-
     display: flex;
-    flex: 1 1 12em;
+    flex: 1 1 auto;
     flex-direction: column;
-    gap: 0.5em;
-    padding: 0.5em;
+    padding: 1rem;
   }
 
   &__title {
@@ -81,19 +101,7 @@
     height: 1em;
   }
 
-  // bottom color bar
-  &::after {
-    @include media(mobile, tablet) {
-      position: absolute;
-    }
-
-    content: "";
-    bottom: 0;
-    width: 100%;
-    height: 2px;
-    background-color: $primary-color;
-  }
-
+  
   // hovering make image scale
   &:hover {
     img { transform: scale(1.2); }

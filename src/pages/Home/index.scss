@@ -1,0 +1,12 @@
+@import '/src/styles/variables';
+@import '/src/styles/global';
+
+.home{
+  &__cards{
+    @include container-main;
+
+    display: flex;
+    flex-wrap: wrap;
+
+  }
+}
