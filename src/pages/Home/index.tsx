@@ -4,8 +4,10 @@ import { homeLoaderType } from 'types/loader';
 import './index.scss';
 import Card from 'components/Card';
 import MainCardControl from 'components/Card/MainCardContorl';
-
-// import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
+import { AiOutlineArrowRight } from 'react-icons/ai';
+import { FcBookmark, FcFlashOn } from 'react-icons/fc';
+import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
+import Button from 'components/Button';
 
 function Home() {
   const loaderData = useLoaderData() as homeLoaderType;
@@ -13,25 +15,62 @@ function Home() {
   return (
     <div className="home">
       <h1>Home</h1>
-      <div className="home__cards">
-        {
-          loaderData.trendActivityResData.searchResultData.map((activity) => (
-            <Card
-              id="2"
-              key={activity.id.toString()}
-              // id={activity.id.toString()}
-              tags={[{ id: '1', text: 'test', type: 'area' }, { id: '10', text: 'test', type: 'area' }]}
-              title={activity.title}
-              imgUrl={activity.images ? activity.images[0] : '/DefaultActivityImage.svg'}
-              altText="test"
-              detail={activity.subTitle}
-              control={<MainCardControl id="card-contol" trend={20} />}
 
-            />
-          ))
-        }
+      {/* Trend activity */}
+      <section className="trend-activity">
+        <div className="home__title">
+          <h2>
+            <FcBookmark />
+            熱門活動
+          </h2>
+          <Button text="更多熱門活動" color="white" iconAfter={<AiOutlineArrowRight />} />
+        </div>
+        <div className="home__cards">
+          {
+            loaderData.trendActivityResData.searchResultData.map((activity) => (
+              <Card
+                id={activity.id.toString()}
+                key={activity.id.toString()}
+                tags={activity.tags ? parseArrayTagDataToTag(activity.tags) : undefined}
+                title={activity.title}
+                imgUrl={activity.images ? activity.images[0] : '/DefaultActivityImage.svg'}
+                altText="test"
+                detail={activity.subTitle}
+                control={<MainCardControl trend={activity.trend} />}
+              />
+            ))
+          }
+        </div>
+      </section>
 
-      </div>
+      <section className="newest-activityt">
+        {/* Newest activity */}
+        <div className="home__title">
+          <h2>
+            <FcFlashOn />
+            最新活動
+          </h2>
+          <Button text="更多最新活動" color="transparent" iconAfter={<AiOutlineArrowRight />} />
+
+        </div>
+        <div className="home__cards">
+          {
+            loaderData.newestActivityResData.searchResultData.map((activity) => (
+              <Card
+                id={activity.id.toString()}
+                key={activity.id.toString()}
+                tags={activity.tags ? parseArrayTagDataToTag(activity.tags) : undefined}
+                title={activity.title}
+                imgUrl={activity.images ? activity.images[0] : '/DefaultActivityImage.svg'}
+                altText="test"
+                detail={activity.subTitle}
+                control={<MainCardControl trend={activity.trend} />}
+              />
+            ))
+          }
+        </div>
+      </section>
+
     </div>
   );
 }
