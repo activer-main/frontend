@@ -1,3 +1,4 @@
+import Button from 'components/Button';
 import React from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { homeLoaderType } from 'types/loader';
@@ -7,7 +8,6 @@ import MainCardControl from 'components/Card/MainCardContorl';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { FcBookmark, FcFlashOn } from 'react-icons/fc';
 import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
-import Button from 'components/Button';
 
 function Home() {
   const loaderData = useLoaderData() as homeLoaderType;
