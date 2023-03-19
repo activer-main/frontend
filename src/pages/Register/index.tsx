@@ -5,14 +5,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from 'store';
 import Button from 'components/Button';
 import { registerUser } from
-  'store/user/authAction';
+  'store/auth/authAction';
 import { RegisterFormDataType } from 'types/user';
 
 function Register() {
   const {
     loading, error, userInfo, success,
   } = useAppSelector(
-    (state) => state.user,
+    (state) => state.auth,
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ function Register() {
     // redirect user to login page if registration was successful
     if (success) navigate('/login');
     // redirect authenticated user to profile screen
-    if (userInfo) navigate('/user-profile');
+    if (userInfo) navigate('/profile');
   }, [navigate, userInfo, success]);
 
   return (

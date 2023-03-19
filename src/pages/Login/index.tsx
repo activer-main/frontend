@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from 'store';
-import { userLogin } from 'store/user/authAction';
+import { userLogin } from 'store/auth/authAction';
 import { LoginFormDataType } from 'types/user';
 import { useNavigate } from 'react-router-dom';
 import Button from 'components/Button';
 
 function Login() {
-  const { loading, error } = useAppSelector((state) => state.user);
+  const { loading, error, userInfo } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { register, handleSubmit } = useForm<LoginFormDataType>();
+
+  // redirect authenticated user to profile screen
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/profile');
+    }
+  }, [navigate, userInfo]);
 
   const onSubmit: SubmitHandler<LoginFormDataType> = (data) => {
     dispatch(userLogin(data));

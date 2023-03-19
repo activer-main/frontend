@@ -1,9 +1,15 @@
 import {
   createSlice,
 } from '@reduxjs/toolkit';
+import { redirect } from 'react-router-dom';
 import type { RootState } from 'store';
 import { UserDataType } from '../../types/user';
 import { registerUser, userLogin } from './authAction';
+
+// initialize userToken from local storage
+export const userToken = localStorage.getItem('userToken')
+  ? localStorage.getItem('userToken')
+  : null;
 
 const initialState: UserDataType = {
   loading: false,
@@ -13,10 +19,27 @@ const initialState: UserDataType = {
   success: false, // for monitoring the registration process.
 };
 
-const userSlice = createSlice({
-  name: 'user',
+const authSlice = createSlice({
+  name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      redirect('/login');
+      localStorage.removeItem('userToken');
+      // deletes token from storage
+      return ({
+        ...state,
+        loading: false,
+        userInfo: null,
+        userToken: null,
+        error: null,
+      });
+    },
+    setCredentials: (state, { payload }) => ({
+      ...state,
+      userInfo: payload,
+    }),
+  },
   extraReducers: (builder) => {
     builder
       // regist
@@ -56,6 +79,7 @@ const userSlice = createSlice({
 
 });
 
-export const getUserData = (state: RootState) => state.user;
+export const { logout, setCredentials } = authSlice.actions;
+export const getUserData = (state: RootState) => state.auth;
 
-export default userSlice.reducer;
+export default authSlice.reducer;

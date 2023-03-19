@@ -3,11 +3,13 @@ import Home from 'pages/Home';
 import { loader as homeLoader } from 'pages/Home/loader';
 import Root from 'pages/root';
 import React from 'react';
+import Profile from 'pages/User/Profile';
 import {
   RouteObject,
 } from 'react-router-dom';
 import Register from 'pages/Register';
 import Login from 'pages/Login';
+import ProtectedRoute from 'routing/ProtectedRoute';
 
 const routerConfig: RouteObject[] = [
   {
@@ -33,6 +35,14 @@ const routerConfig: RouteObject[] = [
       {
         path: '/login',
         element: <Login />,
+      },
+      {
+        element: <ProtectedRoute />,
+        children: [{
+          path: '/profile',
+          element: <Profile />,
+        },
+        ],
       },
     ],
   },
