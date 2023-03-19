@@ -38,6 +38,7 @@ const userSlice = createSlice({
 
 export const getUserData = (state: RootState) => state.user;
 export const selectAvatar = (state: RootState) => state.user.avatar;
+export const selectRealName = (state: RootState) => state.user.realName;
 
 export const { updateUser, updateSingleUserData } = userSlice.actions;
 
