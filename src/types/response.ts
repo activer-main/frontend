@@ -1,4 +1,5 @@
 import { ActivityDataType } from './data';
+import { UserInfoType, TokenType } from './user';
 
 export interface SegmentResponseType {
   maxSegment: number;// maximun request page
@@ -11,3 +12,9 @@ export interface SegmentResponseType {
 export interface ActivityResponseType extends SegmentResponseType {
   searchResultData: ActivityDataType[];
 }
+
+export interface LoginResponseType {
+  user: UserInfoType;
+  token: TokenType;
+}
+export type RegisterResponseType = LoginResponseType;

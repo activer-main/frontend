@@ -6,6 +6,8 @@ import React from 'react';
 import {
   RouteObject,
 } from 'react-router-dom';
+import Register from 'pages/Register';
+import Login from 'pages/Login';
 
 const routerConfig: RouteObject[] = [
   {
@@ -21,7 +23,16 @@ const routerConfig: RouteObject[] = [
             path: '/sidebar',
             element: <MobileSidebar />,
           },
+
         ],
+      },
+      {
+        path: '/register',
+        element: <Register />,
+      },
+      {
+        path: '/login',
+        element: <Login />,
       },
     ],
   },

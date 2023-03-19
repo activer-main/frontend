@@ -1,5 +1,5 @@
 import { LoaderFunction } from 'react-router-dom';
-import { getTrendActivity, getNewActivity } from 'request/activity';
+import { getTrendActivity, getNewActivity } from 'api/activity';
 
 export const loader: LoaderFunction = async () => {
   const trendActivityRes = await getTrendActivity({ currentSegment: 4, countSegment: 1 });

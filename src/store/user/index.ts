@@ -1,45 +1,61 @@
 import {
-  createSlice, PayloadAction,
+  createSlice,
 } from '@reduxjs/toolkit';
 import type { RootState } from 'store';
 import { UserDataType } from '../../types/user';
+import { registerUser, userLogin } from './authAction';
 
 const initialState: UserDataType = {
-  id: 0,
-  realName: '',
-  nickName: '',
-  email: '',
-  verify: false,
-  avatar: '',
-  gender: '',
-  birthday: '',
-  profession: '',
-  phone: '',
-  county: '',
-  area: '',
-  activityHistory: [],
-  tagHistory: [],
+  loading: false,
+  userInfo: null, // for user object
+  userToken: null, // for storing the JWT
+  error: null,
+  success: false, // for monitoring the registration process.
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    updateUser: (state, action: PayloadAction<UserDataType>) => ({
-      ...state,
-      ...action.payload,
-    }),
-    updateSingleUserData: (state, action: PayloadAction<Partial<UserDataType>>) => ({
-      ...state,
-      ...action.payload,
-    }),
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // regist
+      .addCase(registerUser.pending, (state) => ({
+        ...state,
+        loading: true,
+        error: null,
+      }))
+      .addCase(registerUser.fulfilled, (state) => ({
+        ...state,
+        loading: false,
+        success: true,
+      }))
+      .addCase(registerUser.rejected, (state, { payload }) => ({
+        ...state,
+        loading: false,
+        error: payload,
+      }))
+      // login
+      .addCase(userLogin.pending, (state) => ({
+        ...state,
+        loading: true,
+        error: null,
+      }))
+      .addCase(userLogin.fulfilled, (state, { payload }) => ({
+        ...state,
+        loading: false,
+        userInfo: payload.user,
+        userToken: payload.token,
+      }))
+      .addCase(userLogin.rejected, (state, { payload }) => ({
+        ...state,
+        loading: false,
+        error: payload,
+      }));
   },
+
 });
 
 export const getUserData = (state: RootState) => state.user;
-export const selectAvatar = (state: RootState) => state.user.avatar;
-export const selectRealName = (state: RootState) => state.user.realName;
-
-export const { updateUser, updateSingleUserData } = userSlice.actions;
 
 export default userSlice.reducer;
