@@ -8,13 +8,15 @@ import MainCardControl from 'components/Card/MainCardContorl';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { FcBookmark, FcFlashOn } from 'react-icons/fc';
 import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
+import Hero from './Hero';
 
 function Home() {
   const loaderData = useLoaderData() as homeLoaderType;
 
   return (
     <div className="home">
-      <h1>Home</h1>
+      {/* hero */}
+      <Hero />
 
       {/* Trend activity */}
       <section className="trend-activity">
@@ -43,7 +45,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="newest-activityt">
+      <section className="newest-activity">
         {/* Newest activity */}
         <div className="home__title">
           <h2>

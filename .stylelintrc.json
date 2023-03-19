@@ -11,6 +11,12 @@
         "message": "Expected variable to be kebab-case"
       }
     ],
+    "keyframes-name-pattern": [
+      "^(_?[a-z][a-z0-9]*)(-[a-z0-9]+)*$",
+      {
+        "message": "Expected variable to be kebab-case"
+      }
+    ],
     "scss/operator-no-newline-before": null,
     "order/properties-alphabetical-order": null,
     "order/order": [

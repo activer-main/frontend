@@ -14,3 +14,42 @@
     transition: background 0s;
   }
 }
+
+@mixin drift($duration)
+{ 
+  @keyframes _drift{
+    0% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+
+    100%{
+      transform: translateY(0);
+    }
+  }
+
+  animation: _drift $duration ease-in-out infinite;
+}
+
+@mixin loop-rotate($duration) {
+  @keyframes _loop-rotate {
+    0%{
+      transform: rotate(0deg);
+
+    }
+
+    50%{
+      transform: rotate(-180deg);
+      
+    }
+
+    100%{
+      transform: rotate(-360deg);
+    }
+  }
+
+  animation: _loop-rotate $duration linear infinite;
+}
