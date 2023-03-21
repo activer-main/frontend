@@ -1,3 +1,4 @@
+import { LoginResponseType } from 'types/response';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'api/user';
 import { userToken } from './authSlice';
@@ -18,7 +19,7 @@ export const authApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getUserDetails: builder.query({
+    getUserDetails: builder.query<LoginResponseType, string>({
       query: () => ({
         url: 'api/user/auth/token',
         method: 'GET',

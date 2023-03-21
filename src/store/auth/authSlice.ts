@@ -1,8 +1,9 @@
 import {
-  createSlice,
+  createSlice, PayloadAction,
 } from '@reduxjs/toolkit';
 import { redirect } from 'react-router-dom';
 import type { RootState } from 'store';
+import { LoginResponseType } from 'types/response';
 import { UserDataType } from '../../types/user';
 import { registerUser, userLogin } from './authAction';
 
@@ -35,9 +36,9 @@ const authSlice = createSlice({
         error: null,
       });
     },
-    setCredentials: (state, { payload }) => ({
+    setCredentials: (state, action: PayloadAction<LoginResponseType>) => ({
       ...state,
-      userInfo: payload,
+      userInfo: action.payload.user,
     }),
   },
   extraReducers: (builder) => {
