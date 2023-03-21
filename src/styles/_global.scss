@@ -116,6 +116,25 @@ desktop: 3000px);
   font-weight: bold;
   font-size: 1em;
   transition: all 0.5s;
+}
 
+@mixin login-out{
+  @include container-main;
 
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 1em;
+  justify-content: center;
+  max-width: 30em;
+
+  &__header{
+    text-align: center;
+  }
+  
+  &__control{
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+  }
 }

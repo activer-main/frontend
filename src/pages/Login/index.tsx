@@ -6,16 +6,17 @@ import Button from 'components/Button';
 import FormInput from 'components/FormInput';
 import { LoginFormDataType } from 'types/user';
 import './index.scss';
+import { PASSWORD_PATTERN } from 'utils/pattern';
 
 function Login() {
-  const { loading, error, userInfo } = useAppSelector((state) => state.auth);
+  const { loading, userInfo } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   // redirect authenticated user to profile screen
   useEffect(() => {
     if (userInfo) {
-      navigate('/profile');
+      navigate('/user/profile');
     }
   }, [navigate, userInfo]);
 
@@ -31,7 +32,6 @@ function Login() {
   return (
     <form onSubmit={handleSubmit} className="login">
       <h1 className="login__header">登入</h1>
-      {error && <p>{error}</p>}
 
       <FormInput
         className="login__account"
@@ -47,7 +47,7 @@ function Login() {
         name="password"
         label="密碼"
         type="password"
-        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$"
+        pattern={PASSWORD_PATTERN}
         title="密碼至少八位字元，需要包含至少一個數字、一個大寫英文、一個小寫英文、一個特殊字元: !@#$%"
         required
       />

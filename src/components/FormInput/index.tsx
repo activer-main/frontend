@@ -10,7 +10,7 @@ function FormInput({
   label, className, id, title, value, ...props
 }: FormInputType) {
   const customClassName = className?.split(' ');
-  const [inputValue, setInputValue] = useState<string | undefined>(undefined);
+  const [inputValue, setInputValue] = useState<React.InputHTMLAttributes<HTMLInputElement>['value']>(value);
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
 
   const classes = classNames({
