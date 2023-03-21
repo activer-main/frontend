@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from 'store';
 import { userLogin } from 'store/auth/authAction';
-import { LoginFormDataType } from 'types/user';
 import { useNavigate } from 'react-router-dom';
 import Button from 'components/Button';
+import FormInput from 'components/FormInput';
+import { LoginFormDataType } from 'types/user';
+import './index.scss';
 
 function Login() {
   const { loading, error, userInfo } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { register, handleSubmit } = useForm<LoginFormDataType>();
 
   // redirect authenticated user to profile screen
   useEffect(() => {
@@ -19,45 +19,55 @@ function Login() {
     }
   }, [navigate, userInfo]);
 
-  const onSubmit: SubmitHandler<LoginFormDataType> = (data) => {
-    dispatch(userLogin(data));
+  const handleSubmit = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    const target = event.target as typeof event.target & LoginFormDataType;
+    dispatch(userLogin({
+      email: target.email.value,
+      password: target.password.value,
+    }));
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit} className="login">
+      <h1 className="login__header">登入</h1>
       {error && <p>{error}</p>}
-      <div className="form-group">
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          className="form-input"
-          {...register('email')}
-          required
+
+      <FormInput
+        className="login__account"
+        name="email"
+        label="帳號"
+        type="email"
+        title="請輸入正確帳號格式"
+        required
+      />
+
+      <FormInput
+        className="login__password"
+        name="password"
+        label="密碼"
+        type="password"
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$"
+        title="密碼至少八位字元，需要包含至少一個數字、一個大寫英文、一個小寫英文、一個特殊字元: !@#$%"
+        required
+      />
+
+      <div className="login__control">
+        <Button
+          type="submit"
+          text={loading ? 'spining' : '登入'}
+          className="button"
+          disabled={loading}
+        />
+        <Button
+          type="button"
+          text="註冊"
+          variant={{ outline: true }}
+          className="button"
+          disabled={loading}
+          onClick={() => navigate('/register')}
         />
       </div>
-      <div className="form-group">
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          className="form-input"
-          {...register('password')}
-          required
-        />
-      </div>
-      <Button
-        type="submit"
-        text={loading ? 'spining' : 'Login'}
-        className="button"
-        disabled={loading}
-      />
-      <Button
-        type="button"
-        text="註冊"
-        variant={{ outline: true }}
-        className="button"
-        disabled={loading}
-        onClick={() => navigate('/register')}
-      />
     </form>
   );
 }

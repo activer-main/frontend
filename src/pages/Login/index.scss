@@ -1,0 +1,24 @@
+@import '/src/styles/variables';
+@import '/src/styles/global';
+
+.login{
+  @include container-main;
+
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 1em;
+  justify-content: center;
+  max-width: 30em;
+
+  &__header{
+    text-align: center;
+    
+  }
+  
+  &__control{
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+  }
+}

@@ -9,7 +9,7 @@ export interface RegisterRequestType {
   password: string
 }
 
-export interface LoginRequestType {
+export type LoginRequestType = {
   email: string,
   password: string,
-}
+};
