@@ -10,17 +10,15 @@ export interface UserInfoType {
   id: number;
   email: string;
   verify: boolean;
-  realName: string;
-  nickName: string;
+  username: string;
   avatar: string;
   gender: string;
-  birthdat: Date;
+  birthday: Date;
   profession: string;
   phone: string;
   county: string;
   area: string;
-  activityHistory: string[];
-  tagHistory: string[];
+
 }
 
 export interface TokenType {

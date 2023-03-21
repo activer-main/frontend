@@ -10,6 +10,7 @@ import {
 import Register from 'pages/Register';
 import Login from 'pages/Login';
 import ProtectedRoute from 'routing/ProtectedRoute';
+import User from 'pages/User';
 
 const routerConfig: RouteObject[] = [
   {
@@ -39,8 +40,14 @@ const routerConfig: RouteObject[] = [
       {
         element: <ProtectedRoute />,
         children: [{
-          path: '/profile',
-          element: <Profile />,
+          path: '/user',
+          element: <User />,
+          children: [
+            {
+              path: 'profile',
+              element: <Profile />,
+            },
+          ],
         },
         ],
       },
