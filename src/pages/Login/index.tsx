@@ -16,7 +16,7 @@ function Login() {
   // redirect authenticated user to profile screen
   useEffect(() => {
     if (userInfo) {
-      navigate('/profile');
+      navigate('/user/profile');
     }
   }, [navigate, userInfo]);
 

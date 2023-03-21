@@ -40,7 +40,7 @@ function Register() {
     // redirect user to login page if registration was successful
     if (success) navigate('/login');
     // redirect authenticated user to profile screen
-    if (userInfo) navigate('/profile');
+    if (userInfo) navigate('/user/profile');
   }, [navigate, userInfo, success]);
 
   return (
