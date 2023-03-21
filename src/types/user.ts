@@ -29,10 +29,10 @@ export interface TokenType {
 }
 
 export type RegisterFormDataType = {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
+  username:{ value: string };
+  email: { value: string };
+  password: { value: string };
+  confirmPassword: { value: string };
 };
 
 export type LoginFormDataType = {
