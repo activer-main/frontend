@@ -17,10 +17,10 @@ function Root() {
   }, [data, dispatch]);
 
   return (
-    <div className="root">
+    <>
       <Header />
       <Outlet />
-    </div>
+    </>
   );
 }
 
