@@ -1,0 +1,15 @@
+@import '/src/styles/variables';
+@import '/src/styles/global';
+
+.select{
+  position: relative;
+
+  &__select{  
+    @include style-form-input;
+  }
+
+  &__label{
+    @include style-form-label
+  }
+
+}

@@ -18,7 +18,6 @@ export interface UserInfoType {
   phone: string;
   county: string;
   area: string;
-
 }
 
 export interface TokenType {

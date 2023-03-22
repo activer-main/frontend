@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
 import { RegisterRequestType, LoginRequestType } from 'types/request';
+import { UserInfoType } from 'types/user';
+import { userToken } from '../store/auth/authSlice';
 
 const IP = '220.132.244.41';
 const PORT = '5044';
@@ -31,5 +33,16 @@ export const postLogin = (loginBody: LoginRequestType) => userResquest.post<Logi
   {
     headers: { 'Content-Type': 'application/json' },
     withCredentials: false,
+  },
+);
+
+export const putUserData = (newUserInfo : UserInfoType) => userResquest.put(
+  '',
+  newUserInfo,
+  {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Barear ${userToken}`,
+    },
   },
 );
