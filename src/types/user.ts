@@ -36,3 +36,14 @@ export type LoginFormDataType = {
   email: { value: string };
   password: { value: string };
 };
+
+export type ProfileFormDataType = {
+  avatar: { value: string | undefined }// TODO: remove undefined
+  username: { value: string };
+  gender:{ value: string };
+  profession: { value: string };
+  birthday: { value: Date };
+  phone: { value: string };
+  county: { value: string };
+  area: { value: string };
+};

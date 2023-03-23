@@ -5,7 +5,7 @@ import { redirect } from 'react-router-dom';
 import type { RootState } from 'store';
 import { LoginResponseType } from 'types/response';
 import { UserDataType } from '../../types/user';
-import { registerUser, userLogin } from './authAction';
+import { registerUser, userLogin, userUpdate } from './authAction';
 
 // initialize userToken from local storage
 export const userToken = localStorage.getItem('userToken')
@@ -72,6 +72,22 @@ const authSlice = createSlice({
         userToken: payload.token,
       }))
       .addCase(userLogin.rejected, (state, { payload }) => ({
+        ...state,
+        loading: false,
+        error: payload,
+      }))
+    // post user data
+      .addCase(userUpdate.pending, (state) => ({
+        ...state,
+        loading: true,
+        error: null,
+      }))
+      .addCase(userUpdate.fulfilled, (state, { payload }) => ({
+        ...state,
+        loading: false,
+        userInfo: payload,
+      }))
+      .addCase(userUpdate.rejected, (state, { payload }) => ({
         ...state,
         loading: false,
         error: payload,

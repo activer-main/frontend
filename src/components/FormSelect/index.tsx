@@ -3,12 +3,11 @@ import './index.scss';
 
 interface FormSelectType extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string
-  defaultValue?: string
   options: string[];
 }
 
 function FormSelect({
-  label, options, defaultValue, ...props
+  label, options, ...props
 }: FormSelectType) {
   return (
     <div className="select">
@@ -31,7 +30,7 @@ function FormSelect({
             value={option}
             key={`${props.name}-option-${index}`}
             className="select__option"
-            selected={defaultValue === option}
+
           >
             {option}
           </option>

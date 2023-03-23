@@ -1,10 +1,9 @@
+import { UserInfoType } from 'types/user';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
-import { postRegist } from 'api/user';
+import { postRegist, postLogin, putUserData } from 'api/user';
 import { RegisterRequestType } from 'types/request';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { UserInfoType } from '../../types/user';
-import { LoginRequestType } from '../../types/request';
-import { postLogin } from '../../api/user';
+import { UserUpdateRequestType, LoginRequestType } from '../../types/request';
 
 // Register
 export const registerUser = createAsyncThunk<
@@ -49,16 +48,14 @@ LoginRequestType
 );
 
 // update
-export const postUserData = createAsyncThunk<
-null,
-UserInfoType
+export const userUpdate = createAsyncThunk<
+UserInfoType,
+UserUpdateRequestType
 >(
   'auth/update',
-  async (newUserData: UserInfoType, { rejectWithValue }) => {
+  async (newUserData: UserUpdateRequestType, { rejectWithValue }) => {
     try {
-      const { data } = await (loginBody);
-      // store user's token in local storage
-      localStorage.setItem('userToken', data.token.accessToken);
+      const { data } = await putUserData(newUserData);
       return data;
     } catch (error: any) {
       // return custom error message from API if any

@@ -1,0 +1,28 @@
+@import '/src/styles/variables';
+@import '/src/styles/global';
+
+.profile {
+  @include container-main;
+
+  &__avatar{
+    object-fit: contain;
+    width: 5em;
+    height: 5em;
+    border-radius: 50%;
+  }
+
+  &__inputs{
+    display: flex;
+    flex: row wrap;
+    gap:1em;
+
+    .form-input{
+      flex: 0 0 50em;
+    }
+  }
+  
+
+  &__gender, &__county, &__area, &__birthday{
+    flex: 0 0 20em;
+  }
+}
