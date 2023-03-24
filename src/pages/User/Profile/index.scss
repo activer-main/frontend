@@ -5,7 +5,7 @@
   @include container-main;
 
   &__avatar{
-    object-fit: contain;
+    object-fit: cover;
     width: 5em;
     height: 5em;
     border-radius: 50%;
@@ -13,16 +13,25 @@
 
   &__inputs{
     display: flex;
-    flex: row wrap;
-    gap:1em;
-
-    .form-input{
-      flex: 0 0 50em;
+    flex-flow: row wrap;
+    gap: 1em;
+    width: 80%;
+    
+    > *{
+      flex: 1 0 auto;
+      
     }
+    
   }
   
 
   &__gender, &__county, &__area, &__birthday{
-    flex: 0 0 20em;
+    flex: 0 0 10em;
+  }
+
+  &__control {
+    display: flex;
+    gap:1em;
+    margin: 1em 0;
   }
 }

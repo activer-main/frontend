@@ -64,6 +64,14 @@ function Profile() {
           value={email}
           disabled
         />
+
+        {/* Profession */}
+        <FormInput
+          className="profile__prefession"
+          name="profession"
+          label="職業"
+          value={profession}
+        />
         {/* Gender */}
         <FormSelect
           className="profile__gender"
@@ -73,13 +81,6 @@ function Profile() {
           options={['男', '女', '其他', '隱藏']}
         />
 
-        {/* Profession */}
-        <FormInput
-          className="profile__prefession"
-          name="profession"
-          label="職業"
-          value={profession}
-        />
         {/* Birthday */}
         <FormInput
           className="profile__birthday"
@@ -114,8 +115,10 @@ function Profile() {
           )?.AreaList.map((a) => a.AreaName) || []}
         />
       </div>
-      <Button text="儲存" type="submit" />
-      <Button text="取消" variant={{ outline: true }} type="button" />
+      <div className="profile__control">
+        <Button text="儲存" type="submit" />
+        <Button text="取消" variant={{ outline: true }} type="button" />
+      </div>
     </form>
   );
 }

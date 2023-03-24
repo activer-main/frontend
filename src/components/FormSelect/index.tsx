@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import './index.scss';
 
@@ -7,10 +8,15 @@ interface FormSelectType extends React.SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 function FormSelect({
-  label, options, ...props
+  label, options, className, ...props
 }: FormSelectType) {
+  const customClassName = className?.split(' ');
+  const classes = classNames({
+    select: true,
+  }, customClassName);
+
   return (
-    <div className="select">
+    <div className={classes}>
       {label
           && (
             <label
