@@ -37,20 +37,21 @@ const routerConfig: RouteObject[] = [
         path: '/login',
         element: <Login />,
       },
-      {
-        element: <ProtectedRoute />,
-        children: [{
-          path: '/user',
-          element: <User />,
-          children: [
-            {
-              path: 'profile',
-              element: <Profile />,
-            },
-          ],
+
+    ],
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [{
+      path: '/user',
+      element: <User />,
+      children: [
+        {
+          path: 'profile',
+          element: <Profile />,
         },
-        ],
-      },
+      ],
+    },
     ],
   },
 ];

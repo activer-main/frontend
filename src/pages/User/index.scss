@@ -1,0 +1,9 @@
+@import '/src/styles/variables';
+@import '/src/styles/global';
+
+.user{
+  &__main{
+    margin: 2em;
+    margin-left: $sidebar-width;
+  }
+}
