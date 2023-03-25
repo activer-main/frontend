@@ -7,6 +7,7 @@ function User() {
   return (
 
     <div className="user">
+
       <UserSideBar />
       <div className="user__main">
         <Outlet />
