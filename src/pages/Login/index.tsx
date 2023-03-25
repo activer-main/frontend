@@ -1,32 +1,39 @@
-import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from 'store';
-import { userLogin } from 'store/auth/authAction';
+import React from 'react';
+import { useAppDispatch } from 'store';
 import { useNavigate } from 'react-router-dom';
 import Button from 'components/Button';
 import FormInput from 'components/FormInput';
 import { LoginFormDataType } from 'types/user';
 import './index.scss';
 import { PASSWORD_PATTERN } from 'utils/pattern';
+import { useLoginMutation } from 'store/auth/authService';
+import { setCredentials } from 'store/auth/authSlice';
+// import { setCredentials } from 'store/auth/authSlice';
 
 function Login() {
-  const { loading, userInfo } = useAppSelector((state) => state.auth);
+  const [login, {
+    data, isError, error, isLoading, isSuccess,
+  }] = useLoginMutation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // redirect authenticated user to profile screen
-  useEffect(() => {
-    if (userInfo) {
-      navigate('/user/profile');
-    }
-  }, [navigate, userInfo]);
+  if (isError) {
+    console.error(error);
+  }
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
+  if (isSuccess) {
+    dispatch(setCredentials(data!));
+    navigate('/user/profile');
+    localStorage.setItem('userToken', data!.token.accessToken);
+  }
+
+  const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const target = event.target as typeof event.target & LoginFormDataType;
-    dispatch(userLogin({
+    login({
       email: target.email.value,
       password: target.password.value,
-    }));
+    });
   };
 
   return (
@@ -55,16 +62,16 @@ function Login() {
       <div className="login__control">
         <Button
           type="submit"
-          text={loading ? 'spining' : '登入'}
+          text={isLoading ? 'spining' : '登入'}
           className="button"
-          disabled={loading}
+          disabled={isLoading}
         />
         <Button
           type="button"
           text="註冊"
           variant={{ outline: true }}
           className="button"
-          disabled={loading}
+          disabled={isLoading}
           onClick={() => navigate('/register')}
         />
       </div>
