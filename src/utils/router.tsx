@@ -11,6 +11,7 @@ import Register from 'pages/Register';
 import Login from 'pages/Login';
 import ProtectedRoute from 'routing/ProtectedRoute';
 import User from 'pages/User';
+import MainRoute from 'routing/MainRoute';
 
 const routerConfig: RouteObject[] = [
   {
@@ -19,24 +20,28 @@ const routerConfig: RouteObject[] = [
     children: [
       {
         path: '/',
-        element: <Home />,
-        loader: homeLoader,
+        element: <MainRoute />,
         children: [
           {
-            path: '/sidebar',
+            path: '/',
+            element: <Home />,
+            loader: homeLoader,
+          },
+          {
+            path: 'sidebar',
             element: <MobileSidebar />,
           },
-
+          {
+            path: 'register',
+            element: <Register />,
+          },
+          {
+            path: 'login',
+            element: <Login />,
+          },
         ],
       },
-      {
-        path: '/register',
-        element: <Register />,
-      },
-      {
-        path: '/login',
-        element: <Login />,
-      },
+
       {
         element: <ProtectedRoute />,
         children: [{
