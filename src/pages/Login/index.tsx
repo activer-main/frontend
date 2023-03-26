@@ -4,22 +4,21 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'components/Button';
 import FormInput from 'components/FormInput';
 import { LoginFormDataType } from 'types/user';
+import { BiErrorCircle } from 'react-icons/bi';
 import './index.scss';
 import { PASSWORD_PATTERN } from 'utils/pattern';
 import { useLoginMutation } from 'store/auth/authService';
 import { setCredentials } from 'store/auth/authSlice';
+import Alert from 'components/Alert';
 // import { setCredentials } from 'store/auth/authSlice';
 
 function Login() {
   const [login, {
-    data, isError, error, isLoading, isSuccess,
+    data, error, isLoading, isSuccess,
   }] = useLoginMutation();
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  if (isError) {
-    console.error(error);
-  }
 
   if (isSuccess) {
     dispatch(setCredentials(data!));
@@ -30,7 +29,7 @@ function Login() {
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const target = event.target as typeof event.target & LoginFormDataType;
-    login({
+    await login({
       email: target.email.value,
       password: target.password.value,
     });
@@ -74,7 +73,10 @@ function Login() {
           disabled={isLoading}
           onClick={() => navigate('/register')}
         />
+        {error
+        && <Alert className="login__alert" title={(error as any).data} icon={<BiErrorCircle />} />}
       </div>
+
     </form>
   );
 }
