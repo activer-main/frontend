@@ -7,6 +7,7 @@ import Profile from 'pages/User/Profile';
 import {
   RouteObject,
 } from 'react-router-dom';
+import Verify from 'pages/Verify';
 import Register from 'pages/Register';
 import Login from 'pages/Login';
 import ProtectedRoute from 'routing/ProtectedRoute';
@@ -38,6 +39,10 @@ const routerConfig: RouteObject[] = [
           {
             path: 'login',
             element: <Login />,
+          },
+          {
+            path: 'verify',
+            element: <Verify />,
           },
         ],
       },

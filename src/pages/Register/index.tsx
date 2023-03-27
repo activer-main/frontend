@@ -27,6 +27,7 @@ function Register() {
     // check if passwords match
     if (target.password.value !== target.confirmPassword.value) {
       toast.error('密碼不相同');
+      return;
     }
 
     dispatch(registerUser({

@@ -3,7 +3,8 @@ import { LoginResponseType, RegisterResponseType } from 'types/response';
 import { postRegist, postLogin, putUserData } from 'api/user';
 import { RegisterRequestType } from 'types/request';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { UserUpdateRequestType, LoginRequestType } from '../../types/request';
+import { getVerifyUser } from '../../api/user';
+import { VerifyRequestTyep, UserUpdateRequestType, LoginRequestType } from '../../types/request';
 
 // Register
 export const registerUser = createAsyncThunk<
@@ -48,6 +49,20 @@ UserUpdateRequestType
   async (newUserData: UserUpdateRequestType, { rejectWithValue }) => {
     try {
       const { data } = await putUserData(newUserData);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const verifyUser = createAsyncThunk<
+LoginResponseType,
+VerifyRequestTyep>(
+  'auth/verify',
+  async (request: VerifyRequestTyep, { rejectWithValue }) => {
+    try {
+      const { data } = await getVerifyUser(request);
       return data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

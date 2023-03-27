@@ -1,7 +1,7 @@
 // ProtectedRoute.js
 import React, { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from 'store';
-import { NavLink, Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 import { setCredentials } from 'store/auth/authSlice';
 import { useGetUserDetailsQuery } from 'store/auth/authService';
@@ -21,17 +21,15 @@ function ProtectedRoute() {
   // show unauthorized screen if no user is found in redux store
   if (!userInfo) {
     return (
-      <div className="unauthorized">
-        <h1>Unauthorized :(</h1>
-        <span>
-          <NavLink to="/login">Login</NavLink>
-          {' '}
-          to gain access
-        </span>
-      </div>
+      <Navigate to="/login" />
     );
   }
 
+  if (!userInfo.verify) {
+    return (
+      <Navigate to="/verify" />
+    );
+  }
   // returns child route elements
   return <Outlet />;
 }

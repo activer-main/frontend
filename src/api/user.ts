@@ -3,6 +3,7 @@ import axios from 'axios';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
 import { RegisterRequestType, LoginRequestType, UserUpdateRequestType } from 'types/request';
 import { userToken } from 'store/auth/authSlice';
+import { VerifyRequestTyep } from '../types/request';
 
 const IP = '220.132.244.41';
 const PORT = '5044';
@@ -55,6 +56,26 @@ export const putUserData = (newUserInfo : UserUpdateRequestType) => userResquest
   {
     headers: {
       'Content-Type': 'multipart/form-data',
+      Authorization: `Barear ${userToken}`,
+    },
+  },
+);
+
+export const getVerifyUser = ({ verifyCode } : VerifyRequestTyep) => userResquest.get<
+LoginResponseType>(
+  `auth/verify/email?verifyCode=${verifyCode}`,
+  {
+    headers: {
+      Authorization: `Barear ${userToken}`,
+    },
+  },
+
+);
+
+export const getResendVerifyEmail = () => userResquest.get<void>(
+  'auth/resendVerify/email',
+  {
+    headers: {
       Authorization: `Barear ${userToken}`,
     },
   },

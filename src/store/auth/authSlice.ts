@@ -6,7 +6,9 @@ import { toast } from 'react-toastify';
 import type { RootState } from 'store';
 import { LoginResponseType } from 'types/response';
 import { UserDataType } from '../../types/user';
-import { registerUser, userLogin, userUpdate } from './authAction';
+import {
+  registerUser, userLogin, userUpdate, verifyUser,
+} from './authAction';
 
 // initialize userToken from local storage
 export const userToken = localStorage.getItem('userToken')
@@ -44,49 +46,53 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // regist
-      .addCase(registerUser.pending, (state) => ({
-        ...state,
-        loading: true,
-        error: null,
-      }))
+      // regist success
       .addCase(registerUser.fulfilled, (state) => ({
         ...state,
         loading: false,
         success: true,
       }))
-      // login
-      .addCase(userLogin.pending, (state) => ({
-        ...state,
-        loading: true,
-        error: null,
-      }))
-      .addCase(userLogin.fulfilled, (state, { payload }) => ({
-        ...state,
-        loading: false,
-        userInfo: payload.user,
-        userToken: payload.token,
-      }))
 
-    // post user data
-      .addCase(userUpdate.pending, (state) => ({
-        ...state,
-        loading: true,
-        error: null,
-      }))
+      // post user data
       .addCase(userUpdate.fulfilled, (state, { payload }) => ({
         ...state,
         loading: false,
         userInfo: payload,
       }))
-      .addCase(userUpdate.rejected, (state, { payload }) => ({
-        ...state,
-        loading: false,
-        error: payload,
-      }))
+    // login and verify success
+      .addMatcher(isAnyOf(
+        userLogin.fulfilled,
+        verifyUser.fulfilled,
+      ), (state, { payload }) => {
+        localStorage.setItem('userToken', payload.token.accessToken);
+        return ({
+          ...state,
+          loading: false,
+          userInfo: payload.user,
+          userToken: payload.token,
+        });
+      })
+
+      // pending
+      .addMatcher(
+        isAnyOf(
+          registerUser.pending,
+          userLogin.pending,
+          verifyUser.pending,
+          userUpdate.pending,
+        ),
+        (state) => ({
+          ...state,
+          loading: true,
+          error: null,
+        }),
+      )
+      // reject
       .addMatcher(isAnyOf(
         registerUser.rejected,
         userLogin.rejected,
+        verifyUser.rejected,
+        userUpdate.rejected,
       ), (state, { payload }) => {
         toast.error(payload as any);
         return ({

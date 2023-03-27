@@ -17,3 +17,7 @@ export type LoginRequestType = {
 };
 
 export type UserUpdateRequestType = Omit<UserInfoType, 'email' | 'password' | 'verify' | 'id'>;
+
+export type VerifyRequestTyep = {
+  verifyCode: string,
+};
