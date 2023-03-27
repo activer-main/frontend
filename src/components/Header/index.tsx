@@ -27,7 +27,10 @@ function Haeder() {
             <Button
               className="header__logout"
               text="登出"
-              onClick={() => dispatch(logout())}
+              onClick={() => {
+                dispatch(logout());
+                navigate('/login');
+              }}
             />
           )
             : <Button text="登入/註冊" onClick={() => navigate('/login')} />}
