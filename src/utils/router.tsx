@@ -58,6 +58,7 @@ const routerConfig: RouteObject[] = [
       },
     ],
   },
+
 ];
 
 export default routerConfig;

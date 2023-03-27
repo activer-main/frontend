@@ -1,11 +1,9 @@
 import {
   createSlice, PayloadAction,
 } from '@reduxjs/toolkit';
-import { redirect } from 'react-router-dom';
 import type { RootState } from 'store';
 import { LoginResponseType } from 'types/response';
 import { UserDataType } from '../../types/user';
-import { registerUser, userLogin, userUpdate } from './authAction';
 
 // initialize userToken from local storage
 export const userToken = localStorage.getItem('userToken')
@@ -25,7 +23,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      redirect('/login');
       localStorage.removeItem('userToken');
       // deletes token from storage
       return ({
@@ -39,61 +36,9 @@ const authSlice = createSlice({
     setCredentials: (state, action: PayloadAction<LoginResponseType>) => ({
       ...state,
       userInfo: action.payload.user,
+      userToken: action.payload.token,
     }),
   },
-  extraReducers: (builder) => {
-    builder
-      // regist
-      .addCase(registerUser.pending, (state) => ({
-        ...state,
-        loading: true,
-        error: null,
-      }))
-      .addCase(registerUser.fulfilled, (state) => ({
-        ...state,
-        loading: false,
-        success: true,
-      }))
-      .addCase(registerUser.rejected, (state, { payload }) => ({
-        ...state,
-        loading: false,
-        error: payload,
-      }))
-      // login
-      .addCase(userLogin.pending, (state) => ({
-        ...state,
-        loading: true,
-        error: null,
-      }))
-      .addCase(userLogin.fulfilled, (state, { payload }) => ({
-        ...state,
-        loading: false,
-        userInfo: payload.user,
-        userToken: payload.token,
-      }))
-      .addCase(userLogin.rejected, (state, { payload }) => ({
-        ...state,
-        loading: false,
-        error: payload,
-      }))
-    // post user data
-      .addCase(userUpdate.pending, (state) => ({
-        ...state,
-        loading: true,
-        error: null,
-      }))
-      .addCase(userUpdate.fulfilled, (state, { payload }) => ({
-        ...state,
-        loading: false,
-        userInfo: payload,
-      }))
-      .addCase(userUpdate.rejected, (state, { payload }) => ({
-        ...state,
-        loading: false,
-        error: payload,
-      }));
-  },
-
 });
 
 export const { logout, setCredentials } = authSlice.actions;
