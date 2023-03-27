@@ -1,30 +1,23 @@
 // RegisterScreen.js
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from 'store';
+import { useAppDispatch, useAppSelector } from 'store';
 import Button from 'components/Button';
+import { registerUser } from
+  'store/auth/authAction';
 import { RegisterFormDataType } from 'types/user';
 import FormInput from 'components/FormInput';
 import { PASSWORD_PATTERN } from 'utils/pattern';
 import './index.scss';
-import { selectUserInfo } from 'store/auth/authSlice';
-import { useRegisterMutation } from 'store/auth/authService';
 
 function Register() {
-  // selact redux data
+  const {
+    loading, userInfo, success,
+  } = useAppSelector(
+    (state) => state.auth,
+  );
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [register, {
-    isSuccess, isError, isLoading, error,
-  }] = useRegisterMutation();
-  const userInfo = useAppSelector(selectUserInfo);
-
-  if (isError) {
-    alert((error as any).data.message);
-  }
-
-  if (isSuccess) {
-    navigate('/login');
-  }
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -36,17 +29,19 @@ function Register() {
       return;
     }
 
-    register({
+    dispatch(registerUser({
       username: target.username.value,
       email: target.email.value.toLowerCase(),
       password: target.password.value,
-    });
+    }));
   };
 
   useEffect(() => {
+    // redirect user to login page if registration was successful
+    if (success) navigate('/login');
     // redirect authenticated user to profile screen
     if (userInfo) navigate('/user/profile');
-  }, [navigate, userInfo]);
+  }, [navigate, userInfo, success]);
 
   return (
     <form onSubmit={handleSubmit} className="register">
@@ -83,9 +78,9 @@ function Register() {
       <div className="register__control">
         <Button
           type="submit"
-          text={isLoading ? 'spin' : '註冊'}
+          text={loading ? 'spin' : '註冊'}
           className="register__submit"
-          disabled={isLoading}
+          disabled={loading}
         />
         <Button
           type="button"
@@ -93,7 +88,7 @@ function Register() {
           variant={{ outline: true }}
           className="register__cancel"
           onClick={() => navigate('/login')}
-          disabled={isLoading}
+          disabled={loading}
         />
       </div>
 

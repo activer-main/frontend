@@ -1,10 +1,21 @@
 // ProtectedRoute.js
-import React from 'react';
-import { useAppSelector } from 'store';
+import React, { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from 'store';
 import { NavLink, Outlet } from 'react-router-dom';
-import Verify from 'pages/Verify';
+
+import { setCredentials } from 'store/auth/authSlice';
+import { useGetUserDetailsQuery } from 'store/auth/authService';
 
 function ProtectedRoute() {
+  const dispatch = useAppDispatch();
+
+  const { data } = useGetUserDetailsQuery('userDetails', {
+    pollingInterval: 900000,
+  });
+
+  useEffect(() => {
+    if (data) dispatch(setCredentials(data));
+  }, [data, dispatch]);
   const { userInfo } = useAppSelector((state) => state.auth);
 
   // show unauthorized screen if no user is found in redux store
@@ -19,10 +30,6 @@ function ProtectedRoute() {
         </span>
       </div>
     );
-  }
-
-  if (!userInfo.verify) {
-    return <Verify />;
   }
 
   // returns child route elements

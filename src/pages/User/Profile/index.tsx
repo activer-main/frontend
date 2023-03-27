@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import FormInput from 'components/FormInput';
-import { useAppSelector } from 'store';
+import { useAppDispatch, useAppSelector } from 'store';
 import parseDate from 'utils/parseStringToYYYYMMDD';
 import { selectUserInfo } from 'store/auth/authSlice';
 import FormSelect from 'components/FormSelect';
 import { ProfileFormDataType } from 'types/user';
 import Button from 'components/Button';
-import { useUserUpdateMutation } from 'store/auth/authService';
+import { userUpdate } from 'store/auth/authAction';
 import CityCountyData from './countyArea.json';
 import './index.scss';
 
 function Profile() {
   const userInfo = useAppSelector(selectUserInfo);
-  const [update] = useUserUpdateMutation();
+  const dispatch = useAppDispatch();
   const {
     avatar, username, email, profession, phone, birthday, county,
     area,
@@ -27,7 +27,7 @@ function Profile() {
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     const target = event.target as typeof event.target & ProfileFormDataType;
-    update({
+    dispatch(userUpdate({
       username: target.username.value,
       avatar: '',
       // TODO: avatar input
@@ -37,7 +37,7 @@ function Profile() {
       phone: target.phone.value,
       county: target.county.value,
       area: target.area.value,
-    });
+    }));
   };
 
   return (
@@ -45,7 +45,7 @@ function Profile() {
       <img
         className="profile__avatar"
         src={`http://220.132.244.41:5044${avatar}`}
-        alt={username || '使用者'}
+        alt={username}
       />
       <h2 className="profile__header">歡迎回來</h2>
       {/* Username */}
@@ -54,7 +54,7 @@ function Profile() {
           className="profile__username"
           name="username"
           label="使用者名稱"
-          value={username || '使用者'}
+          value={username || ''}
         />
         {/* Email */}
         <FormInput
@@ -70,7 +70,7 @@ function Profile() {
           className="profile__prefession"
           name="profession"
           label="職業"
-          value={profession || undefined}
+          value={profession}
         />
         {/* Gender */}
         <FormSelect
@@ -87,14 +87,14 @@ function Profile() {
           name="birthday"
           label="生日"
           type="date"
-          value={birthday ? parseDate(birthday.toString()) : undefined}
+          value={parseDate(birthday.toString())}
         />
         {/* Phone */}
         <FormInput
           className="profile__phone"
           name="phone"
           label="電話"
-          value={phone || undefined}
+          value={phone}
         />
         {/* Country */}
         <FormSelect
@@ -102,14 +102,14 @@ function Profile() {
           label="縣市"
           name="county"
           onChange={handleCountyChange}
-          defaultValue={county || undefined}
+          defaultValue={county}
           options={CityCountyData.map((c) => c.CityName)}
         />
         <FormSelect
           className="profile__area"
           label="區鄉鎮"
           name="area"
-          defaultValue={area || undefined}
+          defaultValue={area}
           options={CityCountyData.find(
             (c) => c.CityName === selectedCounty,
           )?.AreaList.map((a) => a.AreaName) || []}
@@ -119,7 +119,6 @@ function Profile() {
         <Button text="儲存" type="submit" />
         <Button text="取消" variant={{ outline: true }} type="button" />
       </div>
-
     </form>
   );
 }

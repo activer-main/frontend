@@ -3,8 +3,6 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import { authApi } from './auth/authService';
 import authReducer from './auth/authSlice';
 
-export const SERVER_URL = 'http:/220.132.244.41:5044';
-
 const store = configureStore({
   reducer: {
     auth: authReducer,

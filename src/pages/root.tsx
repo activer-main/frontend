@@ -7,7 +7,7 @@ import { useAppDispatch } from 'store';
 function Root() {
   const dispatch = useAppDispatch();
 
-  const { data } = useGetUserDetailsQuery(undefined, {
+  const { data } = useGetUserDetailsQuery('userDetails', {
     pollingInterval: 900000,
   });
 
