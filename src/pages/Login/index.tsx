@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'components/Button';
 import FormInput from 'components/FormInput';
 import { LoginFormDataType } from 'types/user';
-import { BiErrorCircle } from 'react-icons/bi';
 import './index.scss';
 import { PASSWORD_PATTERN } from 'utils/pattern';
 
@@ -68,8 +67,7 @@ function Login() {
           disabled={loading}
           onClick={() => navigate('/register')}
         />
-        {error
-        && <Alert className="login__alert" title={(error as any).data} icon={<BiErrorCircle />} />}
+
       </div>
 
     </form>

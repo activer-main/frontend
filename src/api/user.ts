@@ -18,7 +18,7 @@ const userResquest = axios.create(
 export const postRegist = (
   registBody : RegisterRequestType,
 ) => userResquest.post<RegisterResponseType>(
-  '/signup',
+  '/auth/signup',
   registBody,
   {
     headers: {

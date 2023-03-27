@@ -9,6 +9,7 @@ import { RegisterFormDataType } from 'types/user';
 import FormInput from 'components/FormInput';
 import { PASSWORD_PATTERN } from 'utils/pattern';
 import './index.scss';
+import { toast } from 'react-toastify';
 
 function Register() {
   const {
@@ -25,8 +26,7 @@ function Register() {
 
     // check if passwords match
     if (target.password.value !== target.confirmPassword.value) {
-      alert('Password mismatch');
-      return;
+      toast.error('密碼不相同');
     }
 
     dispatch(registerUser({

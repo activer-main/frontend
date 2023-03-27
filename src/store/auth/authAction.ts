@@ -16,11 +16,7 @@ RegisterRequestType
       const { data } = await postRegist(registBody);
       return data;
     } catch (error: any) {
-    // return custom error message from backend if present
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      }
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   },
 );
@@ -38,11 +34,7 @@ LoginRequestType
       localStorage.setItem('userToken', data.token.accessToken);
       return data;
     } catch (error: any) {
-      // return custom error message from API if any
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      }
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   },
 );
@@ -58,11 +50,7 @@ UserUpdateRequestType
       const { data } = await putUserData(newUserData);
       return data;
     } catch (error: any) {
-      // return custom error message from API if any
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      }
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   },
 );

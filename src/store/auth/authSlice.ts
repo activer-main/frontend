@@ -1,7 +1,8 @@
 import {
-  createSlice, PayloadAction,
+  createSlice, isAnyOf, PayloadAction,
 } from '@reduxjs/toolkit';
 import { redirect } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import type { RootState } from 'store';
 import { LoginResponseType } from 'types/response';
 import { UserDataType } from '../../types/user';
@@ -54,11 +55,6 @@ const authSlice = createSlice({
         loading: false,
         success: true,
       }))
-      .addCase(registerUser.rejected, (state, { payload }) => ({
-        ...state,
-        loading: false,
-        error: payload,
-      }))
       // login
       .addCase(userLogin.pending, (state) => ({
         ...state,
@@ -71,11 +67,7 @@ const authSlice = createSlice({
         userInfo: payload.user,
         userToken: payload.token,
       }))
-      .addCase(userLogin.rejected, (state, { payload }) => ({
-        ...state,
-        loading: false,
-        error: payload,
-      }))
+
     // post user data
       .addCase(userUpdate.pending, (state) => ({
         ...state,
@@ -91,7 +83,18 @@ const authSlice = createSlice({
         ...state,
         loading: false,
         error: payload,
-      }));
+      }))
+      .addMatcher(isAnyOf(
+        registerUser.rejected,
+        userLogin.rejected,
+      ), (state, { payload }) => {
+        toast.error(payload as any);
+        return ({
+          ...state,
+          loading: false,
+          error: payload,
+        });
+      });
   },
 
 });

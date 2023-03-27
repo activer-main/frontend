@@ -11,13 +11,13 @@ export interface UserInfoType {
   email: string;
   verify: boolean;
   username: string;
-  avatar: string;
-  gender: string;
-  birthday: Date;
-  profession: string;
-  phone: string;
-  county: string;
-  area: string;
+  avatar: string | null;
+  gender: string | null;
+  birthday: Date | null;
+  profession: string | null;
+  phone: string | null;
+  county: string | null;
+  area: string | null;
 }
 
 export interface TokenType {

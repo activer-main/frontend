@@ -3,6 +3,8 @@ import { Outlet } from 'react-router-dom';
 import { useGetUserDetailsQuery } from 'store/auth/authService';
 import { setCredentials } from 'store/auth/authSlice';
 import { useAppDispatch } from 'store';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Root() {
   const dispatch = useAppDispatch();
@@ -16,7 +18,10 @@ function Root() {
   }, [data, dispatch]);
 
   return (
-    <Outlet />
+    <>
+      <ToastContainer />
+      <Outlet />
+    </>
   );
 }
 

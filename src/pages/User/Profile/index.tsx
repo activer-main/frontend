@@ -70,7 +70,7 @@ function Profile() {
           className="profile__prefession"
           name="profession"
           label="職業"
-          value={profession}
+          value={profession || ''}
         />
         {/* Gender */}
         <FormSelect
@@ -87,14 +87,14 @@ function Profile() {
           name="birthday"
           label="生日"
           type="date"
-          value={parseDate(birthday.toString())}
+          value={birthday ? parseDate(birthday.toString()) : undefined}
         />
         {/* Phone */}
         <FormInput
           className="profile__phone"
           name="phone"
           label="電話"
-          value={phone}
+          value={phone || undefined}
         />
         {/* Country */}
         <FormSelect
@@ -102,14 +102,14 @@ function Profile() {
           label="縣市"
           name="county"
           onChange={handleCountyChange}
-          defaultValue={county}
+          defaultValue={county || undefined}
           options={CityCountyData.map((c) => c.CityName)}
         />
         <FormSelect
           className="profile__area"
           label="區鄉鎮"
           name="area"
-          defaultValue={area}
+          defaultValue={area || undefined}
           options={CityCountyData.find(
             (c) => c.CityName === selectedCounty,
           )?.AreaList.map((a) => a.AreaName) || []}
