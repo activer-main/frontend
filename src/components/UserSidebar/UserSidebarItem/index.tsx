@@ -1,16 +1,20 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, NavLinkProps } from 'react-router-dom';
 import './index.scss';
 
-interface UserSideBarItemType {
+interface UserSideBarItemType
+  extends NavLinkProps {
   icon: React.ReactNode;
   label: string;
 }
 
-function UserSideBarItem({ icon, label }: UserSideBarItemType) {
+function UserSideBarItem({
+  icon, label, className, ...props
+}: UserSideBarItemType) {
   return (
     <NavLink
-      className="user-sidebar-item"
+      {...props}
+      className={`${className} user-sidebar-item`}
       to="profile"
     >
       <div className="user-sidebar-item__icon">
