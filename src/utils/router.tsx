@@ -59,7 +59,7 @@ const routerConfig: RouteObject[] = [
               element: <Profile />,
             },
             {
-              path: 'manage',
+              path: 'manage/:type?',
               element: <Manage />,
             },
           ],

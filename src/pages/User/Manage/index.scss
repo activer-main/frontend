@@ -13,11 +13,23 @@
   }
 
   &__control-link{
-    padding: 0.5em;
+    position: relative;
     font-size: 1.2em;
 
+    &::after{
+      content: "";
+      position: absolute;
+      display: block;
+      width: 0%;
+      height: 3px;
+      background-color: $primary-font-color;
+      transition: all 0.5s;
+    }
+
     &.active{
-      text-decoration: underline;
+      &::after{
+        width: 100%;
+      }
     }
   }
 }
