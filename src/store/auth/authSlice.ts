@@ -47,11 +47,14 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // regist success
-      .addCase(registerUser.fulfilled, (state) => ({
-        ...state,
-        loading: false,
-        success: true,
-      }))
+      .addCase(registerUser.fulfilled, (state) => {
+        toast.success('註冊成功，請重新登入並驗證信箱!');
+        return ({
+          ...state,
+          loading: false,
+          success: true,
+        });
+      })
 
       // post user data
       .addCase(userUpdate.fulfilled, (state, { payload }) => ({

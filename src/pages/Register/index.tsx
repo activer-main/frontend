@@ -20,7 +20,7 @@ function Register() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
+  const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const target = event.target as typeof event.target & RegisterFormDataType;
 
@@ -30,16 +30,15 @@ function Register() {
       return;
     }
 
-    dispatch(registerUser({
+    await dispatch(registerUser({
       username: target.username.value,
       email: target.email.value.toLowerCase(),
       password: target.password.value,
-    }));
+    })).unwrap()
+      .then(() => navigate('/login'));
   };
 
   useEffect(() => {
-    // redirect user to login page if registration was successful
-    if (success) navigate('/login');
     // redirect authenticated user to profile screen
     if (userInfo) navigate('/user/profile');
   }, [navigate, userInfo, success]);
