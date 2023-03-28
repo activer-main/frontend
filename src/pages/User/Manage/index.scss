@@ -1,0 +1,23 @@
+@import '/src/styles/variables';
+@import '/src/styles/global';
+
+.manage {
+  display: flex;
+  flex-flow: column;
+  gap: 1em;
+
+  &__control{
+    display: flex;
+    gap: 1em;
+    padding: 1em ;
+  }
+
+  &__control-link{
+    padding: 0.5em;
+    font-size: 1.2em;
+
+    &.active{
+      text-decoration: underline;
+    }
+  }
+}

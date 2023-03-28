@@ -26,6 +26,12 @@ export const authApi = createApi({
         method: 'GET',
       }),
     }),
+    getManageActivity: builder.query<ActivityDataType[], void>({
+      query: () => ({
+        url: 'api/activity/dreamAndRegistered',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
