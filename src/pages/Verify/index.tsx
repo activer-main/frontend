@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from 'store';
 import { verifyUser } from 'store/auth/authAction';
+import './index.scss';
 
 function Verify() {
   const dispatch = useAppDispatch();
@@ -41,8 +42,9 @@ function Verify() {
       <FormInput
         label="驗證碼"
         name="verifyCode"
+        className="verify__input"
       />
-      <div className="control">
+      <div className="verify__control">
         <Button text="驗證" type="submit" />
         <Button
           text="重新傳送"
