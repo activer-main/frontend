@@ -1,6 +1,7 @@
 import { LoginResponseType } from 'types/response';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'api/user';
+import { ActivityDataType } from '../../types/data';
 import { userToken } from './authSlice';
 
 export const authApi = createApi({
@@ -25,9 +26,15 @@ export const authApi = createApi({
         method: 'GET',
       }),
     }),
+    getManageActivity: builder.query<ActivityDataType[], void>({
+      query: () => ({
+        url: 'api/activity/dreamAndRegistered',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
 // export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserDetailsQuery } = authApi;
+export const { useGetUserDetailsQuery, useGetManageActivityQuery } = authApi;
