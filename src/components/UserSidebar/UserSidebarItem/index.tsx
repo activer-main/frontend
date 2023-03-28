@@ -15,7 +15,7 @@ function UserSideBarItem({
     <NavLink
       {...props}
       className={`${className} user-sidebar-item`}
-      to="profile"
+
     >
       <div className="user-sidebar-item__icon">
         {icon}

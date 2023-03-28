@@ -13,6 +13,7 @@ import Login from 'pages/Login';
 import ProtectedRoute from 'routing/ProtectedRoute';
 import User from 'pages/User';
 import MainRoute from 'routing/MainRoute';
+import Manage from 'pages/User/Manage';
 
 const routerConfig: RouteObject[] = [
   {
@@ -56,6 +57,10 @@ const routerConfig: RouteObject[] = [
             {
               path: 'profile',
               element: <Profile />,
+            },
+            {
+              path: 'manage',
+              element: <Manage />,
             },
           ],
         },
