@@ -1,9 +1,9 @@
-import Card from 'components/Card';
 import React from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { useGetManageActivityQuery } from 'store/auth/authService';
 import Loading from 'components/Loading';
 import './index.scss';
+import ManageTable from './ManageTable';
 
 function Manage() {
   const { data, isLoading } = useGetManageActivityQuery();
@@ -19,14 +19,8 @@ function Manage() {
       </div>
       {isLoading && <Loading />}
       <h2>{type}</h2>
-      {data && data.map((activity) => (
-        <Card
-          id={`manage-activity-${activity.id}`}
-          title={activity.title}
-          imgUrl={activity.images ? activity.images[0] : '/DefaultActivityImage.svg'}
-          altText={activity.title}
-        />
-      ))}
+      {data
+      && <ManageTable activities={data} />}
     </div>
   );
 }
