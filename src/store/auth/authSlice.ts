@@ -7,7 +7,7 @@ import type { RootState } from 'store';
 import { LoginResponseType } from 'types/response';
 import { UserDataType } from '../../types/user';
 import {
-  registerUser, userLogin, userUpdate, verifyUser,
+  registerUser, userLogin, userUpdate, verifyUser, tokenLogin,
 } from './authAction';
 
 // initialize userToken from local storage
@@ -66,6 +66,7 @@ const authSlice = createSlice({
       .addMatcher(isAnyOf(
         userLogin.fulfilled,
         verifyUser.fulfilled,
+        tokenLogin.fulfilled,
       ), (state, { payload }) => {
         localStorage.setItem('userToken', payload.token.accessToken);
         return ({
@@ -83,6 +84,7 @@ const authSlice = createSlice({
           userLogin.pending,
           verifyUser.pending,
           userUpdate.pending,
+          tokenLogin.pending,
         ),
         (state) => ({
           ...state,

@@ -37,6 +37,14 @@ export const postLogin = (loginBody: LoginRequestType) => userResquest.post<Logi
   },
 );
 
+export const getTokenLogin = () => (
+  userResquest.get<LoginResponseType>(
+    '/auth/token',
+    {
+      headers: { Authorization: `Bearer ${userToken}` },
+    },
+  ));
+
 // eslint-disable-next-line
 export const putUserData = (newUserInfo : UserUpdateRequestType) => userResquest.put<UserInfoType>(
   '',
