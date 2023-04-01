@@ -54,7 +54,6 @@ function ManageTable({ activities }: ManageTableType) {
           ))}
         </tbody>
       </table>
-
     </div>
   );
 }

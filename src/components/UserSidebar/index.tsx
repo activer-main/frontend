@@ -27,7 +27,7 @@ function UserSideBar() {
       <UserSideBarItem
         label="活動管理"
         icon={<FaUserAlt />}
-        to="manage"
+        to="manage?"
       />
       <UserSideBarItem
         label="登出"
