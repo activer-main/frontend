@@ -1,93 +1,62 @@
 import React from 'react';
+import { BiNavigation, BiTrash } from 'react-icons/bi';
 import { ActivityDataType } from 'types/data';
-import {
-  createColumnHelper, getCoreRowModel, useReactTable, flexRender,
-} from '@tanstack/react-table';
-import './index.scss';
 import Button from 'components/Button';
-import { BiNavigation } from 'react-icons/bi';
-import { AiOutlineEdit, AiOutlineCloseCircle } from 'react-icons/ai';
+import './index.scss';
 
 interface ManageTableType {
-  activities: ActivityDataType[]
+  activities: ActivityDataType[];
 }
 
-/* eslint-disable react/no-unstable-nested-components */
-function ManageTable({ activities } :ManageTableType) {
-  const columnHelper = createColumnHelper<ActivityDataType>();
-  const defaultColumn = [
-    columnHelper.accessor('title', {
-      header: 'Title',
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor('subTitle', {
-      header: 'Subtitle',
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.display({
-      id: 'action',
-      cell: () => (
-        <>
-          <Button
-            color="white"
-            iconAfter={<BiNavigation />}
-            variant={{ round: true }}
-          />
-          <Button
-            color="white"
-            iconAfter={<AiOutlineEdit />}
-            variant={{ round: true }}
-          />
-          <Button
-            color="white"
-            iconAfter={<AiOutlineCloseCircle />}
-            variant={{ round: true }}
-          />
-        </>
-      ),
-
-    }),
-  ];
-  const table = useReactTable({
-    data: activities,
-    columns: defaultColumn,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
+function ManageTable({ activities }: ManageTableType) {
   return (
     <div className="manage-table">
       <table>
         <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                </th>
-              ))}
-            </tr>
-          ))}
+          <tr>
+            <th>標題</th>
+            <th>活動日期</th>
+            <th>狀態</th>
+            <th>控制</th>
+          </tr>
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          {activities.map((activity) => (
+            <tr>
+              <td>{activity.title}</td>
+              <td>2023/10/01</td>
+              <td className="manage-table__select">
+                <select>
+                  <option value="願望">願望</option>
+                  <option value="已註冊">已註冊</option>
+                  <option value="已完成">已完成</option>
+                </select>
+                <span className="manage-table__select__arrow" />
+              </td>
+              <td className="manage-table__control">
+                <td>
+                  <Button
+                    iconAfter={<BiNavigation />}
+                    variant={{ round: true }}
+                    color="transparent"
+                  />
                 </td>
-              ))}
+                <td>
+                  <Button
+                    iconAfter={<BiTrash />}
+                    variant={{ round: true }}
+                    color="transparent"
+                  />
+                </td>
+
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
     </div>
   );
 }
 
 export default ManageTable;
-/* eslint-enable react/no-unstable-nested-components */

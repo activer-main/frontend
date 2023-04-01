@@ -1,23 +1,99 @@
+@import '/src/styles/variables';
+@import '/src/styles/global';
+
+$custom-border: 2px solid $tertiary-font-color;
+
 .manage-table{
   table {
     width: 100%;
-    border: 1px solid lightgray;
+    border-top:$custom-border;
     
   }
   
-  tbody {
-    border-bottom: 1px solid lightgray;
-  }
-  
-  th {
-    padding: 2px 4px;
-    border-right: 1px solid lightgray;
-    border-bottom: 1px solid lightgray;
+  th{
+    border-bottom: $custom-border;
+    color: $secondary-font-color;
     font-weight: bold;
-  }
-  
-  tfoot {
-    color: gray;
+    font-size: 1.1em;
   }
 
+  td{
+    height: 2em;
+  }
+
+  &__control{
+    td{
+      border: none !important
+    }
+  }
+
+    
+  td, th{
+    &:not(:last-child) {
+      border-right: $custom-border;
+    }
+  }
+
+  tbody tr{
+    &:not(:last-child){
+      td{
+        border-bottom: $custom-border;
+      }
+    }
+  }
+
+  
+
+  
+  &__select {
+    position: relative;
+    transition: all 0.3s;
+  
+    select {
+      width: 100%;
+      height: 100%;
+      padding: 0.5em 1em ;
+      border: none;
+      background-color: transparent;
+      color: #333;
+      line-height: 2em;
+      cursor: pointer;
+      appearance: none;
+  
+      &:focus {
+        outline: none;
+      }
+
+      &:hover{
+        background-color: $tertiary-font-color;
+      }
+    }
+  
+    &__arrow {
+      position: absolute;
+      top: 45%;
+      right: 1em;
+      width: 0.3em;
+      height: 0.3em;
+      border-top: 2px solid #333;
+      border-right: 2px solid #333;
+      transform: translateY(-50%);
+      transform: rotate(135deg);
+    }
+  
+    &__select option {
+      padding: 1em;
+      background-color: white;
+      color: #333;
+  
+      &:hover {
+        background-color: red;
+      }
+    }
+
+   
+  }
+  
 }
+
+   
