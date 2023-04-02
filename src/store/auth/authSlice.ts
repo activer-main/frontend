@@ -98,6 +98,7 @@ const authSlice = createSlice({
         userLogin.rejected,
         verifyUser.rejected,
         userUpdate.rejected,
+        tokenLogin.rejected,
       ), (state, { payload }) => {
         toast.error(payload as any);
         return ({
