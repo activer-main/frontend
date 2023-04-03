@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { URL } from 'utils/apiURL';
+import { URL } from 'api/user';
 import { ActivityDataType } from 'types/data';
 import { userToken } from './authSlice';
 
