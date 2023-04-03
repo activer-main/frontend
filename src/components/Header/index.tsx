@@ -5,8 +5,10 @@ import Button from 'components/Button';
 import { useAppDispatch, useAppSelector } from 'store';
 import { logout } from 'store/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
+import UserAvatar from './UserAvatar';
 import Logo from './Logo';
 import Navigation from './Navigation';
+
 import './index.scss';
 
 function Haeder() {
@@ -19,16 +21,22 @@ function Haeder() {
   return (
     <header className="header">
 
+      {/* Logo */}
       <Logo />
+
+      {/* Navigation */}
       {!isMobile ? (
         <>
           <Navigation />
           {userInfo ? (
-            <Button
-              className="header__logout"
-              text="登出"
-              onClick={() => dispatch(logout())}
-            />
+            <>
+              <UserAvatar avatar={userInfo.avatar} />
+              <Button
+                className="header__logout"
+                text="登出"
+                onClick={() => dispatch(logout())}
+              />
+            </>
           )
             : <Button text="登入/註冊" onClick={() => navigate('/login')} />}
         </>

@@ -3,12 +3,8 @@ import axios from 'axios';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
 import { RegisterRequestType, LoginRequestType, UserUpdateRequestType } from 'types/request';
 import { userToken } from 'store/auth/authSlice';
+import { URL } from 'utils/apiURL';
 import { VerifyRequestTyep } from '../types/request';
-
-const IP = '220.132.244.41';
-const PORT = '5044';
-
-export const URL = `http://${IP}:${PORT}`;
 
 const userResquest = axios.create(
   {
