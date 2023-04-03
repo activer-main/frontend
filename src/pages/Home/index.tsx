@@ -25,7 +25,7 @@ function Home() {
               imgUrl={activity.images ? activity.images[0] : '/DefaultActivityImage.svg'}
               altText="test"
               detail={activity.subTitle}
-              control={<MainCardControl id="card-contol" trend={20} />}
+              control={<MainCardControl trend={20} />}
 
             />
           ))

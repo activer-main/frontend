@@ -16,14 +16,13 @@
     width: 25%;
   }
 
-  display: flex;
   flex: 0 0 auto;
   width: 20%;
 
   &__container {
     @include media(mobile) {
       flex-direction: row;
-      height: 10em;
+      height: 8em;
       margin: 0.5rem 0;
     }
 
@@ -31,7 +30,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    height: 40vh;
+    height: 55vh;
 
     // height: 20em;
     margin: 1rem;
@@ -76,16 +75,26 @@
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
-    padding: 1rem;
+    padding: 1em;
+
   }
 
   &__title {
+    @include media(mobile){
+      flex: 0 0 1.5em
+      
+    }
+
     flex: 0 0 2.5em;
     overflow: hidden;
     font-weight: bold;
   }
 
   &__detail {
+    @include media(mobile){
+      flex: 1 1 2.5em;
+    }
+
     flex: 1 1 5em;
     overflow: hidden;
     color: $secondary-font-color;
@@ -98,12 +107,14 @@
     flex: 2 0 2em;
     flex-wrap: wrap;
     gap: 1em;
+    align-items: flex-end;
     font-size: 0.4em;
   }
 
   &__control {
     flex: 0 0 1em;
     height: 1em;
+    white-space: nowrap;
   }
 
 
