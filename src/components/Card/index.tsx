@@ -1,7 +1,8 @@
 // components/Card/Default
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Tag, { TagType } from 'components/Tag';
 import './index.scss';
+import useWindowWidth from 'hooks/useWindowWidth';
 
 export interface CardType {
   id: string;
@@ -16,6 +17,17 @@ export interface CardType {
 function Card({
   id, imgUrl, title, tags, altText, detail, control,
 }: CardType) {
+  const [showTags, setShowTags] = useState(tags);
+  const windowWidth = useWindowWidth();
+
+  useEffect(() => {
+    if (windowWidth > 768) {
+      setShowTags(tags?.slice(0, 5));
+    } else {
+      setShowTags(tags?.slice(0, 2));
+    }
+  }, [windowWidth]);
+
   return (
     <div className="card">
       <div className="card__container">
@@ -33,8 +45,8 @@ function Card({
 
           {/* tags */}
           <div className="card__tags">
-            {tags
-              && tags.map((tag) => (
+            {showTags
+              && showTags.map((tag) => (
                 <Tag
                   key={`${id}-${tag.id}`}
                   type={tag.type}

@@ -5,7 +5,6 @@
 .card {
   @include media(mobile) {
     width: 100%;
-
   }
 
   @include media(tablet) {
@@ -16,28 +15,38 @@
     width: 25%;
   }
 
-  display: flex;
   flex: 0 0 auto;
   width: 20%;
+  font-size: 1rem;
 
   &__container {
     @include media(mobile) {
       flex-direction: row;
-      height: 10em;
+      height: 100px;
       margin: 0.5rem 0;
+    }
+
+    @include media(tablet){
+      height: 400px;
+    }
+
+    @include media(laptop){
+      height: 350px;
+    }
+
+    @include media(desktop){
+      height: 350px;
     }
 
     position: relative;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    height: 40vh;
-
-    // height: 20em;
-    margin: 1rem;
+    margin: 1em;
     border-radius: 0.25rem;
     background-color: white;
     box-shadow: 0 10px 20px -7px rgb(0 0 0 / 25%);
+    font-size: 1em;
 
     // bottom color bar
     &::after {
@@ -76,17 +85,27 @@
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
-    padding: 1rem;
+    padding: 1em;
+
   }
 
   &__title {
+    @include media(mobile){
+      flex: 0 0 1.5em
+      
+    }
+
     flex: 0 0 2.5em;
     overflow: hidden;
     font-weight: bold;
   }
 
   &__detail {
-    flex: 1 1 5em;
+    @include media(mobile){
+      flex: 1 1 3em;
+    }
+
+    flex: 2 1 5em;
     overflow: hidden;
     color: $secondary-font-color;
     font-size: 0.6em;
@@ -94,16 +113,28 @@
   }
 
   &__tags {
-    display: flex;
-    flex: 2 0 2em;
-    flex-wrap: wrap;
-    gap: 1em;
-    font-size: 0.4em;
+    @include media(mobile){
+      flex-flow: nowrap;
+    }
+
+    display: flex; 
+    flex-flow: wrap;
+    gap: 10px;
+    align-items:  flex-end;
+    overflow: hidden;
+    height: 50px;
+    font-size: 0.5em;
+
+    >*{
+      height: 20px
+    }
+
   }
 
   &__control {
     flex: 0 0 1em;
-    height: 1em;
+    height: 1em;  
+    white-space: nowrap;
   }
 
 
