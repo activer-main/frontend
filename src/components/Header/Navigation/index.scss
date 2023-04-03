@@ -3,7 +3,12 @@
 
 .nav{
   display: flex;
+  flex: 1 0 auto;
   gap: 1em;
+  justify-content: center ;
+  margin: 0 auto;
+  
+  
 
   &__link{
     position: relative;
