@@ -25,6 +25,7 @@
   .trend-activity, .newest-activity{
     @include container-main;
 
+    min-height: 20em;
   
   }
 }

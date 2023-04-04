@@ -23,6 +23,13 @@ export const activityApi = createApi({
         body: { request },
       }),
     }),
+    getNewestActivity: builder.query<ActivityResponseType, SegmentRequestType>({
+      query: (body) => ({
+        url: 'api/activity/newest',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -31,4 +38,5 @@ export const activityApi = createApi({
 export const {
   useGetActivityQuery,
   useGetTrendActivityQuery,
+  useGetNewestActivityQuery,
 } = activityApi;
