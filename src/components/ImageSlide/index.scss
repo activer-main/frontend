@@ -1,0 +1,59 @@
+@import "/src/styles/variables";
+@import "/src/styles/global";
+
+.image-slide {
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+  height: 10em;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  .swiper {
+    width: 100%;
+    height: 100%;
+
+    .swiper-slide {
+      /* Center slide text vertically */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      text-align: center;
+      background: #fff;
+    }
+
+    .swiper-slide img {
+      display: block;
+      object-fit: contain;
+      width: 100%;
+      height: 100%;
+    }
+
+    &-button-prev,
+    &-button-next {
+      background-color: rgba($color: #fff, $alpha: 70%);
+      color: $primary-font-color;
+      transform: scale(0.5);
+    }
+  }
+
+  .swiper__navigation {
+    position: absolute;
+    top: 45%;
+    z-index: 1;
+    font-size: 0.6em;
+
+    &__prev {
+      left: 1em;
+    }
+
+    &__next {
+      right: 1em;
+    }
+  }
+}

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Tag, { TagType } from 'components/Tag';
 import './index.scss';
 import useWindowWidth from 'hooks/useWindowWidth';
+import { Link } from 'react-router-dom';
 
 export interface CardType {
   id: string;
@@ -31,21 +32,21 @@ function Card({
   return (
     <div className="card">
       <div className="card__container">
-        <div className="card__image">
-          <img src={encodeURI(imgUrl)} alt={altText} />
-        </div>
-        <div className="card__content">
-          {/* title */}
-          <div className="card__title">{title}</div>
-
-          {/* detail */}
-          <div className="card__detail">
-            {detail}
+        <Link to={`/detail/${id}`}>
+          <div className="card__image">
+            <img src={encodeURI(imgUrl)} alt={altText} />
           </div>
+          <div className="card__content">
+            {/* title */}
+            <div className="card__title">{title}</div>
+            {/* detail */}
+            <div className="card__detail">
+              {detail}
+            </div>
 
-          {/* tags */}
-          <div className="card__tags">
-            {showTags
+            {/* tags */}
+            <div className="card__tags">
+              {showTags
               && showTags.map((tag) => (
                 <Tag
                   key={`${id}-${tag.id}`}
@@ -56,11 +57,11 @@ function Card({
                   link
                 />
               ))}
+            </div>
           </div>
-
-          {/* Contorls */}
-          {control && <div className="card__control">{control}</div>}
-        </div>
+        </Link>
+        {/* Contorls */}
+        {control && <div className="card__control">{control}</div>}
       </div>
     </div>
 
