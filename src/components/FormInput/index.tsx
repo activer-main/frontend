@@ -17,7 +17,7 @@ function FormInput({
     'form-input__input': true,
   }, customClassName);
 
-  const handleChange = (event : React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
     if (!event.target.validity.valid) {
       setShowErrorMessage(true);
@@ -42,11 +42,11 @@ function FormInput({
         {...props}
       />
       {title
-      && (
-        <span className="form-input__error-message">
-          {showErrorMessage && title}
-        </span>
-      )}
+        && (
+          <span className="form-input__error-message">
+            {showErrorMessage && title}
+          </span>
+        )}
 
     </div>
   );

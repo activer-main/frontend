@@ -76,7 +76,6 @@ const authSlice = createSlice({
         error: payload,
       }));
   },
-
 });
 
 export const { logout, setCredentials } = authSlice.actions;
