@@ -1,11 +1,9 @@
 import Button from 'components/Button';
 import React from 'react';
 import './index.scss';
-import Card from 'components/Card';
-import MainCardControl from 'components/Card/MainCardContorl';
+import MainCard from 'components/Card/MainCard';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { FcBookmark, FcFlashOn } from 'react-icons/fc';
-import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
 import { useGetNewestActivityQuery, useGetTrendActivityQuery } from 'store/activity/activityService';
 import Loading from 'components/Loading';
 import Hero from './Hero';
@@ -39,16 +37,7 @@ function Home() {
             <div className="home__cards">
               {trendData
             && trendData.searchResultData.map((activity) => (
-              <Card
-                id={activity.id.toString()}
-                key={activity.id.toString()}
-                tags={activity.tags ? parseArrayTagDataToTag(activity.tags) : undefined}
-                title={activity.title}
-                imgUrl={activity.images ? activity.images[0] : '/DefaultActivityImage.svg'}
-                altText="test"
-                detail="test"
-                control={<MainCardControl trend={activity.trend} />}
-              />
+              <MainCard {...activity} />
             ))}
             </div>
           )}
@@ -70,16 +59,7 @@ function Home() {
               {
                 newestData
            && newestData.searchResultData.map((activity) => (
-             <Card
-               id={activity.id.toString()}
-               key={activity.id.toString()}
-               tags={activity.tags ? parseArrayTagDataToTag(activity.tags) : undefined}
-               title={activity.title}
-               imgUrl={activity.images ? activity.images[0] : '/DefaultActivityImage.svg'}
-               altText="test"
-               detail={activity.subTitle}
-               control={<MainCardControl trend={activity.trend} />}
-             />
+             <MainCard {...activity} />
            ))
               }
             </div>

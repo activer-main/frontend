@@ -4,6 +4,7 @@ import Tag, { TagType } from 'components/Tag';
 import './index.scss';
 import useWindowWidth from 'hooks/useWindowWidth';
 import { useNavigate } from 'react-router-dom';
+import classNames from 'classnames';
 
 export interface CardType {
   id: string;
@@ -11,16 +12,21 @@ export interface CardType {
   title: string,
   altText: string,
   tags?: TagType[],
-  detail?: string | null,
+  detail?: React.ReactNode;
   control? : React.ReactNode;
+  className? :string;
 }
 
 function Card({
-  id, imgUrl, title, tags, altText, detail, control,
+  id, imgUrl, title, tags, altText, detail, control, className,
 }: CardType) {
   const [showTags, setShowTags] = useState(tags);
   const windowWidth = useWindowWidth();
   const navigate = useNavigate();
+  const customClassName = className?.split(' ');
+  const classes = classNames({
+    card: true,
+  }, customClassName);
 
   useEffect(() => {
     if (windowWidth > 768) {
@@ -31,7 +37,7 @@ function Card({
   }, [windowWidth]);
 
   return (
-    <div className="card">
+    <div className={classes}>
       <div className="card__container">
         <div
           className="card__image"
