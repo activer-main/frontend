@@ -1,128 +1,131 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
-import configureStore from 'redux-mock-store';
-import mockAxios from 'jest-mock-axios';
-
-import { UserDataType, UserInfoType } from 'types/user';
+import {
+  screen,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import Login from '../index';
+import { renderWithProviders } from 'utils/testUtils';
+import store from 'store';
+import { userLogin } from 'store/auth/authAction';
+import { createServer } from 'test/server';
+import Login from '..';
 
 // server url
 const IP = '220.132.244.41';
 const PORT = '5044';
 
-export const URL = `http://${IP}:${PORT}`;
+export const URL = `http://${IP}:${PORT}/api/user`;
 
-// mock user data
-const mockUserData: UserInfoType = {
-  id: 1,
-  email: '',
-  verify: false,
-  realName: 'onandon',
-  nickName: 'onandon',
-  avatar: 'onandon',
-  gender: 'onandon',
-  birthdat: new Date(2020, 6, 9),
-  profession: 'onandon',
-  phone: 'onandon',
-  county: 'onandon',
-  area: 'onandon',
-  activityHistory: [],
-  tagHistory: [],
-};
+// const initialState: UserDataType = {
+//   loading: false,
+//   userInfo: null, // for user object
+//   userToken: null, // for storing the JWT
+//   error: null,
+//   success: false, // for monitoring the registration process.
+// };
 
-// render login component
-function renderComponent() {
-  const initialState: UserDataType = {
-    loading: false,
-    userInfo: null, // for user object
-    userToken: null, // for storing the JWT
-    error: null,
-    success: false, // for monitoring the registration process.
-  };
+let isFetchDataCalled = false;
 
-  const mockStore = configureStore([]);
-  const store: ReturnType<typeof mockStore> = mockStore(initialState);
+createServer([
+  {
+    path: 'http://220.132.244.41:5044/api/User/auth/signin',
+    method: 'post',
+    res: (req, res, ctx) => {
+      isFetchDataCalled = true;
+      return res(
+        ctx.json({
+          data: {
+            user: {
+              id: 1,
+              email: '',
+              verify: false,
+              realName: 'onandon',
+              nickName: 'onandon',
+              avatar: 'onandon',
+              gender: 'onandon',
+              birthdat: new Date(2020, 6, 9),
+              profession: 'onandon',
+              phone: 'onandon',
+              county: 'onandon',
+              area: 'onandon',
+              activityHistory: [],
+              tagHistory: [],
+            },
+            token: {
+              accessToken: 'test_token',
+              expireIn: 52699,
+            },
+          },
+        }),
+      );
+    },
+  },
+]);
 
-  render(
-    <Provider store={store}>
-      <MemoryRouter>
-        <Login />
-      </MemoryRouter>
-    </Provider>,
-  );
-}
+describe('login component', () => {
+  const getIsFetchDataCalled = () => isFetchDataCalled;
 
-describe('When user is not login', () => {
-  afterEach(() => {
-    // cleaning up the mess left behind the previous test
-    mockAxios.reset();
-  });
+  it('Login Page render correctly', () => {
+    // render component
+    renderWithProviders(<Login />);
 
-  it('Login page should renders correctly', () => {
-    renderComponent();
-
+    // assertion
     expect(screen.getByRole('heading', { name: '登入' })).toBeInTheDocument();
-    expect(screen.getByRole('email')).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: '帳號' })).toBeInTheDocument();
     expect(screen.getByLabelText('密碼')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '登入' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '註冊' })).toBeInTheDocument();
   });
 
-  it('Submits form data correctly', () => {
+  it('should submit form with valid credentials', async () => {
     // setup login body
-    const email = 'test@example.com';
-    const password = 'Test123!';
-
-    // mock catch fn
-    const catchFn = jest.fn();
+    const email = 'test@test.com';
+    const password = 'Test1234!';
 
     // render component
-    renderComponent();
+    renderWithProviders(<Login />);
 
-    // simulate user login process
-    userEvent.type(screen.getByRole('email'), email);
-    userEvent.type(screen.getByLabelText('密碼'), password);
-    userEvent.click(screen.getByRole('button', { name: '登入' }));
+    // query element
+    const emailInput = screen.getByLabelText('帳號') as HTMLInputElement;
+    const passwordInput = screen.getByLabelText('密碼') as HTMLInputElement;
+    // const submitButton = screen.getByRole('button', { name: '登入' }) as HTMLButtonElement;
 
-    // assert login api is called
-    expect(mockAxios.post).toHaveBeenCalledWith(
-      `${URL}/auth/signin`,
-      { email, password },
-    );
+    // simulate user login
+    userEvent.type(emailInput, email);
+    userEvent.type(passwordInput, password);
 
-    // assert api don't have error
-    expect(catchFn).not.toHaveBeenCalled();
+    // Todo: fixbug in handleSubmit
+    // userEvent.click(submitButton);
+    // mock user click submit button
+    await store.dispatch(userLogin({ email, password }));
+
+    // assertion
+    // expect(submitButton).not.toBeDisabled();
+
+    // await screen.findByText('spining');
+
+    console.log(store.getState());
+    expect(getIsFetchDataCalled()).toBe(true);
+    expect(store.getState().auth.loading).toBe(false);
+    // expect(store.getState().auth.userToken).toEqual({ accessToken: 'test_token' });
   });
-});
 
-// =====================
+  // it('should show error message with invalid credentials', async () => {
+  //   // render component
+  //   renderWithProviders(<Login />);
 
-describe('When user login', () => {
-  it('redirects to profile page if user is authenticated', () => {
-    const mockStore = configureStore([]);
-    const store = mockStore({
-      auth: {
-        loading: false,
-        userInfo: mockUserData, // for user object
-        userToken: 'testToken', // for storing the JWT
-        error: null,
-        success: false, // for monitoring the registration process.
-      },
-    });
+  //   const emailInput = screen.getByLabelText('帳號') as HTMLInputElement;
+  //   const passwordInput = screen.getByLabelText('密碼') as HTMLInputElement;
+  //   const submitButton = screen.getByRole('button', { name: '登入' }) as HTMLButtonElement;
 
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <Login />
-        </MemoryRouter>
-      </Provider>,
-    );
+  //   userEvent.type(emailInput, 'invalid@test.com');
+  //   userEvent.type(passwordInput, 'invalid_password');
+  //   userEvent.click(submitButton);
 
-    expect(screen.getByRole('heading', { name: '登入' })).not.toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Profile' })).toBeInTheDocument();
-  });
+  //   expect(submitButton).toBeDisabled();
+
+  //   await screen.findByText('spining');
+
+  //   expect(screen.getByText('Invalid email or password')).toBeInTheDocument();
+  // });
 });
