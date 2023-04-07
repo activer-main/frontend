@@ -68,7 +68,12 @@ function DetailImage({ images, altText }: DetailImagesType) {
             />
 
           </Swiper>
-        ) : <img src="/DefaultActivityImage.svg" alt={altText} />
+        ) : (
+          <>
+            <img className="image-slide__content" src="/DefaultActivityImage.svg" alt={altText} />
+            <img className="image-slide__background" src="/DefaultActivityImage.svg" alt={altText} />
+          </>
+        )
 
       }
     </div>
