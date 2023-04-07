@@ -1,8 +1,9 @@
 import React from 'react';
 import {
+  act,
+  fireEvent,
   screen,
 } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'utils/testUtils';
 import store from 'store';
@@ -34,27 +35,25 @@ createServer([
       isFetchDataCalled = true;
       return res(
         ctx.json({
-          data: {
-            user: {
-              id: 1,
-              email: '',
-              verify: false,
-              realName: 'onandon',
-              nickName: 'onandon',
-              avatar: 'onandon',
-              gender: 'onandon',
-              birthdat: new Date(2020, 6, 9),
-              profession: 'onandon',
-              phone: 'onandon',
-              county: 'onandon',
-              area: 'onandon',
-              activityHistory: [],
-              tagHistory: [],
-            },
-            token: {
-              accessToken: 'test_token',
-              expireIn: 52699,
-            },
+          user: {
+            id: 1,
+            email: '',
+            verify: false,
+            realName: 'onandon',
+            nickName: 'onandon',
+            avatar: 'onandon',
+            gender: 'onandon',
+            birthdat: new Date(2020, 6, 9),
+            profession: 'onandon',
+            phone: 'onandon',
+            county: 'onandon',
+            area: 'onandon',
+            activityHistory: [],
+            tagHistory: [],
+          },
+          token: {
+            accessToken: 'test_token',
+            expireIn: 52699,
           },
         }),
       );
@@ -86,21 +85,25 @@ describe('login component', () => {
     renderWithProviders(<Login />);
 
     // query element
-    const emailInput = screen.getByLabelText('帳號') as HTMLInputElement;
-    const passwordInput = screen.getByLabelText('密碼') as HTMLInputElement;
-    // const submitButton = screen.getByRole('button', { name: '登入' }) as HTMLButtonElement;
+    const emailInput = await screen.findByLabelText('帳號') as HTMLInputElement;
+    const passwordInput = await screen.findByLabelText('密碼') as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: '登入' }) as HTMLButtonElement;
 
     // simulate user login
-    userEvent.type(emailInput, email);
-    userEvent.type(passwordInput, password);
+    act(() => {
+      fireEvent.change(emailInput, { target: { value: email } });
+      fireEvent.change(passwordInput, { target: { value: password } });
+    });
+
+    screen.debug();
 
     // Todo: fixbug in handleSubmit
-    // userEvent.click(submitButton);
     // mock user click submit button
+    // fireEvent.click(submitButton);
     await store.dispatch(userLogin({ email, password }));
 
     // assertion
-    // expect(submitButton).not.toBeDisabled();
+    expect(submitButton).toBeDisabled();
 
     // await screen.findByText('spining');
 
