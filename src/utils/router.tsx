@@ -1,4 +1,5 @@
 import MobileSidebar from 'components/Header/MobileSideBar';
+import ErrorBoundary from 'pages/Error';
 import Home from 'pages/Home';
 import Root from 'pages/root';
 import React from 'react';
@@ -19,6 +20,7 @@ const routerConfig: RouteObject[] = [
   {
     path: '/',
     element: <Root />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: '/',
