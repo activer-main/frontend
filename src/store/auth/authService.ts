@@ -19,7 +19,6 @@ export const authApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-
     getManageActivity: builder.query<ActivityDataType[], void>({
       query: () => ({
         url: 'api/activity/dreamAndRegistered',
