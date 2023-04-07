@@ -8,7 +8,6 @@ import ImageSlide from 'components/ImageSlide';
 import { ActivityTagDataType } from 'types/data';
 import Tag, { TagType } from 'components/Tag';
 import { Buffer } from 'buffer';
-import { BsPlus } from 'react-icons/bs';
 import './index.scss';
 import {
   FcGraduationCap, FcList, FcPhone, FcReading, FcShare,
@@ -45,14 +44,6 @@ function Detail() {
 
   return (
     <div className="detail" id="detail">
-
-      <Button
-        onClick={() => navigate(-1)}
-        color="white"
-        variant={{ underline: true }}
-        text="返回上一頁"
-        className="detail__backlink"
-      />
       {/* Introduction */}
       <div className="detail__hero">
 
@@ -85,19 +76,18 @@ function Detail() {
                   />
                 );
               }).slice(0, 5)}
+              {/* Add Tag Button */}
+              <button
+                type="button"
+                className="detail__add-tag tag"
+                onClick={() => navigate(`/detail/${id}/vote`, {
+                  replace: true,
+                })}
+              >
+                + 新增標籤
+              </button>
             </div>
           )}
-
-          {/* Add Tag Button */}
-          <Button
-            className="detail__add-tag"
-            text="新增標籤"
-            onClick={() => navigate(`/detail/${id}/vote`, {
-              replace: true,
-            })}
-            color="dark"
-            iconAfter={<BsPlus />}
-          />
 
         </div>
 

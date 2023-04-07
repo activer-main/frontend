@@ -13,6 +13,12 @@ interface DetailImagesType {
 
 function DetailImage({ images, altText }: DetailImagesType) {
   const swiperRef = React.useRef<SwiperType>();
+  const imgErrorHandler:React.ReactEventHandler<HTMLImageElement> = ({ currentTarget }) => {
+    /* eslint-disable no-param-reassign */
+    currentTarget.onerror = null; // prevents looping
+    currentTarget.src = '/DefaultActivityImage.svg';
+    /* eslint-enable no-param-reassign */
+  };
   return (
     <div className="image-slide">
       {
@@ -29,7 +35,19 @@ function DetailImage({ images, altText }: DetailImagesType) {
           >
             {images.map((image) => (
               <SwiperSlide key={`slide-${image}`}>
-                <img src={image} alt={altText} />
+                <img
+                  className="image-slide__background"
+                  src={encodeURI(image)}
+                  onError={imgErrorHandler}
+                  alt={altText}
+                />
+                <img
+                  className="image-slide__content"
+                  src={encodeURI(image)}
+                  onError={imgErrorHandler}
+                  alt={altText}
+                />
+
               </SwiperSlide>
             ))}
 
