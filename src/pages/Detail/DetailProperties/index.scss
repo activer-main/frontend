@@ -1,12 +1,19 @@
+@import '/src/styles/variables';
+@import '/src/styles/global';
+
 .detail-properties{
   display: flex;
   flex-direction: column;
-  gap: 2em;
   height: 100%;
-  
 
   &__item{
+    position: relative;
     display: flex;
+    padding: 1em 0;
+
+    &:not(:last-child) {
+      border-bottom: 1.5px solid $secondary-font-color;
+    }
   }
 
   &__title{

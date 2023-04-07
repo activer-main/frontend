@@ -9,15 +9,22 @@
   &__backlink{
     position: absolute;
     z-index: $zindex-navbar;
-    
   }
   
 
   &__hero{
+    @include media(mobile){
+      flex-direction: column;
+    }
+
     display: flex;
   }
   
   &__hero-left, &__hero-right{
+    @include media(mobile){
+      width: 100%;
+    }
+
     gap: 1em;
     width: 50%;
     margin: 1em;
@@ -30,7 +37,6 @@
     justify-content: center;
     align-items: center;
     padding-top: 1.5em;
-
   }
   
   &__tags{

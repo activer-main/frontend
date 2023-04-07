@@ -5,12 +5,26 @@
   position: relative;
   flex-grow: 1;
   width: 100%;
-  height: 10em;
+  height: 20em;
 
-  img {
-    object-fit: cover;
+  &__content {
+    position: absolute;
+    z-index: 1;
+    object-fit: contain;
     width: 100%;
     height: 100%;
+  }
+
+  &__background{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    object-fit: cover !important;
+    width: 100%;
+    height: 100%;
+    filter: blur(5px);
+    opacity: 0.8; /* optional */
   }
 
   .swiper {
@@ -32,6 +46,7 @@
       object-fit: contain;
       width: 100%;
       height: 100%;
+ 
     }
 
     &-button-prev,
