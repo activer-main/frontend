@@ -120,4 +120,15 @@
       width: 6em;
     }
   }
+
+  &__searchbar{
+    display: flex;
+    gap: 1em;
+  }
+
+  &__search-button{
+    height: fit-content;
+    font-size: 0.8em;
+    white-space: nowrap;
+  }
 }
