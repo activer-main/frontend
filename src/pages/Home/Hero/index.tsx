@@ -1,11 +1,11 @@
 import React from 'react';
-import Button from 'components/Button';
 import { ReactComponent as Earth } from './components/Earth.svg';
 import { ReactComponent as Planet } from './components/Planet.svg';
 import { ReactComponent as Rocket1 } from './components/Rocket1.svg';
-import './index.scss';
 import Counter from './components/Counter';
 import { ReactComponent as StarRing } from './components/StarRing.svg';
+import './index.scss';
+import Searchbar from './components/Searchbar';
 
 function Hero() {
   return (
@@ -17,9 +17,9 @@ function Hero() {
           <mark className="hero__h3--highlight">學生的社群中</mark>
           <br />
           尋找屬於你的活動
-
         </h3>
-        <Button text="立即搜尋活動" color="secondary" />
+
+        <Searchbar />
         <div className="hero__count">
           <div className="hero__count__item">
             <h4>活動總數</h4>
