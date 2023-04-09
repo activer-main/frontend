@@ -7,7 +7,7 @@ import { createServer } from 'test/server';
 import { MemoryRouter, useNavigate } from 'react-router-dom';
 import { mockUserData } from 'test/data/user';
 import userEvent from '@testing-library/user-event';
-import Login from '..';
+import Login from '../index';
 
 // Mock the `useNavigate` hook
 jest.mock('react-router-dom', () => ({
@@ -30,7 +30,7 @@ createServer([
 ]);
 
 // Test
-describe('login component', () => {
+describe('Login component', () => {
   it('Login Page render correctly', () => {
     // render component
     renderWithProviders(
