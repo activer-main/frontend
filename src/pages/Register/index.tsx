@@ -2,7 +2,6 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -13,7 +12,7 @@ import { useAppDispatch, useAppSelector } from 'store';
 import { selectUserData } from 'store/auth/authSlice';
 import { toast } from 'react-toastify';
 import { registerUser } from 'store/auth/authAction';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register() {
   const { loading } = useAppSelector(selectUserData);
@@ -120,7 +119,7 @@ export default function Register() {
           </LoadingButton>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/login" variant="body2">
+              <Link to="/login">
                 已有帳號? 立即登入
               </Link>
             </Grid>

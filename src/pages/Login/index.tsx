@@ -2,7 +2,7 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
+import { Link, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -11,7 +11,7 @@ import Container from '@mui/material/Container';
 import { useAppDispatch, useAppSelector } from 'store';
 import { userLogin } from 'store/auth/authAction';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+
 import LoadingButton from '@mui/lab/LoadingButton';
 
 export default function Login() {
@@ -93,12 +93,12 @@ export default function Login() {
 
           <Grid container>
             <Grid item xs>
-              <Link href="/" variant="body2">
+              <Link to="/">
                 忘記密碼?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/register" variant="body2">
+              <Link to="/register">
                 立即註冊
               </Link>
             </Grid>
