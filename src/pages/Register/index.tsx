@@ -1,98 +1,132 @@
-// RegisterScreen.js
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Container from '@mui/material/Container';
 import { useAppDispatch, useAppSelector } from 'store';
-import Button from 'components/Button';
-import { registerUser } from
-  'store/auth/authAction';
-import { RegisterFormDataType } from 'types/user';
-import FormInput from 'components/FormInput';
-import { PASSWORD_PATTERN } from 'utils/pattern';
-import './index.scss';
+import { selectUserData } from 'store/auth/authSlice';
 import { toast } from 'react-toastify';
+import { registerUser } from 'store/auth/authAction';
+import { useNavigate } from 'react-router-dom';
 
-function Register() {
-  const {
-    loading, userInfo, success,
-  } = useAppSelector(
-    (state) => state.auth,
-  );
+export default function Register() {
+  const { loading } = useAppSelector(selectUserData);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.SyntheticEvent) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const target = event.target as typeof event.target & RegisterFormDataType;
-
-    // check if passwords match
-    if (target.password.value !== target.confirmPassword.value) {
+    const data = new FormData(event.currentTarget);
+    if (
+      data.get('password') !== data.get('confirmPassword')
+    ) {
       toast.error('密碼不相同');
       return;
     }
 
-    await dispatch(registerUser({
-      username: target.username.value,
-      email: target.email.value.toLowerCase(),
-      password: target.password.value,
-    })).unwrap()
-      .then(() => navigate('/login'));
+    dispatch(registerUser({
+      username: data.get('username') as string,
+      email: data.get('email') as string,
+      password: data.get('password') as string,
+    }))
+      .unwrap()
+      .then(() => {
+        toast.success('註冊成功，請重新登入!');
+        navigate('/login');
+      })
+      .catch((error: any) => toast.error(error.message));
   };
 
-  useEffect(() => {
-    // redirect authenticated user to profile screen
-    if (userInfo) navigate('/user/profile');
-  }, [navigate, userInfo, success]);
-
   return (
-    <form onSubmit={handleSubmit} className="register">
-      <h1 className="register__header">註冊</h1>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1 }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="username"
+                name="username"
+                required
+                fullWidth
+                id="username"
+                label="使用者名稱"
+                autoFocus
+              />
+            </Grid>
 
-      <FormInput
-        type="text"
-        label="使用者名稱"
-        name="username"
-        required
-      />
-      <FormInput
-        label="帳號"
-        type="email"
-        name="email"
-        required
-      />
-      <FormInput
-        type="password"
-        label="密碼"
-        name="password"
-        pattern={PASSWORD_PATTERN}
-        required
-      />
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="帳號"
+                name="email"
+                autoComplete="email"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="密碼"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="confirmPassword"
+                label="確認密碼"
+                type="password"
+                id="confirmPassword"
+                autoComplete="new-password"
+              />
+            </Grid>
 
-      <FormInput
-        type="password"
-        label="確認密碼"
-        pattern={PASSWORD_PATTERN}
-        name="confirmPassword"
-        required
-      />
-
-      <div className="register__control">
-        <Button
-          type="submit"
-          text={loading ? 'spin' : '註冊'}
-          className="register__submit"
-          disabled={loading}
-        />
-        <Button
-          type="button"
-          text="取消"
-          variant={{ outline: true }}
-          className="register__cancel"
-          onClick={() => navigate('/login')}
-          disabled={loading}
-        />
-      </div>
-
-    </form>
+          </Grid>
+          <LoadingButton
+            loading={loading}
+            loadingPosition="end"
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign Up
+          </LoadingButton>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link href="/login" variant="body2">
+                已有帳號? 立即登入
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </Container>
   );
 }
-export default Register;
