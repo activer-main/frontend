@@ -9,7 +9,10 @@ import { renderWithProviders } from 'utils/testUtils';
 import store from 'store';
 import { userLogin } from 'store/auth/authAction';
 import { createServer } from 'test/server';
-import Login from '..';
+import { MemoryRouter, useNavigate } from 'react-router-dom';
+import { mockUserData } from 'test/data/user';
+import userEvent from '@testing-library/user-event';
+import Login from '../index';
 
 // server url
 const IP = '220.132.244.41';
@@ -61,9 +64,8 @@ createServer([
   },
 ]);
 
-describe('login component', () => {
-  const getIsFetchDataCalled = () => isFetchDataCalled;
-
+// Test
+describe('Login component', () => {
   it('Login Page render correctly', () => {
     // render component
     renderWithProviders(<Login />);
