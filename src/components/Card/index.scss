@@ -1,68 +1,66 @@
 // components/Card/Row
+@use "sass:map";
 @import "/src/styles/variables";
 @import "/src/styles/global";
 
+$card-config: (
+  mobile:(height: 100px,
+    width: 100%,
+    img-height: 100%,
+    img-width: 20px,
+  ),
+  tablet:(height: 300px,
+    width: 50%,
+    img-height: 130px,
+    img-width: 100%,
+  ),
+  laptop: (height: 380px,
+    width: 25%,
+    img-height: 130px,
+    img-width: 100%),
+  desktop: (height: 400px,
+    width: 20%,
+    img-height: 130px,
+    img-width: 100%)
+);
+
+
 .card {
-  @include media(mobile) {
-    width: 100%;
+  @each $key,
+  $value in $card-config {
+    $height: map.get($value, height);
+    $width: map.get($value, width);
+    $img-width: map.get($value, img-width);
+    $img-height: map.get($value, img-height);
+
+    @include media($key) {
+      @include setSize($width, $height);
+    }
+
+    &__image {
+      @include media($key) {
+        @include setSize($img-width, $img-height)
+      }
+    }
 
   }
 
-  @include media(tablet) {
-    width: 50%;
-  }
-
-  @include media(laptop) {
-    width: 25%;
-  }
-
-  display: flex;
   flex: 0 0 auto;
-  width: 20%;
+  padding: 1em;
 
   &__container {
-    @include media(mobile) {
-      flex-direction: row;
-      height: 10em;
-      margin: 0.5rem 0;
-    }
-
-    position: relative;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    height: 40vh;
-
-    // height: 20em;
-    margin: 1rem;
-    border-radius: 0.25rem;
-    background-color: white;
-    box-shadow: 0 10px 20px -7px rgb(0 0 0 / 25%);
-
-    // bottom color bar
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 2px;
-      background-color: $primary-color;
-    }
-
+    width: 100%;
+    height: 100%;
+    box-shadow: rgb(99 99 99 / 20%) 0 2px 8px 0;
   }
 
+
   &__image {
-    @include media(mobilt, tablet) {
-      flex: 0 0 10em;
-      padding-bottom: 2px; // escape ::after color bar
-    }
-
-    @include media(laptop) {
-      flex: 0 0 8em;
-    }
-
-    flex: 0 0 6em;
+    flex: 0 0 auto;
     overflow: hidden;
+    cursor: pointer;
 
     img {
       object-fit: cover;
@@ -75,35 +73,46 @@
   &__content {
     display: flex;
     flex: 1 1 auto;
-    flex-direction: column;
-    padding: 1rem;
+    flex-flow: column;
+    padding: 1em;
+    cursor: pointer;
   }
 
   &__title {
-    flex: 0 0 2.5em;
     overflow: hidden;
-    font-weight: bold;
+    height: 2em;
+    font-size: 1em;
+    line-height: 1em;
   }
 
   &__detail {
-    flex: 1 1 5em;
-    overflow: hidden;
-    color: $secondary-font-color;
-    font-size: 0.6em;
-    line-height: 1.5em;
+    flex: 1 1 auto;
   }
 
   &__tags {
     display: flex;
-    flex: 2 0 2em;
-    flex-wrap: wrap;
-    gap: 1em;
-    font-size: 0.4em;
+    flex-flow: row nowrap;
+    gap: 0.5em;
+    overflow-x: auto;
+    padding: 0.2em;
+    font-size: 0.5em;
+
+    &::-webkit-scrollbar {
+      height: 2px;
+      background-color: #F5F5F5;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border: 2px solid $secondary-font-color;
+      background-color: $secondary-font-color;
+    }
+
   }
 
+
   &__control {
-    flex: 0 0 1em;
-    height: 1em;
+    margin-top: 0;
+    padding: 0 1em;
   }
 
 

@@ -1,25 +1,26 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import Header from 'components/Header';
-import { useGetUserDetailsQuery } from 'store/auth/authService';
-import { setCredentials } from 'store/auth/authSlice';
-import { useAppDispatch } from 'store';
+import { selectUserData } from 'store/auth/authSlice';
+import { useAppDispatch, useAppSelector } from 'store';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { tokenLogin } from 'store/auth/authAction';
+import Loading from 'components/Loading';
 
 function Root() {
   const dispatch = useAppDispatch();
-
-  const { data } = useGetUserDetailsQuery('userDetails', {
-    pollingInterval: 900000,
-  });
+  const { loading } = useAppSelector(selectUserData);
 
   useEffect(() => {
-    if (data) dispatch(setCredentials(data));
-  }, [data, dispatch]);
+    dispatch(tokenLogin());
+  }, []);
 
   return (
     <>
-      <Header />
-      <Outlet />
+      <ToastContainer />
+      {loading
+        ? <Loading />
+        : <Outlet />}
     </>
   );
 }

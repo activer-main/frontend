@@ -10,17 +10,14 @@ export interface UserInfoType {
   id: number;
   email: string;
   verify: boolean;
-  realName: string;
-  nickName: string;
-  avatar: string;
-  gender: string;
-  birthdat: Date;
-  profession: string;
-  phone: string;
-  county: string;
-  area: string;
-  activityHistory: string[];
-  tagHistory: string[];
+  username: string;
+  avatar: string | null;
+  gender: string | null;
+  birthday: Date | null;
+  profession: string | null;
+  phone: string | null;
+  county: string | null;
+  area: string | null;
 }
 
 export interface TokenType {
@@ -38,4 +35,15 @@ export type RegisterFormDataType = {
 export type LoginFormDataType = {
   email: { value: string };
   password: { value: string };
+};
+
+export type ProfileFormDataType = {
+  avatar: { value: string | undefined }// TODO: remove undefined
+  username: { value: string };
+  gender:{ value: string };
+  profession: { value: string };
+  birthday: { value: Date };
+  phone: { value: string };
+  county: { value: string };
+  area: { value: string };
 };

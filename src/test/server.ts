@@ -5,7 +5,7 @@ import { LoginResponseType } from 'types/response';
 interface HandlerConfig {
   method?: 'get' | 'post' | 'put' | 'delete';
   path: string;
-  res: (req: any, res: any, ctx: any) => { data: LoginResponseType };
+  res: (req: any, res: any, ctx: any) => LoginResponseType;
 }
 
 export function createServer(handlerConfig: HandlerConfig[]) {

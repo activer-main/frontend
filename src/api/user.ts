@@ -1,11 +1,10 @@
+import { UserInfoType } from 'types/user';
 import axios from 'axios';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
-import { RegisterRequestType, LoginRequestType } from 'types/request';
-
-const IP = '220.132.244.41';
-const PORT = '5044';
-
-export const URL = `http://${IP}:${PORT}`;
+import { RegisterRequestType, LoginRequestType, UserUpdateRequestType } from 'types/request';
+import { userToken } from 'store/auth/authSlice';
+import { URL } from 'utils/apiURL';
+import { VerifyRequestTyep } from '../types/request';
 
 const userResquest = axios.create(
   {
@@ -16,7 +15,7 @@ const userResquest = axios.create(
 export const postRegist = (
   registBody : RegisterRequestType,
 ) => userResquest.post<RegisterResponseType>(
-  '/signup',
+  '/auth/signup',
   registBody,
   {
     headers: {
@@ -31,5 +30,57 @@ export const postLogin = (loginBody: LoginRequestType) => userResquest.post<Logi
   {
     headers: { 'Content-Type': 'application/json' },
     withCredentials: false,
+  },
+);
+
+export const getTokenLogin = () => (
+  userResquest.get<LoginResponseType>(
+    '/auth/token',
+    {
+      headers: { Authorization: `Bearer ${userToken}` },
+    },
+  ));
+
+// eslint-disable-next-line
+export const putUserData = (newUserInfo : UserUpdateRequestType) => userResquest.put<UserInfoType>(
+  '',
+  {
+    RealName: 'John Doe',
+    NickName: 'johndoe123',
+    Avatar: 'https://example.com/avatar.png',
+    Gender: 'male',
+    Birthday: '1980-01-01T00:00:00.000Z',
+    Profession: 'Software Developer',
+    Phone: '123-456-7890',
+    County: 'Los Angeles',
+    Area: 'Santa Monica',
+    ActivityHistory: ['activity1', 'activity2', 'activity3'],
+    TagHistory: ['tag1', 'tag2', 'tag3'],
+  },
+  {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Barear ${userToken}`,
+    },
+  },
+);
+
+export const getVerifyUser = ({ verifyCode } : VerifyRequestTyep) => userResquest.get<
+LoginResponseType>(
+  `auth/verify/email?verifyCode=${verifyCode}`,
+  {
+    headers: {
+      Authorization: `Barear ${userToken}`,
+    },
+  },
+
+);
+
+export const getResendVerifyEmail = () => userResquest.get<void>(
+  'auth/resendVerify/email',
+  {
+    headers: {
+      Authorization: `Barear ${userToken}`,
+    },
   },
 );

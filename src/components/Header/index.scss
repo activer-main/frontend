@@ -4,7 +4,9 @@
 .header{
   @include container-main;
 
-  display: flex;
+  display: flex;  
+  gap:1em;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-end;  
+ 
 }

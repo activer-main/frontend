@@ -53,6 +53,11 @@ desktop: 3000px);
   }
 }
 
+@mixin setSize($width, $height){
+  width: $width;
+  height: $height;
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0turn);
@@ -121,6 +126,7 @@ desktop: 3000px);
 @mixin login-out{
   @include container-main;
 
+  position: relative;
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -133,8 +139,15 @@ desktop: 3000px);
   }
   
   &__control{
+    position: relative;
     display: flex;
     gap: 1em;
     justify-content: center;
+    padding-bottom: 1em;
+  }
+
+  &__alert{
+    position: absolute;
+    top: 100%;
   }
 }

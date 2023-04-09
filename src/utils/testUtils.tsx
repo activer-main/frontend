@@ -4,19 +4,18 @@ import type { RenderOptions } from '@testing-library/react';
 import type { PreloadedState } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
-import { AppStore, RootState, setupStore } from 'store';
-import { MemoryRouter } from 'react-router-dom';
+import { AppStore, TestRootState, setupStore } from 'store';
 
 // 这个 interface 扩展了 RTL 的默认 render 选项，同时允许用户指定其他选项，例如 initialState 和 store
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
-  preloadedState?: PreloadedState<RootState>
+  preloadedState?: PreloadedState<TestRootState>
   store?: AppStore
 }
 
 export function renderWithProviders(
   ui: React.ReactElement,
   {
-    preloadedState,
+    preloadedState = {},
     // 自动创建一个 store 实例，如果没有传入 store
     store = setupStore(preloadedState),
     ...renderOptions
@@ -25,9 +24,7 @@ export function renderWithProviders(
   function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
     return (
       <Provider store={store}>
-        <MemoryRouter>
-          {children}
-        </MemoryRouter>
+        {children}
       </Provider>
     );
   }

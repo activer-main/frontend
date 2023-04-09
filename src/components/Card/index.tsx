@@ -1,7 +1,10 @@
 // components/Card/Default
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Tag, { TagType } from 'components/Tag';
 import './index.scss';
+import useWindowWidth from 'hooks/useWindowWidth';
+import { useNavigate } from 'react-router-dom';
+import classNames from 'classnames';
 
 export interface CardType {
   id: string;
@@ -9,23 +12,56 @@ export interface CardType {
   title: string,
   altText: string,
   tags?: TagType[],
-  detail?: string | null,
+  detail?: React.ReactNode;
   control? : React.ReactNode;
+  className? :string;
 }
 
 function Card({
-  id, imgUrl, title, tags, altText, detail, control,
+  id, imgUrl, title, tags, altText, detail, control, className,
 }: CardType) {
+  const [showTags, setShowTags] = useState(tags);
+  const windowWidth = useWindowWidth();
+  const navigate = useNavigate();
+  const customClassName = className?.split(' ');
+  const classes = classNames({
+    card: true,
+  }, customClassName);
+
+  useEffect(() => {
+    if (windowWidth > 768) {
+      setShowTags(tags?.slice(0, 5));
+    } else {
+      setShowTags(tags?.slice(0, 2));
+    }
+  }, [windowWidth]);
+
   return (
-    <div className="card">
+    <div className={classes}>
       <div className="card__container">
-        <div className="card__image">
-          <img src={encodeURI(imgUrl)} alt={altText} />
+        <div
+          className="card__image"
+          onClick={() => navigate(`/detail/${id}`)}
+          aria-hidden
+        >
+          <img
+            src={encodeURI(imgUrl)}
+            onError={({ currentTarget }) => {
+              /* eslint-disable no-param-reassign */
+              currentTarget.onerror = null; // prevents looping
+              currentTarget.src = '/DefaultActivityImage.svg';
+              /* eslint-enable no-param-reassign */
+            }}
+            alt={altText}
+          />
         </div>
-        <div className="card__content">
+        <div
+          className="card__content"
+          onClick={() => navigate(`/detail/${id}`)}
+          aria-hidden
+        >
           {/* title */}
           <div className="card__title">{title}</div>
-
           {/* detail */}
           <div className="card__detail">
             {detail}
@@ -33,8 +69,8 @@ function Card({
 
           {/* tags */}
           <div className="card__tags">
-            {tags
-              && tags.map((tag) => (
+            {showTags
+              && showTags.map((tag) => (
                 <Tag
                   key={`${id}-${tag.id}`}
                   type={tag.type}
@@ -45,11 +81,11 @@ function Card({
                 />
               ))}
           </div>
-
-          {/* Contorls */}
-          {control && <div className="card__control">{control}</div>}
         </div>
+        {/* Contorls */}
+        {control && <div className="card__control">{control}</div>}
       </div>
+
     </div>
 
   );

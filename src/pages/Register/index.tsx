@@ -9,6 +9,7 @@ import { RegisterFormDataType } from 'types/user';
 import FormInput from 'components/FormInput';
 import { PASSWORD_PATTERN } from 'utils/pattern';
 import './index.scss';
+import { toast } from 'react-toastify';
 
 function Register() {
   const {
@@ -19,28 +20,27 @@ function Register() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
+  const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const target = event.target as typeof event.target & RegisterFormDataType;
 
     // check if passwords match
     if (target.password.value !== target.confirmPassword.value) {
-      alert('Password mismatch');
+      toast.error('密碼不相同');
       return;
     }
 
-    dispatch(registerUser({
+    await dispatch(registerUser({
       username: target.username.value,
       email: target.email.value.toLowerCase(),
       password: target.password.value,
-    }));
+    })).unwrap()
+      .then(() => navigate('/login'));
   };
 
   useEffect(() => {
-    // redirect user to login page if registration was successful
-    if (success) navigate('/login');
     // redirect authenticated user to profile screen
-    if (userInfo) navigate('/profile');
+    if (userInfo) navigate('/user/profile');
   }, [navigate, userInfo, success]);
 
   return (

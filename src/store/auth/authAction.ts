@@ -1,9 +1,12 @@
+import { UserInfoType } from 'types/user';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
-import { postRegist } from 'api/user';
+import {
+  postRegist, postLogin, putUserData, getTokenLogin,
+} from 'api/user';
 import { RegisterRequestType } from 'types/request';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { LoginRequestType } from '../../types/request';
-import { postLogin } from '../../api/user';
+import { getVerifyUser } from '../../api/user';
+import { VerifyRequestTyep, UserUpdateRequestType, LoginRequestType } from '../../types/request';
 
 // Register
 export const registerUser = createAsyncThunk<
@@ -16,11 +19,7 @@ RegisterRequestType
       const { data } = await postRegist(registBody);
       return data;
     } catch (error: any) {
-    // return custom error message from backend if present
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      }
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   },
 );
@@ -38,11 +37,48 @@ LoginRequestType
       localStorage.setItem('userToken', data.token.accessToken);
       return data;
     } catch (error: any) {
-      // return custom error message from API if any
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      }
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const tokenLogin = createAsyncThunk<
+LoginResponseType,
+void>(
+  'auth/token',
+  async () => {
+    const { data } = await getTokenLogin();
+    localStorage.setItem('userToken', data.token.accessToken);
+    return data;
+  },
+);
+
+// update
+export const userUpdate = createAsyncThunk<
+UserInfoType,
+UserUpdateRequestType
+>(
+  'auth/update',
+  async (newUserData: UserUpdateRequestType, { rejectWithValue }) => {
+    try {
+      const { data } = await putUserData(newUserData);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const verifyUser = createAsyncThunk<
+LoginResponseType,
+VerifyRequestTyep>(
+  'auth/verify',
+  async (request: VerifyRequestTyep, { rejectWithValue }) => {
+    try {
+      const { data } = await getVerifyUser(request);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
     }
   },
 );

@@ -1,17 +1,22 @@
 import Button from 'components/Button';
 import React from 'react';
-import { useLoaderData } from 'react-router-dom';
-import { homeLoaderType } from 'types/loader';
 import './index.scss';
-import Card from 'components/Card';
-import MainCardControl from 'components/Card/MainCardContorl';
+import MainCard from 'components/Card/MainCard';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { FcBookmark, FcFlashOn } from 'react-icons/fc';
-import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
+import { useGetNewestActivityQuery, useGetTrendActivityQuery } from 'store/activity/activityService';
+import Loading from 'components/Loading';
 import Hero from './Hero';
 
 function Home() {
-  const loaderData = useLoaderData() as homeLoaderType;
+  const { data: trendData, isLoading: isLoadingTrendData } = useGetTrendActivityQuery({
+    currentSegment: 1,
+    countSegment: 4,
+  });
+  const { data: newestData, isLoading: isLoadingNewestData } = useGetNewestActivityQuery({
+    currentSegment: 1,
+    countSegment: 4,
+  });
 
   return (
     <div className="home">
@@ -27,22 +32,15 @@ function Home() {
           </h2>
           <Button text="更多熱門活動" color="white" iconAfter={<AiOutlineArrowRight />} />
         </div>
-        <div className="home__cards">
-          {
-            loaderData.trendActivityResData.searchResultData.map((activity) => (
-              <Card
-                id={activity.id.toString()}
-                key={activity.id.toString()}
-                tags={activity.tags ? parseArrayTagDataToTag(activity.tags) : undefined}
-                title={activity.title}
-                imgUrl={activity.images ? activity.images[0] : '/DefaultActivityImage.svg'}
-                altText="test"
-                detail={activity.subTitle}
-                control={<MainCardControl trend={activity.trend} />}
-              />
-            ))
-          }
-        </div>
+        {isLoadingTrendData ? <Loading />
+          : (
+            <div className="home__cards">
+              {trendData
+            && trendData.searchResultData.map((activity) => (
+              <MainCard {...activity} />
+            ))}
+            </div>
+          )}
       </section>
 
       <section className="newest-activity">
@@ -55,22 +53,17 @@ function Home() {
           <Button text="更多最新活動" color="transparent" iconAfter={<AiOutlineArrowRight />} />
 
         </div>
-        <div className="home__cards">
-          {
-            loaderData.newestActivityResData.searchResultData.map((activity) => (
-              <Card
-                id={activity.id.toString()}
-                key={activity.id.toString()}
-                tags={activity.tags ? parseArrayTagDataToTag(activity.tags) : undefined}
-                title={activity.title}
-                imgUrl={activity.images ? activity.images[0] : '/DefaultActivityImage.svg'}
-                altText="test"
-                detail={activity.subTitle}
-                control={<MainCardControl trend={activity.trend} />}
-              />
-            ))
-          }
-        </div>
+        {isLoadingNewestData ? <Loading />
+          : (
+            <div className="home__cards">
+              {
+                newestData
+           && newestData.searchResultData.map((activity) => (
+             <MainCard {...activity} />
+           ))
+              }
+            </div>
+          )}
       </section>
 
     </div>

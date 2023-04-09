@@ -10,11 +10,11 @@ function FormInput({
   label, className, id, title, value, ...props
 }: FormInputType) {
   const customClassName = className?.split(' ');
-  const [inputValue, setInputValue] = useState<string | undefined>(undefined);
+  const [inputValue, setInputValue] = useState<React.InputHTMLAttributes<HTMLInputElement>['value']>(value);
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
 
   const classes = classNames({
-    'form-input__input': true,
+    'form-input': true,
   }, customClassName);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +27,7 @@ function FormInput({
   };
 
   return (
-    <div className="form-input">
+    <div className={classes}>
       <label
         htmlFor={id ? `form-input-${id}` : ''}
         className="form-input__label"
@@ -35,7 +35,7 @@ function FormInput({
         {label}
       </label>
       <input
-        className={classes}
+        className="form-input__input"
         value={inputValue}
         onChange={handleChange}
         id={id ? `form-input-${id}` : ''}

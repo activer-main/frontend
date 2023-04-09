@@ -16,7 +16,7 @@ function Login() {
   // redirect authenticated user to profile screen
   useEffect(() => {
     if (userInfo) {
-      navigate('/profile');
+      navigate(-1);
     }
   }, [navigate, userInfo]);
 
@@ -69,7 +69,9 @@ function Login() {
           disabled={loading}
           onClick={() => navigate('/register')}
         />
+
       </div>
+
     </form>
   );
 }

@@ -77,11 +77,10 @@ function Tag({
       id={`tag-${id.toString()}`}
       disabled={disabled}
     >
-      <p className="tag__text">
-        #
-        {' '}
+      <span className="tag__hash">#</span>
+      <div className="tag__text">
         {text}
-      </p>
+      </div>
       {icon && (
         <div className="tag__icon">
           {TagIcon(icon)}
