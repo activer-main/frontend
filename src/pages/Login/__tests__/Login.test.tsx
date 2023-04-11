@@ -4,9 +4,13 @@ import { renderWithProviders } from 'utils/testUtils';
 import { setupStore } from 'store';
 import { userLogin } from 'store/auth/authAction';
 import { createServer } from 'test/server';
-import { MemoryRouter, useNavigate } from 'react-router-dom';
+import {
+  MemoryRouter, useNavigate, Routes, Route,
+} from 'react-router-dom';
 import { mockUserData } from 'test/data/user';
 import userEvent from '@testing-library/user-event';
+import ReactTestRenderer from 'react-test-renderer';
+import { Provider } from 'react-redux';
 import Login from '../index';
 
 // Mock the `useNavigate` hook
@@ -34,7 +38,7 @@ describe('Login component', () => {
   it('Login Page render correctly', () => {
     // render component
     renderWithProviders(
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/login']}>
         <Login />
       </MemoryRouter>,
     );
@@ -45,6 +49,25 @@ describe('Login component', () => {
     expect(screen.getByLabelText('密碼')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '登入' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '註冊' })).toBeInTheDocument();
+  });
+
+  it('should match snapshot', () => {
+    // render component
+    const store = setupStore();
+    const component = (
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/login']}>
+          <Routes>
+            <Route path="login" element={<Login />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    );
+
+    const renderer = ReactTestRenderer.create(component);
+
+    // assertion
+    expect(renderer.toJSON()).toMatchSnapshot();
   });
 
   it('should render to previous page if user is already authenticated', async () => {
@@ -62,7 +85,7 @@ describe('Login component', () => {
 
     // render component
     renderWithProviders(
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/login']}>
         <Login />
       </MemoryRouter>,
       { store },
@@ -78,7 +101,11 @@ describe('Login component', () => {
     useMockNavigate.mockReturnValueOnce(navigate);
 
     // render component
-    renderWithProviders(<Login />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+      </MemoryRouter>,
+    );
 
     // query register button
     const registerButton = screen.getByRole('button', { name: '註冊' });
