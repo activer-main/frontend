@@ -9,9 +9,13 @@ import { renderWithProviders } from 'utils/testUtils';
 import store from 'store';
 import { userLogin } from 'store/auth/authAction';
 import { createServer } from 'test/server';
-import { MemoryRouter, useNavigate } from 'react-router-dom';
+import {
+  MemoryRouter, useNavigate, Routes, Route,
+} from 'react-router-dom';
 import { mockUserData } from 'test/data/user';
 import userEvent from '@testing-library/user-event';
+import ReactTestRenderer from 'react-test-renderer';
+import { Provider } from 'react-redux';
 import Login from '../index';
 
 // server url
@@ -68,7 +72,11 @@ createServer([
 describe('Login component', () => {
   it('Login Page render correctly', () => {
     // render component
-    renderWithProviders(<Login />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+      </MemoryRouter>,
+    );
 
     // assertion
     expect(screen.getByRole('heading', { name: '登入' })).toBeInTheDocument();
@@ -78,13 +86,61 @@ describe('Login component', () => {
     expect(screen.getByRole('button', { name: '註冊' })).toBeInTheDocument();
   });
 
-  it('should submit form with valid credentials', async () => {
+  it('should match snapshot', () => {
+    // render component
+    const store = setupStore();
+    const component = (
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/login']}>
+          <Routes>
+            <Route path="login" element={<Login />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    );
+
+    const renderer = ReactTestRenderer.create(component);
+
+    // assertion
+    expect(renderer.toJSON()).toMatchSnapshot();
+  });
+
+  it('should render to previous page if user is already authenticated', async () => {
     // setup login body
     const email = 'test@test.com';
     const password = 'Test1234!';
 
+    // setup redux store
+    const store = setupStore();
+    await store.dispatch(userLogin({ email, password }));
+
+    const navigate = jest.fn();
+    const useMockNavigate = useNavigate as jest.Mock;
+    useMockNavigate.mockReturnValueOnce(navigate);
+
     // render component
-    renderWithProviders(<Login />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+      </MemoryRouter>,
+      { store },
+    );
+
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(navigate).toHaveBeenCalledWith(-1);
+  });
+
+  it('should render to register page', async () => {
+    const navigate = jest.fn();
+    const useMockNavigate = useNavigate as jest.Mock;
+    useMockNavigate.mockReturnValueOnce(navigate);
+
+    // render component
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+      </MemoryRouter>,
+    );
 
     // query element
     const emailInput = await screen.findByLabelText('帳號') as HTMLInputElement;
