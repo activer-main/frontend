@@ -1,72 +1,104 @@
-import Button from 'components/Button';
 import React from 'react';
-import './index.scss';
-import MainCard from 'components/Card/MainCard';
-import { AiOutlineArrowRight } from 'react-icons/ai';
-import { FcBookmark, FcFlashOn } from 'react-icons/fc';
 import { useGetNewestActivityQuery, useGetTrendActivityQuery } from 'store/activity/activityService';
+import Button from '@mui/material/Button';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Loading from 'components/Loading';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import { MainCard } from 'components/Card';
 import Hero from './Hero';
 
 function Home() {
   const { data: trendData, isLoading: isLoadingTrendData } = useGetTrendActivityQuery({
     currentSegment: 1,
-    countSegment: 4,
+    countPerSegment: 4,
   });
   const { data: newestData, isLoading: isLoadingNewestData } = useGetNewestActivityQuery({
     currentSegment: 1,
-    countSegment: 4,
+    countPerSegment: 4,
   });
 
   return (
-    <div className="home">
+    <>
       {/* hero */}
       <Hero />
+      <Container
+        component="main"
+        maxWidth="xl"
+      >
 
-      {/* Trend activity */}
-      <section className="trend-activity">
-        <div className="home__title">
-          <h2>
-            <FcBookmark />
+        {/* Trend activity */}
+        {/* Trend header */}
+        <Box
+          component="title"
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            mt: 3,
+          }}
+        >
+          <Typography component="h2" variant="h4">
+            <BookmarkIcon />
             熱門活動
-          </h2>
-          <Button text="更多熱門活動" color="white" iconAfter={<AiOutlineArrowRight />} />
-        </div>
-        {isLoadingTrendData ? <Loading />
+          </Typography>
+          <Button endIcon={<NavigateNextIcon />}>
+            更多熱門活動
+          </Button>
+        </Box>
+
+        {/* Trend cards */}
+        {isLoadingTrendData && trendData
+          ? <Loading />
           : (
-            <div className="home__cards">
-              {trendData
-            && trendData.searchResultData.map((activity) => (
-              <MainCard {...activity} />
-            ))}
-            </div>
+            <Grid container spacing={3} sx={{ mt: 1 }}>
+              {
+                trendData?.searchResultData.map((activity) => (
+                  <Grid item xs={12} sm={6} lg={3}>
+                    <MainCard {...activity} />
+                  </Grid>
+                ))
+              }
+            </Grid>
           )}
-      </section>
 
-      <section className="newest-activity">
         {/* Newest activity */}
-        <div className="home__title">
-          <h2>
-            <FcFlashOn />
+        {/* Newest header */}
+        <Box
+          component="title"
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            mt: 3,
+          }}
+        >
+          <Typography component="h2" variant="h4">
+            <BookmarkIcon />
             最新活動
-          </h2>
-          <Button text="更多最新活動" color="transparent" iconAfter={<AiOutlineArrowRight />} />
+          </Typography>
+          <Button endIcon={<NavigateNextIcon />}>
+            更多最新活動
+          </Button>
+        </Box>
 
-        </div>
+        {/* Newest cards */}
         {isLoadingNewestData ? <Loading />
           : (
-            <div className="home__cards">
+            <Grid container spacing={3} sx={{ mt: 1 }}>
               {
-                newestData
-           && newestData.searchResultData.map((activity) => (
-             <MainCard {...activity} />
-           ))
+                newestData?.searchResultData.map((activity) => (
+                  <Grid item xs={12} sm={6} lg={3}>
+                    <MainCard {...activity} />
+                  </Grid>
+                ))
               }
-            </div>
+            </Grid>
           )}
-      </section>
 
-    </div>
+      </Container>
+    </>
   );
 }
 

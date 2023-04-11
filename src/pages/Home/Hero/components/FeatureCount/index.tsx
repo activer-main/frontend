@@ -1,12 +1,14 @@
+import { Paper, Typography } from '@mui/material';
 import { animate } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 
 interface CounterType {
+  label: string;
   from: number;
   to: number
 }
 
-function Counter({ from, to }: CounterType) {
+function FeatureCount({ label, from, to }: CounterType) {
   const nodeRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
@@ -22,7 +24,12 @@ function Counter({ from, to }: CounterType) {
     return () => controls.stop();
   }, [from, to]);
 
-  return <p ref={nodeRef} />;
+  return (
+    <Paper sx={{ padding: 3 }}>
+      <Typography variant="h4" component="h3" color="initial">{label}</Typography>
+      <Typography variant="h5" component="h4" color="initial" ref={nodeRef} />
+    </Paper>
+  );
 }
 
-export default Counter;
+export default FeatureCount;
