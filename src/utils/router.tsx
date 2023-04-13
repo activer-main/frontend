@@ -15,6 +15,7 @@ import User from 'pages/User';
 import MainRoute from 'routing/MainRoute';
 import Detail from 'pages/Detail';
 import Manage from 'pages/User/Manage';
+import Search from 'pages/Search';
 
 const routerConfig: RouteObject[] = [
   {
@@ -49,6 +50,10 @@ const routerConfig: RouteObject[] = [
           {
             path: '/detail/:id',
             element: <Detail />,
+          },
+          {
+            path: '/search',
+            element: <Search />,
           },
         ],
       },

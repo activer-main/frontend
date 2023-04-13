@@ -3,15 +3,18 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import { authApi } from './auth/authService';
 import authReducer from './auth/authSlice';
 import { activityApi } from './activity/activityService';
+import { tagApi } from './tag/tagService';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     [authApi.reducerPath]: authApi.reducer,
     [activityApi.reducerPath]: activityApi.reducer,
+    [tagApi.reducerPath]: tagApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
     .concat(authApi.middleware)
+    .concat(tagApi.middleware)
     .concat(activityApi.middleware),
 });
 
