@@ -39,6 +39,7 @@ function Login() {
         label="帳號"
         type="email"
         title="請輸入正確帳號格式"
+        id="email"
         required
       />
 
@@ -49,6 +50,7 @@ function Login() {
         type="password"
         pattern={PASSWORD_PATTERN}
         title="密碼至少八位字元，需要包含至少一個數字、一個大寫英文、一個小寫英文、一個特殊字元: !@#$%"
+        id="password"
         required
       />
 

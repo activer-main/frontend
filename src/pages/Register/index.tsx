@@ -51,18 +51,21 @@ function Register() {
         type="text"
         label="使用者名稱"
         name="username"
+        id="username"
         required
       />
       <FormInput
         label="帳號"
         type="email"
         name="email"
+        id="email"
         required
       />
       <FormInput
         type="password"
         label="密碼"
         name="password"
+        id="password"
         pattern={PASSWORD_PATTERN}
         required
       />
@@ -72,6 +75,7 @@ function Register() {
         label="確認密碼"
         pattern={PASSWORD_PATTERN}
         name="confirmPassword"
+        id="confirmPassword"
         required
       />
 

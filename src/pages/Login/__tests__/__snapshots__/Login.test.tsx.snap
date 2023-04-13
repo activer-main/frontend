@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login component should match snapshot 1`] = `
+<form
+  className="login"
+  onSubmit={[Function]}
+>
+  <h1
+    className="login__header"
+  >
+    登入
+  </h1>
+  <div
+    className="form-input login__account"
+  >
+    <label
+      className="form-input__label"
+      htmlFor="form-input-email"
+    >
+      帳號
+    </label>
+    <input
+      className="form-input__input"
+      id="form-input-email"
+      name="email"
+      onChange={[Function]}
+      required={true}
+      type="email"
+    />
+    <span
+      className="form-input__error-message"
+    />
+  </div>
+  <div
+    className="form-input login__password"
+  >
+    <label
+      className="form-input__label"
+      htmlFor="form-input-password"
+    >
+      密碼
+    </label>
+    <input
+      className="form-input__input"
+      id="form-input-password"
+      name="password"
+      onChange={[Function]}
+      pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$"
+      required={true}
+      type="password"
+    />
+    <span
+      className="form-input__error-message"
+    />
+  </div>
+  <div
+    className="login__control"
+  >
+    <button
+      className="button button--primary button"
+      disabled={false}
+      type="submit"
+    >
+      登入
+    </button>
+    <button
+      className="button button--primary button--outline button"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      註冊
+    </button>
+  </div>
+</form>
+`;
