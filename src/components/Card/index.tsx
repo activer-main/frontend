@@ -17,6 +17,7 @@ import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
+import { activityTypeToColor } from 'utils/activityTypeToColor';
 
 export interface CardType {
   imgUrl: string,
@@ -26,15 +27,6 @@ export interface CardType {
   detail?: React.ReactNode;
   control? : React.ReactNode;
 }
-
-const getColor = (type: string | undefined) :'primary' | 'secondary' | 'success' => {
-  switch (type) {
-    case 'area': return 'primary';
-    case 'location': return 'secondary';
-    case 'other': return 'success';
-    default: return 'primary';
-  }
-};
 
 export default function ActionCard({
   imgUrl, title, tags, altText, detail, control,
@@ -83,7 +75,7 @@ export default function ActionCard({
           useFlexGap
         >
           {tags?.slice(0, 3).map((tag) => (
-            <Chip icon={<TagIcon />} label={tag.text} size="small" color={getColor(tag.type)} variant="outlined" />
+            <Chip icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
           ))}
         </Stack>
         <Typography variant="body2" gutterBottom>
