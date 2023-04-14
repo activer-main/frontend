@@ -17,13 +17,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { loading, userInfo } = useAppSelector((state) => state.auth);
-
-  React.useEffect(() => {
-    if (!userInfo) {
-      navigate(-1);
-    }
-  }, []);
+  const { loading } = useAppSelector((state) => state.auth);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
