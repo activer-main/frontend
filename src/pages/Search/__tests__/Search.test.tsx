@@ -16,7 +16,7 @@ createServer([
 ]);
 
 // Test
-describe('Register component', () => {
+describe('Search component', () => {
   it('Should render Tags in Search Page', async () => {
     renderWithProviders(
       <MemoryRouter>
