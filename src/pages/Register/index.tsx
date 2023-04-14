@@ -25,15 +25,15 @@ function Register() {
     const target = event.target as typeof event.target & RegisterFormDataType;
 
     // check if passwords match
-    if (target.password.value !== target.confirmPassword.value) {
+    if (target.password?.value !== target.confirmPassword?.value) {
       toast.error('密碼不相同');
       return;
     }
 
     await dispatch(registerUser({
-      username: target.username.value,
-      email: target.email.value.toLowerCase(),
-      password: target.password.value,
+      username: target.username?.value,
+      email: target.email?.value.toLowerCase(),
+      password: target.password?.value,
     })).unwrap()
       .then(() => navigate('/login'));
   };
