@@ -1,19 +1,43 @@
-import React from 'react';
-import UserSideBar from 'components/UserSidebar';
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
 import { Outlet } from 'react-router-dom';
-import './index.scss';
+import UserSidebar, { drawerWidth, DrawerHeader } from './components/UserSidebar';
+import UserHeader from './components/UserHeader';
 
-function User() {
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+  open?: boolean;
+}>(({ theme, open }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(3),
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginLeft: `-${drawerWidth}px`,
+  ...(open && {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  }),
+}));
+
+export default function PersistentDrawerLeft() {
+  const [open, setOpen] = React.useState(false);
   return (
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
 
-    <div className="user">
+      <UserHeader open={open} setOpen={setOpen} />
+      <UserSidebar open={open} setOpen={setOpen} />
 
-      <UserSideBar />
-      <div className="user__main">
+      <Main open={open}>
+        <DrawerHeader />
         <Outlet />
-      </div>
-    </div>
+      </Main>
+    </Box>
   );
 }
-
-export default User;
