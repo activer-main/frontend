@@ -24,8 +24,8 @@ function Login() {
     event.preventDefault();
     const target = event.target as typeof event.target & LoginFormDataType;
     dispatch(userLogin({
-      email: target.email.value,
-      password: target.password.value,
+      email: target.email?.value,
+      password: target.password?.value,
     }));
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { renderWithProviders } from 'utils/testUtils';
 import { setupStore } from 'store';
 import { userLogin } from 'store/auth/authAction';
@@ -11,6 +11,7 @@ import { mockUserData } from 'test/data/user';
 import userEvent from '@testing-library/user-event';
 import ReactTestRenderer from 'react-test-renderer';
 import { Provider } from 'react-redux';
+import { act } from 'react-dom/test-utils';
 import Login from '../index';
 
 // Mock the `useNavigate` hook
@@ -32,6 +33,12 @@ createServer([
     res: () => mockUserData,
   },
 ]);
+
+const pause = () => new Promise<void>((resolve) => {
+  setTimeout(() => {
+    resolve();
+  }, 100);
+});
 
 // Test
 describe('Login component', () => {
@@ -71,6 +78,10 @@ describe('Login component', () => {
   });
 
   it('should render to previous page if user is already authenticated', async () => {
+    const navigate = jest.fn();
+    const useMockNavigate = useNavigate as jest.Mock;
+    useMockNavigate.mockReturnValueOnce(navigate);
+
     // setup login body
     const email = 'test@test.com';
     const password = 'Test1234!';
@@ -78,10 +89,6 @@ describe('Login component', () => {
     // setup redux store
     const store = setupStore();
     await store.dispatch(userLogin({ email, password }));
-
-    const navigate = jest.fn();
-    const useMockNavigate = useNavigate as jest.Mock;
-    useMockNavigate.mockReturnValueOnce(navigate);
 
     // render component
     renderWithProviders(
@@ -115,5 +122,42 @@ describe('Login component', () => {
 
     expect(navigate).toHaveBeenCalledTimes(1);
     expect(navigate).toHaveBeenCalledWith('/register');
+  });
+
+  it('Should submit data correctly', async () => {
+    // render component
+    const { store, getByLabelText } = renderWithProviders(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+      </MemoryRouter>,
+    );
+
+    const navigate = jest.fn();
+    const useMockNavigate = useNavigate as jest.Mock;
+    useMockNavigate.mockReturnValueOnce(navigate);
+
+    const emailInput = screen.getByLabelText('帳號');
+    const passwordInput = getByLabelText('密碼');
+    const submitButton = screen.getByRole('button', { name: '登入' });
+
+    act(() => {
+      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+      fireEvent.change(passwordInput, { target: { value: 'Password123!' } });
+    });
+
+    fireEvent.click(submitButton);
+    screen.debug();
+
+    expect(store.getState().auth.loading).toBe(true);
+    expect(store.getState().auth.userInfo).toBe(null);
+
+    // Wait for the API call to complete and update the store
+    screen.debug();
+    await pause();
+    screen.debug();
+
+    console.log(store.getState().auth);
+    expect(store.getState().auth.loading).toBe(false);
+    expect(store.getState().auth.userInfo?.email).toBe('test@example.com');
   });
 });

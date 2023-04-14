@@ -6,8 +6,11 @@ interface FormInputType extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
 }
 
+// 我在測試時 value 標示為 undefined
+// 會讓 component 變成 uncontrolled input
+// value => value = ''
 function FormInput({
-  label, className, id, title, value, ...props
+  label, className, id, title, value = '', ...props
 }: FormInputType) {
   const customClassName = className?.split(' ');
   const [inputValue, setInputValue] = useState<React.InputHTMLAttributes<HTMLInputElement>['value']>(value);

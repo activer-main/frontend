@@ -33,12 +33,17 @@ const rootReducer = combineReducers({
   auth: authReducer,
   [authApi.reducerPath]: authApi.reducer,
   [activityApi.reducerPath]: activityApi.reducer,
+  [tagApi.reducerPath]: tagApi.reducer,
 });
 
 export function setupStore(preloadedState?: PreloadedState<TestRootState>) {
   return configureStore({
     reducer: rootReducer,
     preloadedState,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+      .concat(authApi.middleware)
+      .concat(tagApi.middleware)
+      .concat(activityApi.middleware),
   });
 }
 

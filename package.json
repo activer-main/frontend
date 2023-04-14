@@ -35,7 +35,6 @@
     "react-scripts": "5.0.1",
     "react-test-renderer": "^18.2.0",
     "react-toastify": "^9.1.2",
-    "redux-thunk": "^2.4.2",
     "sass": "^1.59.3",
     "stylelint-config-standard-scss": "^7.0.1",
     "stylelint-order": "^6.0.3",
@@ -47,6 +46,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:cg": "react-scripts test --coverage",
+    "clear_jest": "jest --clearCache",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
