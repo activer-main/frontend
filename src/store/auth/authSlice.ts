@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import type { RootState } from 'store';
 import { LoginResponseType } from 'types/response';
 import { UserDataType } from '../../types/user';
+import { authApi } from './authService';
 import {
   registerUser, userLogin, userUpdate, verifyUser, tokenLogin,
 } from './authAction';
@@ -76,6 +77,15 @@ const authSlice = createSlice({
           userToken: payload.token,
         });
       })
+
+      .addMatcher(
+        authApi.endpoints.getAuthtoken.matchFulfilled,
+        (state, { payload }) => ({
+          ...state,
+          userToken: payload.token,
+          userInfo: payload.user,
+        }),
+      )
 
       // pending
       .addMatcher(

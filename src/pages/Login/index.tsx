@@ -13,10 +13,20 @@ import { userLogin } from 'store/auth/authAction';
 import { toast } from 'react-toastify';
 
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useGetAuthtokenQuery } from 'store/auth/authService';
 
 export default function Login() {
+  const { isSuccess } = useGetAuthtokenQuery();
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      navigate('/user/profile');
+    }
+  }, [isSuccess]);
+
   const { loading } = useAppSelector((state) => state.auth);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
