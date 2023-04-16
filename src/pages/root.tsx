@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { useAppDispatch } from 'store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { tokenLogin } from 'store/auth/authAction';
 import { ThemeProvider } from '@mui/material';
 import { theme } from 'styles/theme';
+import { useGetAuthtokenQuery } from 'store/auth/authService';
+import Loading from 'components/Loading';
 
 function Root() {
-  const dispatch = useAppDispatch();
+  const { isLoading } = useGetAuthtokenQuery(undefined, {
+    pollingInterval: 2000000,
+  });
 
-  useEffect(() => {
-    dispatch(tokenLogin());
-  }, []);
+  if (isLoading) return <Loading />;
 
   return (
     <ThemeProvider theme={theme}>
