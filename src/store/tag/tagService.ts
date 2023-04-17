@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { URL } from 'utils/apiURL';
+import { testURL } from 'utils/apiURL';
 import { TagDataType } from 'types/data';
 
 export const tagApi = createApi({
   reducerPath: 'tagApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: URL.concat('/api/tag'),
+    // baseUrl: URL.concat('/api/tag'),
+    baseUrl: testURL,
     prepareHeaders: (headers) => {
       // const token = (getState() as RootState).auth.userToken?.accessToken;
 
