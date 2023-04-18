@@ -3,7 +3,7 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import { authApi } from './auth/authService';
 import authReducer from './auth/authSlice';
 import { activityApi } from './activity/activityService';
-import { tagApi } from './tag/tagService';
+import { tagApi } from './test/testService';
 
 const store = configureStore({
   reducer: {

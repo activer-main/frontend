@@ -100,7 +100,7 @@ export function MainCard({ ...props }: ActivityDataType) {
       title={title}
       tags={tags ? parseArrayTagDataToTag(tags) : undefined}
       imgUrl={images ? images[0] : '/DefaultActivityImage.svg'}
-      detail="date"
+      detail=""
       altText={title}
       control={(
         <Grid container sx={{ alignItems: 'center' }}>

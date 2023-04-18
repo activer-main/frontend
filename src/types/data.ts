@@ -38,3 +38,33 @@ export interface BranchDataType {
 export interface DateType {
   [key: string]: string
 }
+
+export interface NewActivityDataType {
+  id: number;
+  title: string;
+  subTitle:string | null;
+  images: string[] | null;
+  tags: ActivityTagDataType[] | null;
+  branches: NewBranchDataType[];
+  content: string;
+  connection: string[] | null;
+  holder: string[] | null ;
+  objective: string[] | null;
+  sources: string[] | null;
+  trend: number;
+}
+
+export interface NewBranchDataType {
+  id: number;
+  branchName: string | null;
+  date: NewDataType[];
+  applyFee: string[] | null;
+  location: string[] | null;
+  status: string | undefined | null;
+}
+
+export interface NewDataType {
+  name: string;
+  start: Date | null;
+  end: Date | null;
+}

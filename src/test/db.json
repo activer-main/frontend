@@ -110,5 +110,150 @@
       "type": "location",
       "text": "連江縣"
     }
+  ],
+  "field": [
+    {
+      "id": 1,
+      "type": "field",
+      "text": "教育"
+    },
+    {
+      "id": 2,
+      "type": "field",
+      "text": "藝術"
+    },
+    {
+      "id": 3,
+      "type": "field",
+      "text": "社科新聞"
+    },
+    {
+      "id": 4,
+      "type": "field",
+      "text": "商法管理"
+    },
+    {
+      "id": 5,
+      "type": "field",
+      "text": "自然科學"
+    },
+    {
+      "id": 6,
+      "type": "field",
+      "text": "資訊科技"
+    },
+    {
+      "id": 7,
+      "type": "field",
+      "text": "工程製造"
+    },
+    {
+      "id": 8,
+      "type": "field",
+      "text": "農林漁獸"
+    },
+    {
+      "id": 9,
+      "type": "field",
+      "text": "醫療社福"
+    },
+    {
+      "id": 10,
+      "type": "field",
+      "text": "服務"
+    },
+    {
+      "id": 11,
+      "type": "field",
+      "text": "其他"
+    }
+  ],
+  "search": [
+    {
+      "id": 1,
+      "title": "夏日音樂祭",
+      "subTitle": "快來和我們一起狂歡吧！",
+      "images": [
+        "https: //example.com/image1.jpg",
+        "https: //example.com/image2.jpg",
+        "https: //example.com/image3.jpg"
+      ],
+      "tags": [
+        {
+          "id": 1,
+          "type": "field",
+          "text": "藝術"
+        },
+        {
+          "id": 2,
+          "type": "area",
+          "text": "台北"
+        },
+        {
+          "id": 3,
+          "type": "style",
+          "text": "流行音樂"
+        }
+      ],
+      "branches": [
+        {
+          "id": 1,
+          "branchName": "新北場",
+          "date": [
+            {
+              "name": "第一天",
+              "start": "new Date('2023-07-01T12: 00: 00')",
+              "end": "new Date('2023-07-01T23: 59: 59')"
+            },
+            {
+              "name": "第二天",
+              "start": "new Date('2023-07-02T12: 00: 00')",
+              "end": "new Date('2023-07-02T23: 59: 59')"
+            }
+          ],
+          "applyFee": [
+            "早鳥優惠 $500",
+            "現場 $800"
+          ],
+          "location": [
+            "新北市板橋區中山路一段123號"
+          ],
+          "status": "open"
+        },
+        {
+          "id": 2,
+          "branchName": "台北場",
+          "date": [
+            {
+              "name": "第三天",
+              "start": "new Date('2023-07-03T12: 00: 00')",
+              "end": "new Date('2023-07-03T23: 59: 59')"
+            }
+          ],
+          "applyFee": [
+            "現場 $1000"
+          ],
+          "location": [
+            "台北市信義區松壽路20號"
+          ],
+          "status": "coming_soon"
+        }
+      ],
+      "content": "夏日音樂祭是一個舉辦在炎炎夏日的音樂盛會，來自各地的音樂人將在這裡演出，帶給大家美好的音樂體驗。",
+      "connection": [
+        "聯絡信箱：musicfestival@example.com",
+        "電話：02-12345678"
+      ],
+      "holder": [
+        "主辦單位：音樂節有限公司"
+      ],
+      "objective": [
+        "本音樂節旨在推廣流行音樂，讓更多人接觸、喜愛這個領域。"
+      ],
+      "sources": [
+        "本活動資訊來自夏日音樂祭官網"
+      ],
+      "trend": 10
+    }
   ]
 }

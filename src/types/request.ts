@@ -21,3 +21,9 @@ export type UserUpdateRequestType = Omit<UserInfoType, 'email' | 'password' | 'v
 export type VerifyRequestTyep = {
   verifyCode: string,
 };
+
+export interface SearchRequestType extends SegmentRequestType {
+  keyword: string,
+  tags: string[],
+  date: Date,
+}
