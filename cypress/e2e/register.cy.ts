@@ -13,8 +13,8 @@ describe('Register screen', () => {
     cy.get('#form-input-username').should('exist');
     cy.get('#form-input-email').should('have.attr', 'type', 'email');
     cy.get('#form-input-password').should('have.attr', 'type', 'password');
-    cy.get('#register-button').should('have.text', '註冊');
-    cy.get('#register-cancel-button').should('have.text', '取消');
+    cy.get('button[type="submit"]').should('have.text', '註冊');
+    cy.get('.register__cancel').should('have.text', '取消');
   });
 
   it('shows an error message when passwords do not match', () => {
@@ -23,7 +23,7 @@ describe('Register screen', () => {
     cy.get('#form-input-email').type('testuser@example.com');
     cy.get('#form-input-password').type('password');
     cy.get('#form-input-confirmPassword').type('wrongpassword');
-    cy.get('#register-button').click();
+    cy.get('button[type="submit"]').click();
 
     // assertion
     cy.get('#form-input-password:invalid').should('exist');
@@ -48,7 +48,7 @@ describe('Register screen', () => {
     cy.get('#form-input-confirmPassword').type(password);
 
     // click register button
-    cy.get('.register__submit').click();
+    cy.get('button[type="submit"]').click();
 
     // check if user is redirected to login screen
     cy.url().should('include', '/login');
@@ -57,11 +57,11 @@ describe('Register screen', () => {
   });
 
   it('should navigate to register page on cancel button click', () => {
-    cy.get('#register-cancel-button').click();
+    cy.get('.register__cancel').click();
     cy.url().should('include', '/login');
   });
 
-  it.only('should redirect to profile page but email not authorized', () => {
+  it('should redirect to profile page but email not authorized', () => {
     // 攔截 api 回傳正確
     cy.intercept('GET', `${API_URL}/api/user/auth/token`, {
       delay: 1000,

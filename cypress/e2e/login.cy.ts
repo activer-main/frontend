@@ -27,7 +27,7 @@ describe('Login Page', () => {
     cy.get('[role="alert"]').should('be.visible').and('contain.text', '帳號或密碼錯誤');
   });
 
-  it.only('should display loading spinner on form submission', () => {
+  it('should display loading spinner on form submission', () => {
     cy.intercept('POST', `${API_URL}/api/user/auth/signin`, {
       delay: 2000,
       statusCode: 200,
