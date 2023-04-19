@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "type": "area",
+    "text": "Taipei"
+  },
+  {
+    "id": 2,
+    "type": "area",
+    "text": "Taichung"
+  },
+  {
+    "id": 3,
+    "type": "area",
+    "text": "Tainan"
+  },
+  {
+    "id": 4,
+    "type": "location",
+    "text": "101"
+  },
+  {
+    "id": 5,
+    "type": "location",
+    "text": "Taipei Main Station"
+  },
+  {
+    "id": 6,
+    "type": "location",
+    "text": "Kaohsiung Arena"
+  },
+  {
+    "id": 7,
+    "type": "other",
+    "text": "Historical Sites"
+  },
+  {
+    "id": 8,
+    "type": "other",
+    "text": "Theme Parks"
+  }
+]

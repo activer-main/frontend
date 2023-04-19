@@ -121,7 +121,7 @@ function Detail() {
               </h2>
               <p>{objective}</p>
             </div>
-          ) }
+          )}
 
         {/* Content */}
         <div className="detail__content detail__item">
@@ -178,7 +178,7 @@ function Detail() {
               <FcGraduationCap />
               主辦單位
             </h2>
-            {holder.map((item: string, index:number) => (
+            {holder.map((item: string, index: number) => (
               <p key={`detail-holder-${index}`}>
                 {item}
               </p>

@@ -67,6 +67,7 @@ function Login() {
           variant={{ outline: true }}
           className="button"
           disabled={loading}
+          data-testid="register-button" // for test to get element
           onClick={() => navigate('/register')}
         />
 

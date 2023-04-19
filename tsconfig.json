@@ -23,5 +23,6 @@
     "baseUrl": "src"
   
   },
-  "include": ["src"]
+  "types": ["cypress"],
+  "include": ["src", "./cypress.config.ts", "./cypress"]
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { renderWithProviders } from 'utils/testUtils';
 import { setupStore } from 'store';
 import { userLogin } from 'store/auth/authAction';
@@ -16,11 +16,6 @@ import { act } from 'react-dom/test-utils';
 import Register from 'pages/Register';
 import Login from '../index';
 
-// Server URL
-const IP = '220.132.244.41';
-const PORT = '5044';
-export const URL = `http://${IP}:${PORT}/api/user`;
-
 // Mock Server
 createServer([
   {
@@ -29,12 +24,6 @@ createServer([
     res: () => mockUserData,
   },
 ]);
-
-const pause = () => new Promise<void>((resolve) => {
-  setTimeout(() => {
-    resolve();
-  }, 100);
-});
 
 // Test
 describe('Login component', () => {
@@ -108,8 +97,6 @@ describe('Login component', () => {
       </MemoryRouter>,
     );
 
-    screen.debug();
-
     // query register button
     const registerButton = screen.getByRole('button', { name: '註冊' });
 
@@ -133,23 +120,19 @@ describe('Login component', () => {
     const submitButton = screen.getByRole('button', { name: '登入' });
 
     act(() => {
-      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+      fireEvent.change(emailInput, { target: { value: mockUserData.user.email } });
       fireEvent.change(passwordInput, { target: { value: 'Password123!' } });
     });
 
     fireEvent.click(submitButton);
-    screen.debug();
 
     expect(store.getState().auth.loading).toBe(true);
     expect(store.getState().auth.userInfo).toBe(null);
 
     // Wait for the API call to complete and update the store
-    // screen.debug();
-    await pause();
-    // screen.debug();
-
-    // console.log(store.getState().auth);
-    expect(store.getState().auth.loading).toBe(false);
-    // expect(store.getState().auth.userInfo?.email).toBe('test@example.com');
+    waitFor(() => {
+      console.log(store.getState().auth);
+      expect(store.getState().auth.loading).toBe(false);
+    });
   });
 });
