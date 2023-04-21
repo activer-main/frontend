@@ -1,6 +1,9 @@
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import SearchIcon from '@mui/icons-material/Search';
-import { Container, Divider, Skeleton } from '@mui/material';
+import {
+  CircularProgress,
+  Container, Divider, Skeleton, Stack,
+} from '@mui/material';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
@@ -16,18 +19,20 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import InputAdornment from '@mui/material/InputAdornment';
 import { MainCard } from 'components/Card';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-  useGetSearchActivityQuery, useGetFieldTagQuery, useGetLocationTagQuery,
+  useGetSearchActivityQuery,
 } from 'store/search/searchService';
+import { useGetLocationTagQuery, useGetFieldTagQuery } from 'store/tag/tagService';
 import { useAppDispatch, useAppSelector } from 'store';
 import {
   removeAllByType, selectSearchState, setField, setLocation, setValue,
 } from 'store/search/searchSlice';
-import _, { debounce } from 'lodash';
+import _ from 'lodash';
 import TagManage from './TagManage';
 
 const SlideTransition = React.forwardRef((
@@ -38,6 +43,7 @@ const SlideTransition = React.forwardRef((
 ) => <Slide direction="up" ref={ref} {...props} />);
 
 function Search() {
+  // hooks implementation
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchState = useAppSelector(selectSearchState);
@@ -53,19 +59,12 @@ function Search() {
     countPerSegment: 10,
   });
 
-  // tag manage dialog display
+  // component @TagManage dialog display
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const handleKeywordChange = debounce((event:React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setValue({ key: 'keyword', value: event.target.value }));
-  }, 500);
-  const handleDateChange = debounce((newValue: dayjs.Dayjs | null) => {
-    dispatch(setValue({ key: 'date', value: newValue }));
-  });
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -87,19 +86,36 @@ function Search() {
 
           {/* Keyword */}
           <Grid item xs={12} md={7}>
+
             <TextField
               label="關鍵字"
               fullWidth
               name="keyword"
-              defaultValue={searchState.keyword}
-              onChange={handleKeywordChange}
+              value={searchState.keyword}
+              onChange={(event:React.ChangeEvent<HTMLInputElement>) => {
+                dispatch(setValue({ key: 'keyword', value: event.target.value }));
+              }}
+              InputProps={isLoading ? {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CircularProgress size={20} />
+                  </InputAdornment>
+                ),
+              } : undefined}
             />
+
           </Grid>
 
           {/* Date */}
           <Grid item md={4}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker value={dayjs(new Date())} label="日期" onChange={handleDateChange} />
+              <DatePicker
+                value={dayjs(searchState.date, 'YYYY-MM-DD')}
+                label="日期"
+                onChange={(newValue: dayjs.Dayjs | null) => {
+                  dispatch(setValue({ key: 'date', value: newValue?.format('YYYY-MM-DD') }));
+                }}
+              />
             </LocalizationProvider>
           </Grid>
 
@@ -128,18 +144,27 @@ function Search() {
             </Typography>
           </Grid>
           <Grid item xs={12} md={11}>
-            {locationTagData?.map((tag) => (
+
+            {!isLoading ? locationTagData?.map((tag) => (
               <FormControlLabel
                 key={tag.id}
                 componentsProps={{
                   typography: { variant: 'caption' },
                 }}
                 label={tag.text}
-                checked={_.includes(searchState.location, tag)}
+                checked={_.some(searchState.location, (stateTag) => _.isEqual(stateTag, tag))}
                 control={<Checkbox />}
                 onChange={() => dispatch(setLocation(tag))}
               />
-            ))}
+            ))
+              : (
+                <Stack spacing={3} direction="row">
+                  <Skeleton variant="rectangular" width={40} />
+                  <Skeleton variant="rectangular" width={40} />
+                  <Skeleton variant="rectangular" width={40} />
+                  <Skeleton variant="rectangular" width={40} />
+                </Stack>
+              )}
             <Button onClick={() => dispatch(removeAllByType('location'))}>清除選擇</Button>
           </Grid>
           {/* Field */}
@@ -149,18 +174,25 @@ function Search() {
             </Typography>
           </Grid>
           <Grid item xs={12} md={11}>
-            {fieldTagData?.map((tag) => (
+            {!isLoading ? fieldTagData?.map((tag) => (
               <FormControlLabel
                 componentsProps={{
                   typography: { variant: 'caption' },
                 }}
-                checked={_.includes(searchState.field, tag)}
+                checked={_.some(searchState.field, (stateTag) => _.isEqual(stateTag, tag))}
                 key={tag.id}
                 control={<Checkbox />}
                 label={tag.text}
                 onChange={() => dispatch(setField(tag))}
               />
-            ))}
+            )) : (
+              <Stack spacing={3} direction="row">
+                <Skeleton variant="rectangular" width={40} />
+                <Skeleton variant="rectangular" width={40} />
+                <Skeleton variant="rectangular" width={40} />
+                <Skeleton variant="rectangular" width={40} />
+              </Stack>
+            ) }
             <Button onClick={() => dispatch(removeAllByType('field'))}>清除選擇</Button>
           </Grid>
         </Grid>
@@ -182,20 +214,17 @@ function Search() {
       </Container>
 
       {/* Result */}
-      {isLoading
-        ? <Skeleton />
-        : (
-          <Grid container spacing={3}>
-            {searchData?.searchResultData
-              ? searchData.searchResultData.map((activity) => (
-                <Grid item xs={12} sm={6} md={4} xl={3} key={activity.id}>
-                  <MainCard {...activity} />
-                </Grid>
-              ))
-              : <Typography variant="h4">查無資料</Typography>}
 
-          </Grid>
-        )}
+      <Grid container spacing={3}>
+        {searchData?.searchResultData
+          ? searchData.searchResultData.map((activity) => (
+            <Grid item xs={12} sm={6} md={4} xl={3} key={activity.id}>
+              <MainCard {...activity} />
+            </Grid>
+          ))
+          : <Typography variant="h4">查無資料</Typography>}
+
+      </Grid>
 
       {/* Pagination */}
       <Grid

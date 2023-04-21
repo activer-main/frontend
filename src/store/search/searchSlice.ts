@@ -104,12 +104,26 @@ const searchSlice = createSlice({
       .addMatcher(
         searchApi.endpoints.getSearchActivity.matchFulfilled,
         (state, { payload }) => {
-          searchSlice.actions.setState({
-            ...state,
+          const newState: SearchStateType = {
             keyword: payload.keyword,
-            tags: payload.tags,
             date: payload.date,
+            tags: payload.tags,
+            location: [],
+            field: [],
+            recommendTags: [],
+          };
+
+          _.forEach(payload.tags, (tag: TagDataType) => {
+            if (tag.type === 'field') {
+              newState.field.push(tag);
+            }
+
+            if (tag.type === 'location') {
+              newState.location.push(tag);
+            }
           });
+
+          return newState;
         },
       );
   },

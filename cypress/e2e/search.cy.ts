@@ -1,6 +1,8 @@
 import { URL as API_URL } from 'utils/apiURL';
 import { TagDataType } from 'types/data';
 import searchLocationData from '../fixtures/search-location.json';
+import searchResultData from '../fixtures/search-result.json';
+import searchFieldData from '../fixtures/search-field.json';
 import userData from '../fixtures/user.json';
 
 function testLocationTags(locationData: TagDataType[]) {
@@ -23,6 +25,14 @@ describe('Search Page', () => {
     cy.intercept(`${API_URL}/api/tag/location`, {
       statusCode: 200,
       body: searchLocationData,
+    });
+    cy.intercept(`${API_URL}/api/tag/field`, {
+      statusCode: 200,
+      body: searchFieldData,
+    });
+    cy.intercept(`${API_URL}/api/search?*`, {
+      statusCode: 200,
+      body: searchResultData,
     });
     cy.intercept(`${API_URL}/api/user/auth/token`, {
       statusCode: 200,

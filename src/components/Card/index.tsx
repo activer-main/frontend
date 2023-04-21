@@ -12,7 +12,7 @@ import SendIcon from '@mui/icons-material/Send';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { TagType } from 'components/Tag';
-import { ActivityDataType, NewActivityDataType } from 'types/data';
+import { NewActivityDataType } from 'types/data';
 import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';

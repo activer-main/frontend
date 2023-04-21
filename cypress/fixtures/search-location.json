@@ -1,42 +1,112 @@
 [
   {
     "id": 1,
-    "type": "area",
-    "text": "Taipei"
+    "type": "location",
+    "text": "基隆市"
   },
   {
     "id": 2,
-    "type": "area",
-    "text": "Taichung"
+    "type": "location",
+    "text": "台北市"
   },
   {
     "id": 3,
-    "type": "area",
-    "text": "Tainan"
+    "type": "location",
+    "text": "新北市"
   },
   {
     "id": 4,
     "type": "location",
-    "text": "101"
+    "text": "桃園市"
   },
   {
     "id": 5,
     "type": "location",
-    "text": "Taipei Main Station"
+    "text": "新竹市"
   },
   {
     "id": 6,
     "type": "location",
-    "text": "Kaohsiung Arena"
+    "text": "新竹縣"
   },
   {
     "id": 7,
-    "type": "other",
-    "text": "Historical Sites"
+    "type": "location",
+    "text": "苗栗縣"
   },
   {
     "id": 8,
-    "type": "other",
-    "text": "Theme Parks"
+    "type": "location",
+    "text": "台中市"
+  },
+  {
+    "id": 9,
+    "type": "location",
+    "text": "彰化縣"
+  },
+  {
+    "id": 10,
+    "type": "location",
+    "text": "南投縣"
+  },
+  {
+    "id": 11,
+    "type": "location",
+    "text": "雲林縣"
+  },
+  {
+    "id": 12,
+    "type": "location",
+    "text": "嘉義市"
+  },
+  {
+    "id": 13,
+    "type": "location",
+    "text": "嘉義縣"
+  },
+  {
+    "id": 14,
+    "type": "location",
+    "text": "台南市"
+  },
+  {
+    "id": 15,
+    "type": "location",
+    "text": "高雄市"
+  },
+  {
+    "id": 16,
+    "type": "location",
+    "text": "屏東縣"
+  },
+  {
+    "id": 17,
+    "type": "location",
+    "text": "台東縣"
+  },
+  {
+    "id": 18,
+    "type": "location",
+    "text": "花蓮縣"
+  },
+  {
+    "id": 19,
+    "type": "location",
+    "text": "宜蘭縣"
+  },
+  {
+    "id": 20,
+    "type": "location",
+    "text": "澎湖縣"
+  },
+  {
+    "id": 21,
+    "type": "location",
+    "text": "金門縣"
+  },
+  {
+    "id": 22,
+    "type": "location",
+    "text": "連江縣"
   }
 ]

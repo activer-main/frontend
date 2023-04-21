@@ -14,11 +14,13 @@ const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [activityApi.reducerPath]: activityApi.reducer,
     [searchApi.reducerPath]: searchApi.reducer,
+    [tagApi.reducerPath]: tagApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
     .concat(authApi.middleware)
     .concat(searchApi.middleware)
-    .concat(activityApi.middleware),
+    .concat(activityApi.middleware)
+    .concat(tagApi.middleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
