@@ -6,15 +6,15 @@ interface ButtonVariantType {
   outline?: boolean;
   round?: boolean;
   colorReverse?: boolean;
-  square? :boolean;
-  underline? :boolean
+  square?: boolean;
+  underline?: boolean
 }
 interface ButtonType extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: 'primary' | 'secondary' | 'success' | 'dark' | 'white' | 'danger' | 'transparent';
   variant?: ButtonVariantType;
   text?: string;
   iconAfter?: JSX.Element;
-  iconBefore? : JSX.Element;
+  iconBefore?: JSX.Element;
 }
 
 function Button({
@@ -40,18 +40,18 @@ function Button({
       {...props}
     >
       {iconBefore
-      && (
-        <i className="button__icon">
-          {iconBefore}
-        </i>
-      )}
+        && (
+          <i className="button__icon">
+            {iconBefore}
+          </i>
+        )}
       {text}
       {iconAfter
-      && (
-        <i className="button__icon">
-          {iconAfter}
-        </i>
-      )}
+        && (
+          <i className="button__icon">
+            {iconAfter}
+          </i>
+        )}
     </button>
   );
 }

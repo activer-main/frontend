@@ -1,70 +1,27 @@
 import React from 'react';
-import {
-  act,
-  fireEvent,
-  screen,
-} from '@testing-library/react';
-
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { renderWithProviders } from 'utils/testUtils';
-import store from 'store';
+import { setupStore } from 'store';
 import { userLogin } from 'store/auth/authAction';
 import { createServer } from 'test/server';
 import {
-  MemoryRouter, useNavigate, Routes, Route,
+  MemoryRouter, Routes, Route,
 } from 'react-router-dom';
 import { mockUserData } from 'test/data/user';
 import userEvent from '@testing-library/user-event';
 import ReactTestRenderer from 'react-test-renderer';
 import { Provider } from 'react-redux';
+import { act } from 'react-dom/test-utils';
+
+import Register from 'pages/Register';
 import Login from '../index';
 
-// server url
-const IP = '220.132.244.41';
-const PORT = '5044';
-
-export const URL = `http://${IP}:${PORT}/api/user`;
-
-// const initialState: UserDataType = {
-//   loading: false,
-//   userInfo: null, // for user object
-//   userToken: null, // for storing the JWT
-//   error: null,
-//   success: false, // for monitoring the registration process.
-// };
-
-let isFetchDataCalled = false;
-
+// Mock Server
 createServer([
   {
     path: 'http://220.132.244.41:5044/api/User/auth/signin',
     method: 'post',
-    res: (req, res, ctx) => {
-      isFetchDataCalled = true;
-      return res(
-        ctx.json({
-          user: {
-            id: 1,
-            email: '',
-            verify: false,
-            realName: 'onandon',
-            nickName: 'onandon',
-            avatar: 'onandon',
-            gender: 'onandon',
-            birthdat: new Date(2020, 6, 9),
-            profession: 'onandon',
-            phone: 'onandon',
-            county: 'onandon',
-            area: 'onandon',
-            activityHistory: [],
-            tagHistory: [],
-          },
-          token: {
-            accessToken: 'test_token',
-            expireIn: 52699,
-          },
-        }),
-      );
-    },
+    res: () => mockUserData,
   },
 ]);
 
@@ -114,79 +71,68 @@ describe('Login component', () => {
     const store = setupStore();
     await store.dispatch(userLogin({ email, password }));
 
-    const navigate = jest.fn();
-    const useMockNavigate = useNavigate as jest.Mock;
-    useMockNavigate.mockReturnValueOnce(navigate);
-
     // render component
     renderWithProviders(
-      <MemoryRouter initialEntries={['/login']}>
-        <Login />
+      <MemoryRouter initialEntries={['/login', '/test']}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/test" element={<h1>test</h1>} />
+        </Routes>
       </MemoryRouter>,
       { store },
     );
 
-    expect(navigate).toHaveBeenCalledTimes(1);
-    expect(navigate).toHaveBeenCalledWith(-1);
+    // assertion not in login page
+    expect(screen.queryByRole('heading', { name: '登入' })).not.toBeInTheDocument();
   });
 
   it('should render to register page', async () => {
-    const navigate = jest.fn();
-    const useMockNavigate = useNavigate as jest.Mock;
-    useMockNavigate.mockReturnValueOnce(navigate);
-
     // render component
     renderWithProviders(
+      <MemoryRouter initialEntries={['/login', '/register']}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    // query register button
+    const registerButton = screen.getByRole('button', { name: '註冊' });
+
+    // click register button
+    userEvent.click(registerButton);
+
+    // assertion
+    expect(screen.getByRole('heading', { name: '註冊' })).toBeInTheDocument();
+  });
+
+  it('Should submit data correctly', async () => {
+    // render component
+    const { store, getByLabelText } = renderWithProviders(
       <MemoryRouter initialEntries={['/login']}>
         <Login />
       </MemoryRouter>,
     );
 
-    // query element
-    const emailInput = await screen.findByLabelText('帳號') as HTMLInputElement;
-    const passwordInput = await screen.findByLabelText('密碼') as HTMLInputElement;
-    const submitButton = screen.getByRole('button', { name: '登入' }) as HTMLButtonElement;
+    const emailInput = screen.getByLabelText('帳號');
+    const passwordInput = getByLabelText('密碼');
+    const submitButton = screen.getByRole('button', { name: '登入' });
 
-    // simulate user login
     act(() => {
-      fireEvent.change(emailInput, { target: { value: email } });
-      fireEvent.change(passwordInput, { target: { value: password } });
+      fireEvent.change(emailInput, { target: { value: mockUserData.user.email } });
+      fireEvent.change(passwordInput, { target: { value: 'Password123!' } });
     });
 
-    screen.debug();
+    fireEvent.click(submitButton);
 
-    // Todo: fixbug in handleSubmit
-    // mock user click submit button
-    // fireEvent.click(submitButton);
-    await store.dispatch(userLogin({ email, password }));
+    expect(store.getState().auth.loading).toBe(true);
+    expect(store.getState().auth.userInfo).toBe(null);
 
-    // assertion
-    expect(submitButton).toBeDisabled();
-
-    // await screen.findByText('spining');
-
-    console.log(store.getState());
-    expect(getIsFetchDataCalled()).toBe(true);
-    expect(store.getState().auth.loading).toBe(false);
-    // expect(store.getState().auth.userToken).toEqual({ accessToken: 'test_token' });
+    // Wait for the API call to complete and update the store
+    waitFor(() => {
+      console.log(store.getState().auth);
+      expect(store.getState().auth.loading).toBe(false);
+    });
   });
-
-  // it('should show error message with invalid credentials', async () => {
-  //   // render component
-  //   renderWithProviders(<Login />);
-
-  //   const emailInput = screen.getByLabelText('帳號') as HTMLInputElement;
-  //   const passwordInput = screen.getByLabelText('密碼') as HTMLInputElement;
-  //   const submitButton = screen.getByRole('button', { name: '登入' }) as HTMLButtonElement;
-
-  //   userEvent.type(emailInput, 'invalid@test.com');
-  //   userEvent.type(passwordInput, 'invalid_password');
-  //   userEvent.click(submitButton);
-
-  //   expect(submitButton).toBeDisabled();
-
-  //   await screen.findByText('spining');
-
-  //   expect(screen.getByText('Invalid email or password')).toBeInTheDocument();
-  // });
 });

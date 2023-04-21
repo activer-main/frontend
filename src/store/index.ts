@@ -5,6 +5,7 @@ import authReducer from './auth/authSlice';
 import searchReducer from './search/searchSlice';
 import { activityApi } from './activity/activityService';
 import { searchApi } from './search/searchService';
+import { tagApi } from './tag/tagService';
 
 const store = configureStore({
   reducer: {
@@ -35,13 +36,20 @@ export default store;
 const rootReducer = combineReducers({
   auth: authReducer,
   [authApi.reducerPath]: authApi.reducer,
+  [activityApi.reducerPath]: activityApi.reducer,
+  [tagApi.reducerPath]: tagApi.reducer,
 });
 
-export function setupStore(preloadedState?: PreloadedState<RootState>) {
+export function setupStore(preloadedState?: PreloadedState<TestRootState>) {
   return configureStore({
     reducer: rootReducer,
     preloadedState,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+      .concat(authApi.middleware)
+      .concat(tagApi.middleware)
+      .concat(activityApi.middleware),
   });
 }
 
+export type TestRootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;

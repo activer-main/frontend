@@ -26,6 +26,7 @@ exports[`Login component should match snapshot 1`] = `
       onChange={[Function]}
       required={true}
       type="email"
+      value=""
     />
     <span
       className="form-input__error-message"
@@ -48,6 +49,7 @@ exports[`Login component should match snapshot 1`] = `
       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$"
       required={true}
       type="password"
+      value=""
     />
     <span
       className="form-input__error-message"
