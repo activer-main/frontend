@@ -1,4 +1,4 @@
-import { ActivityDataType } from './data';
+import { ActivityDataType, NewActivityDataType, TagDataType } from './data';
 import { UserInfoType, TokenType } from './user';
 
 export interface SegmentResponseType {
@@ -11,6 +11,13 @@ export interface SegmentResponseType {
 
 export interface ActivityResponseType extends SegmentResponseType {
   searchResultData: ActivityDataType[];
+}
+
+export interface SearchResponseType extends SegmentResponseType {
+  keyword: string;
+  tags: TagDataType[];
+  date: string; // yyyy-mm-dd
+  searchResultData: NewActivityDataType[];
 }
 
 export interface LoginResponseType {

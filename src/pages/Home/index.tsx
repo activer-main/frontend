@@ -57,7 +57,7 @@ function Home() {
               {
                 trendData?.searchResultData.map((activity) => (
                   <Grid item xs={12} sm={6} lg={3}>
-                    <MainCard {...activity} />
+                    {/* <MainCard {...activity} /> */}
                   </Grid>
                 ))
               }
@@ -90,7 +90,7 @@ function Home() {
               {
                 newestData?.searchResultData.map((activity) => (
                   <Grid item xs={12} sm={6} lg={3}>
-                    <MainCard {...activity} />
+                    {/* <MainCard {...activity} /> */}
                   </Grid>
                 ))
               }

@@ -12,7 +12,7 @@ import SendIcon from '@mui/icons-material/Send';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { TagType } from 'components/Tag';
-import { ActivityDataType } from 'types/data';
+import { ActivityDataType, NewActivityDataType } from 'types/data';
 import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -75,7 +75,7 @@ export default function ActionCard({
           useFlexGap
         >
           {tags?.slice(0, 3).map((tag) => (
-            <Chip icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
+            <Chip key={tag.id} icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
           ))}
         </Stack>
         <Typography variant="body2" gutterBottom>
@@ -89,7 +89,7 @@ export default function ActionCard({
   );
 }
 
-export function MainCard({ ...props }: ActivityDataType) {
+export function MainCard({ ...props }: NewActivityDataType) {
   const {
     title, tags, images, trend, id,
   } = props;

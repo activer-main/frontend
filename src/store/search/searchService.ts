@@ -1,16 +1,15 @@
+import { TagDataType } from 'types/data';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { testURL } from 'utils/apiURL';
-import { ActivityDataType, TagDataType } from 'types/data';
 import { SearchRequestType } from 'types/request';
+import { SearchResponseType } from 'types/response';
 
-export const tagApi = createApi({
-  reducerPath: 'tagApi',
+export const searchApi = createApi({
+  reducerPath: 'searchApi',
   baseQuery: fetchBaseQuery({
     // baseUrl: URL.concat('/api/tag'),
     baseUrl: testURL,
     prepareHeaders: (headers) => {
-      // const token = (getState() as RootState).auth.userToken?.accessToken;
-
       const token = localStorage.getItem('userToken');
 
       if (token) {
@@ -20,35 +19,38 @@ export const tagApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['Activity', 'Tag'],
   endpoints: (builder) => ({
-    getLocationTag: builder.query<
-    TagDataType[], void>({
+    getSearchActivity: builder.query<SearchResponseType, SearchRequestType>({
+      query: (request) => ({
+        url: 'search',
+        method: 'GET',
+        params: request,
+      }),
+      providesTags: ['Activity'],
+    }),
+    getLocationTag: builder.query<TagDataType[], void>({
       query: () => ({
         url: 'location',
         method: 'GET',
       }),
+      providesTags: ['Tag'],
     }),
     getFieldTag: builder.query<TagDataType[], void>({
       query: () => ({
         url: 'field',
         method: 'GET',
       }),
-    }),
-    getSearchActivity: builder.query<ActivityDataType[], SearchRequestType>({
-      // eslint-disable-next-line
-      query: (request) => ({
-        url: 'search',
-        method: 'GET',
-        params: { id: 1 },
-      }),
+      providesTags: ['Tag'],
     }),
   }),
+
 });
 
 // export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
-  useGetLocationTagQuery,
   useGetSearchActivityQuery,
   useGetFieldTagQuery,
-} = tagApi;
+  useGetLocationTagQuery,
+} = searchApi;

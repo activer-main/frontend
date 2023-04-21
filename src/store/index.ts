@@ -2,19 +2,21 @@ import { PreloadedState, combineReducers, configureStore } from '@reduxjs/toolki
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import { authApi } from './auth/authService';
 import authReducer from './auth/authSlice';
+import searchReducer from './search/searchSlice';
 import { activityApi } from './activity/activityService';
-import { tagApi } from './test/testService';
+import { searchApi } from './search/searchService';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    search: searchReducer,
     [authApi.reducerPath]: authApi.reducer,
     [activityApi.reducerPath]: activityApi.reducer,
-    [tagApi.reducerPath]: tagApi.reducer,
+    [searchApi.reducerPath]: searchApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
     .concat(authApi.middleware)
-    .concat(tagApi.middleware)
+    .concat(searchApi.middleware)
     .concat(activityApi.middleware),
 });
 

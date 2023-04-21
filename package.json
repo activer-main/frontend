@@ -29,6 +29,7 @@
     "dayjs": "^1.11.7",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "framer-motion": "^10.6.0",
+    "lodash": "^4.17.21",
     "msw": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -72,6 +73,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.194",
     "@types/react-redux": "^7.1.25",
     "@types/react-test-renderer": "^18.0.0",
     "@types/redux-mock-store": "^1.0.3",

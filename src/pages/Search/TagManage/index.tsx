@@ -1,157 +1,80 @@
 import * as React from 'react';
-import Grid from '@mui/material/Grid';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { addTag, removeTag, selectSearchState } from 'store/search/searchSlice';
+import Chip from '@mui/material/Chip';
+import { useAppDispatch, useAppSelector } from 'store';
+import TagIcon from '@mui/icons-material/Tag';
+import ClearIcon from '@mui/icons-material/Clear';
+import { activityTypeToColor } from 'utils/activityTypeToColor';
+import AddIcon from '@mui/icons-material/Add';
 
-function not(a: readonly number[], b: readonly number[]) {
-  return a.filter((value) => b.indexOf(value) === -1);
+interface TransferListType {
+  onClose: () => void;
 }
 
-function intersection(a: readonly number[], b: readonly number[]) {
-  return a.filter((value) => b.indexOf(value) !== -1);
-}
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
-
-export default function TransferList() {
-  const [checked, setChecked] = React.useState<readonly number[]>([]);
-  const [left, setLeft] = React.useState<readonly number[]>([0, 1, 2, 3]);
-  const [right, setRight] = React.useState<readonly number[]>([4, 5, 6, 7]);
-
-  const leftChecked = intersection(checked, left);
-  const rightChecked = intersection(checked, right);
-
-  const handleToggle = (value: number) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
-
-  const handleAllRight = () => {
-    setRight(right.concat(left));
-    setLeft([]);
-  };
-
-  const handleCheckedRight = () => {
-    setRight(right.concat(leftChecked));
-    setLeft(not(left, leftChecked));
-    setChecked(not(checked, leftChecked));
-  };
-
-  const handleCheckedLeft = () => {
-    setLeft(left.concat(rightChecked));
-    setRight(not(right, rightChecked));
-    setChecked(not(checked, rightChecked));
-  };
-
-  const handleAllLeft = () => {
-    setLeft(left.concat(right));
-    setRight([]);
-  };
-
-  const customList = (items: readonly number[]) => (
-    <Paper sx={{ width: 200, height: 230, overflow: 'auto' }}>
-      <List dense component="div" role="list">
-        {items.map((value: number) => {
-          const labelId = `transfer-list-item-${value}-label`;
-
-          return (
-            <ListItem
-              key={value}
-              role="listitem"
-              button
-              onClick={handleToggle(value)}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{
-                    'aria-labelledby': labelId,
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    </Paper>
-  );
+export default function TransferList({ onClose } : TransferListType) {
+  const searchState = useAppSelector(selectSearchState);
+  const dispatch = useAppDispatch();
 
   return (
-    <Box sx={style}>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <Grid item>{customList(left)}</Grid>
-        <Grid item>
-          <Grid container direction="column" alignItems="center">
-            <Button
-              sx={{ my: 0.5 }}
-              variant="outlined"
-              size="small"
-              onClick={handleAllRight}
-              disabled={left.length === 0}
-              aria-label="move all right"
-            >
-              ≫
-            </Button>
-            <Button
-              sx={{ my: 0.5 }}
-              variant="outlined"
-              size="small"
-              onClick={handleCheckedRight}
-              disabled={leftChecked.length === 0}
-              aria-label="move selected right"
-            >
-              &gt;
-            </Button>
-            <Button
-              sx={{ my: 0.5 }}
-              variant="outlined"
-              size="small"
-              onClick={handleCheckedLeft}
-              disabled={rightChecked.length === 0}
-              aria-label="move selected left"
-            >
-              &lt;
-            </Button>
-            <Button
-              sx={{ my: 0.5 }}
-              variant="outlined"
-              size="small"
-              onClick={handleAllLeft}
-              disabled={right.length === 0}
-              aria-label="move all left"
-            >
-              ≪
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid item>{customList(right)}</Grid>
-      </Grid>
-    </Box>
+    <>
+      {/* Title */}
+      <DialogTitle>
+        <Typography variant="h4" component="h2">標籤管理</Typography>
+      </DialogTitle>
+
+      <DialogContent>
+        <Stack spacing={3}>
+          {/* Search Tag */}
+          <TextField
+            size="small"
+            label="搜尋標籤"
+            sx={{ mt: 1 }}
+          />
+
+          {/* Current tag */}
+          <Typography variant="h5" component="h3">目前標籤</Typography>
+          <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+            {searchState.tags.map((tag) => (
+              <Chip
+                label={tag.text}
+                icon={<TagIcon />}
+                deleteIcon={<ClearIcon />}
+                onDelete={() => dispatch(removeTag(tag))}
+                color={activityTypeToColor(tag.type)}
+                variant="outlined"
+              />
+            ))}
+
+          </Stack>
+
+          {/* Recommend tag */}
+          <Typography variant="h5" component="h3">推薦標籤</Typography>
+          <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+            {searchState.recommendTags.map((tag) => (
+              <Chip
+                label={tag.text}
+                icon={<TagIcon />}
+                deleteIcon={<AddIcon />}
+                onDelete={() => dispatch(addTag(tag))}
+                color={activityTypeToColor(tag.type)}
+                variant="outlined"
+              />
+            ))}
+          </Stack>
+        </Stack>
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={onClose} variant="contained">搜尋</Button>
+        <Button onClick={onClose}>關閉</Button>
+      </DialogActions>
+    </>
   );
 }

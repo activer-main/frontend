@@ -25,5 +25,5 @@ export type VerifyRequestTyep = {
 export interface SearchRequestType extends SegmentRequestType {
   keyword: string,
   tags: string[],
-  date: Date,
+  date: string,
 }

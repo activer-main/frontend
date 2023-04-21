@@ -170,90 +170,115 @@
   ],
   "search": [
     {
-      "id": 1,
-      "title": "夏日音樂祭",
-      "subTitle": "快來和我們一起狂歡吧！",
-      "images": [
-        "https: //example.com/image1.jpg",
-        "https: //example.com/image2.jpg",
-        "https: //example.com/image3.jpg"
-      ],
+      "maxSegment": 5,
+      "minSegment": 1,
+      "currentSegment": 1,
+      "countPerSegment": 10,
+      "totalCount": 50,
+      "keyword": "test",
       "tags": [
         {
           "id": 1,
-          "type": "field",
-          "text": "藝術"
+          "type": "location",
+          "text": "桃園市"
         },
         {
           "id": 2,
-          "type": "area",
-          "text": "台北"
+          "type": "location",
+          "text": "新竹市"
         },
         {
           "id": 3,
-          "type": "style",
-          "text": "流行音樂"
+          "type": "location",
+          "text": "嘉義市"
         }
       ],
-      "branches": [
+      "date": "2000-01-01",
+      "searchResultData": [
         {
           "id": 1,
-          "branchName": "新北場",
-          "date": [
+          "title": "Test Activity 1",
+          "subTitle": null,
+          "images": [
+            "https://via.placeholder.com/150",
+            "https://via.placeholder.com/250"
+          ],
+          "tags": [
             {
-              "name": "第一天",
-              "start": "new Date('2023-07-01T12: 00: 00')",
-              "end": "new Date('2023-07-01T23: 59: 59')"
+              "id": 4,
+              "type": "other",
+              "text": "test1",
+              "tagVoteCount": 10,
+              "userVoted": true
             },
             {
-              "name": "第二天",
-              "start": "new Date('2023-07-02T12: 00: 00')",
-              "end": "new Date('2023-07-02T23: 59: 59')"
+              "id": 5,
+              "type": "other",
+              "text": "test2",
+              "tagVoteCount": 5,
+              "userVoted": false
             }
           ],
-          "applyFee": [
-            "早鳥優惠 $500",
-            "現場 $800"
-          ],
-          "location": [
-            "新北市板橋區中山路一段123號"
-          ],
-          "status": "open"
-        },
-        {
-          "id": 2,
-          "branchName": "台北場",
-          "date": [
+          "branches": [
             {
-              "name": "第三天",
-              "start": "new Date('2023-07-03T12: 00: 00')",
-              "end": "new Date('2023-07-03T23: 59: 59')"
+              "id": 1,
+              "branchName": "Test Branch 1",
+              "date": [
+                {
+                  "name": "Test Date 1",
+                  "start": "2023-05-01T00:00:00.000Z",
+                  "end": "2023-05-10T00:00:00.000Z"
+                },
+                {
+                  "name": "Test Date 2",
+                  "start": "2023-06-01T00:00:00.000Z",
+                  "end": "2023-06-10T00:00:00.000Z"
+                }
+              ],
+              "applyFee": [
+                "1000",
+                "2000"
+              ],
+              "location": [
+                "Taipei",
+                "Taoyuan"
+              ],
+              "status": "open"
+            },
+            {
+              "id": 2,
+              "branchName": "Test Branch 2",
+              "date": [
+                {
+                  "name": "Test Date 3",
+                  "start": "2023-07-01T00:00:00.000Z",
+                  "end": "2023-07-10T00:00:00.000Z"
+                },
+                {
+                  "name": "Test Date 4",
+                  "start": "2023-08-01T00:00:00.000Z",
+                  "end": "2023-08-10T00:00:00.000Z"
+                }
+              ],
+              "applyFee": [
+                "3000",
+                "4000"
+              ],
+              "location": [
+                "Taichung",
+                "Kaohsiung"
+              ],
+              "status": "closed"
             }
           ],
-          "applyFee": [
-            "現場 $1000"
-          ],
-          "location": [
-            "台北市信義區松壽路20號"
-          ],
-          "status": "coming_soon"
+          "content": "This is a test activity.",
+          "connection": null,
+          "holder": null,
+          "objective": null,
+          "sources": null,
+          "trend": 3
         }
-      ],
-      "content": "夏日音樂祭是一個舉辦在炎炎夏日的音樂盛會，來自各地的音樂人將在這裡演出，帶給大家美好的音樂體驗。",
-      "connection": [
-        "聯絡信箱：musicfestival@example.com",
-        "電話：02-12345678"
-      ],
-      "holder": [
-        "主辦單位：音樂節有限公司"
-      ],
-      "objective": [
-        "本音樂節旨在推廣流行音樂，讓更多人接觸、喜愛這個領域。"
-      ],
-      "sources": [
-        "本活動資訊來自夏日音樂祭官網"
-      ],
-      "trend": 10
+      ]
     }
   ]
 }
