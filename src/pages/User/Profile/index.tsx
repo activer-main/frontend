@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
-import FormInput from 'components/FormInput';
 import { useAppDispatch, useAppSelector } from 'store';
 import parseDate from 'utils/parseStringToYYYYMMDD';
 import { selectUserInfo } from 'store/auth/authSlice';
-import FormSelect from 'components/FormSelect';
 import { ProfileFormDataType } from 'types/user';
-import Button from 'components/Button';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import Button from '@mui/material/Button';
 import { userUpdate } from 'store/auth/authAction';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import {
+  Avatar, FormControl, InputLabel, MenuItem,
+} from '@mui/material';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 import CityCountyData from './countyArea.json';
-import './index.scss';
 
 function Profile() {
   const userInfo = useAppSelector(selectUserInfo);
@@ -19,7 +27,7 @@ function Profile() {
   } = userInfo!;
   const [selectedCounty, setSelectCounty] = useState(county || '臺北市');
 
-  const handleCountyChange = (event: React.SyntheticEvent) => {
+  const handleCountyChange = (event:SelectChangeEvent) => {
     // county
     setSelectCounty((event.target as HTMLSelectElement).value);
   };
@@ -41,24 +49,25 @@ function Profile() {
   };
 
   return (
-    <form className="profile" onSubmit={handleSubmit}>
-      <img
-        className="profile__avatar"
+    <Container component="form" maxWidth="xl" onSubmit={handleSubmit}>
+      <Avatar
         src={`http://220.132.244.41:5044${avatar}`}
         alt={username}
-      />
-      <h2 className="profile__header">歡迎回來</h2>
+      >
+        {username}
+      </Avatar>
       {/* Username */}
-      <div className="profile__inputs">
-        <FormInput
-          className="profile__username"
+      <Stack maxWidth="sm" spacing={3} sx={{ mt: 2 }}>
+
+        <TextField
           name="username"
           label="使用者名稱"
           value={username || ''}
         />
+
         {/* Email */}
-        <FormInput
-          className="profile__email"
+
+        <TextField
           name="email"
           label="帳號"
           value={email}
@@ -66,60 +75,80 @@ function Profile() {
         />
 
         {/* Profession */}
-        <FormInput
-          className="profile__prefession"
+        <TextField
           name="profession"
           label="職業"
           value={profession || ''}
         />
         {/* Gender */}
-        <FormSelect
-          className="profile__gender"
-          name="gender"
-          label="性別"
-          defaultValue="隱藏"
-          options={['男', '女', '其他', '隱藏']}
-        />
+        <FormControl>
+          <InputLabel>性別</InputLabel>
+          <Select
+            name="gender"
+            label="性別"
+            defaultValue="隱藏"
+          >
+            <MenuItem value="男性">男性</MenuItem>
+            <MenuItem value="女性">女性</MenuItem>
+            <MenuItem value="隱藏">隱藏</MenuItem>
+
+          </Select>
+        </FormControl>
 
         {/* Birthday */}
-        <FormInput
-          className="profile__birthday"
-          name="birthday"
-          label="生日"
-          type="date"
-          value={birthday ? parseDate(birthday.toString()) : undefined}
-        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={['DatePicker']}>
+            <DatePicker
+              name="birthday"
+              value={birthday ? parseDate(birthday.toString()) : undefined}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
         {/* Phone */}
-        <FormInput
-          className="profile__phone"
+        <TextField
           name="phone"
           label="電話"
           value={phone || undefined}
         />
         {/* Country */}
-        <FormSelect
-          className="profile__county"
-          label="縣市"
-          name="county"
-          onChange={handleCountyChange}
-          defaultValue={county || undefined}
-          options={CityCountyData.map((c) => c.CityName)}
-        />
-        <FormSelect
-          className="profile__area"
-          label="區鄉鎮"
-          name="area"
-          defaultValue={area || undefined}
-          options={CityCountyData.find(
-            (c) => c.CityName === selectedCounty,
-          )?.AreaList.map((a) => a.AreaName) || []}
-        />
-      </div>
-      <div className="profile__control">
-        <Button text="儲存" type="submit" />
-        <Button text="取消" variant={{ outline: true }} type="button" />
-      </div>
-    </form>
+        <FormControl>
+          <InputLabel>縣市</InputLabel>
+          <Select
+            label="縣市"
+            name="county"
+            onChange={handleCountyChange}
+            defaultValue={county || undefined}
+          >
+            {CityCountyData.map((c) => (
+              <MenuItem value={c.CityName}>{c.CityName}</MenuItem>
+            ))}
+
+          </Select>
+        </FormControl>
+        <FormControl>
+          <InputLabel>區鄉鎮</InputLabel>
+          <Select
+            label="區鄉鎮"
+            name="area"
+            defaultValue={area || undefined}
+          >
+            {
+              CityCountyData.find(
+                (c) => c.CityName === selectedCounty,
+              )?.AreaList.map((a) => (
+                <MenuItem value={a.AreaName}>
+                  { a.AreaName}
+                </MenuItem>
+              ))
+            }
+          </Select>
+        </FormControl>
+      </Stack>
+      <Stack spacing={3} direction="row" sx={{ mt: 1 }}>
+        <Button type="submit" variant="contained">儲存</Button>
+        <Button variant="outlined" type="button">取消</Button>
+      </Stack>
+    </Container>
   );
 }
 

@@ -1,61 +1,57 @@
 import React from 'react';
-import { ReactComponent as Earth } from './components/Earth.svg';
-import { ReactComponent as Planet } from './components/Planet.svg';
-import { ReactComponent as Rocket1 } from './components/Rocket1.svg';
-import Counter from './components/Counter';
-import { ReactComponent as StarRing } from './components/StarRing.svg';
-import './index.scss';
-import Searchbar from './components/Searchbar';
+import {
+  Button, Typography, Grid, Box, Container,
+} from '@mui/material';
+import { blue } from '@mui/material/colors';
+import { ReactComponent as Graphic } from './components/Graphic.svg';
 
-function Hero() {
+function HeroSection() {
   return (
-    <section className="hero">
-      <div className="hero__header">
-        <h1>Activer 活動者</h1>
-        <h3 className="hero__h3">
-          在這屬於
-          <mark className="hero__h3--highlight">學生的社群中</mark>
-          <br />
-          尋找屬於你的活動
-        </h3>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        bgcolor: 'primary',
+        width: '100vw',
+      }}
+    >
+      <Container maxWidth="xl" sx={{ padding: 5 }}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} sm={8}>
+            <Typography variant="h1" sx={{ fontWeight: 'bold', mb: 2 }}>
+              Activer
+              <br />
+              活動者
+            </Typography>
+            <Typography variant="h3" sx={{ mb: 4 }}>
+              在這屬於學生的社群中
+              <br />
+              找尋屬於自己的活動
+            </Typography>
+            <Button variant="contained" sx={{ px: 5, py: 2, borderRadius: 0 }}>
+              Book now
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={4} sx={{ position: 'relative' }}>
+            <Graphic />
+            <Box sx={{
+              width: 300,
+              height: 300,
+              bgcolor: blue[100],
+              position: 'absolute',
+              borderRadius: 5,
+              zIndex: -1,
+              top: 20,
+              left: -30,
+            }}
+            />
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
 
-        <Searchbar />
-        <div className="hero__count">
-          <div className="hero__count__item">
-            <h4>活動總數</h4>
-            <Counter from={0} to={100} />
-          </div>
-          <div className="hero__count__item">
-            <h4>爬蟲網站總數</h4>
-            <Counter from={0} to={20} />
-          </div>
-          <div className="hero__count__item">
-            <h4>總計瀏覽數</h4>
-            <Counter from={0} to={20000} />
-          </div>
-        </div>
-        <StarRing className="hero__star-ring" />
-      </div>
-
-      <div className="hero__resource">
-        <h2 className="hero__resource__title">活動來源</h2>
-        <div className="hero__resource__items">
-          <div className="hero__resource__item">
-            <img src="https://www.nlpi.edu.tw/images/header-logo.svg" alt="國立公共資訊圖書館" />
-          </div>
-        </div>
-      </div>
-      <div
-        className="hero__item hero__item__earth"
-
-      >
-        <Earth />
-
-      </div>
-      <div className="hero__item hero__item__planet"><Planet /></div>
-      <div className="hero__item hero__item__rocket"><Rocket1 /></div>
-    </section>
   );
 }
 
-export default Hero;
+export default HeroSection;

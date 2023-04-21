@@ -1,4 +1,4 @@
-import { PreloadedState, combineReducers, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import { authApi } from './auth/authService';
 import authReducer from './auth/authSlice';
@@ -26,26 +26,5 @@ export type AppDispatch = typeof store.dispatch;
 // getting dispatch and selector type
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
 export default store;
-
-// for test
-const rootReducer = combineReducers({
-  auth: authReducer,
-  [authApi.reducerPath]: authApi.reducer,
-  [activityApi.reducerPath]: activityApi.reducer,
-  [tagApi.reducerPath]: tagApi.reducer,
-});
-
-export function setupStore(preloadedState?: PreloadedState<TestRootState>) {
-  return configureStore({
-    reducer: rootReducer,
-    preloadedState,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
-      .concat(authApi.middleware)
-      .concat(tagApi.middleware)
-      .concat(activityApi.middleware),
-  });
-}
-
-export type TestRootState = ReturnType<typeof rootReducer>;
-export type AppStore = ReturnType<typeof setupStore>;

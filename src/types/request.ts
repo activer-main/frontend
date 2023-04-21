@@ -2,7 +2,7 @@ import { UserInfoType } from './user';
 
 export interface SegmentRequestType {
   currentSegment: number,
-  countSegment: number,
+  countPerSegment: number,
 }
 
 export interface RegisterRequestType {

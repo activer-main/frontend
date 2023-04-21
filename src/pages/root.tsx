@@ -1,27 +1,25 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { selectUserData } from 'store/auth/authSlice';
-import { useAppDispatch, useAppSelector } from 'store';
+import { useAppDispatch } from 'store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { tokenLogin } from 'store/auth/authAction';
-import Loading from 'components/Loading';
+import { ThemeProvider } from '@mui/material';
+import { theme } from 'styles/theme';
 
 function Root() {
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector(selectUserData);
 
   useEffect(() => {
     dispatch(tokenLogin());
   }, []);
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <ToastContainer />
-      {loading
-        ? <Loading />
-        : <Outlet />}
-    </>
+      <Outlet />
+    </ThemeProvider>
+
   );
 }
 

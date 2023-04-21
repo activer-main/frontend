@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Loading from 'components/Loading';
 import { useGetActivityQuery } from 'store/activity/activityService';
 import { toast } from 'react-toastify';
-import { useParams, useNavigate } from 'react-router-dom';
-import Button from 'components/Button';
+import { useParams } from 'react-router-dom';
 import ImageSlide from 'components/ImageSlide';
 import { ActivityTagDataType } from 'types/data';
-import Tag, { TagType } from 'components/Tag';
+import TagIcon from '@mui/icons-material/Tag';
 import { Buffer } from 'buffer';
-import './index.scss';
 import {
   FcGraduationCap, FcList, FcPhone, FcReading, FcShare,
 } from 'react-icons/fc';
-import DetailProperties from './DetailProperties';
+import Stack from '@mui/material/Stack';
+import {
+  Box,
+  Chip, Container, Divider, Grid, Link, Typography,
+} from '@mui/material';
+import { activityTypeToColor } from 'utils/activityTypeToColor';
+import BranchTabs from './BranchTabs';
 
 function Detail() {
   const { id = '1' } = useParams();
   const { data, isFetching, isError } = useGetActivityQuery(id as string);
-  const navigate = useNavigate();
-  const [currentBranchId, setCurrentBranchId] = useState<number>(0);
 
   if (isFetching) {
     return <Loading />;
@@ -43,151 +45,138 @@ function Detail() {
   } = data;
 
   return (
-    <div className="detail" id="detail">
+    <Container maxWidth="xl">
       {/* Introduction */}
-      <div className="detail__hero">
+      <Grid container>
 
-        <div className="detail__hero-left">
-
-          {/* Image */}
-          <ImageSlide
-            images={images}
-            altText={title}
-          />
-
-          {/* Title */}
-          <h2 className="detail__title">{title}</h2>
-
-          {/* SubTitle */}
-          {subTitle && (
-            <h3>{subTitle}</h3>
-          )}
-          {/* Tags */}
-          {tags && (
-            <div className="detail__tags">
-              {tags.map((tag: ActivityTagDataType) => {
-                const variant = tag.type as TagType['type'];
-                return (
-                  <Tag
-                    id={`detail-tag-${tag.id!.toString()}`}
-                    key={`detail-tag-${tag.id!.toString()}`}
-                    text={tag.text}
-                    type={variant}
-                  />
-                );
-              }).slice(0, 5)}
-              {/* Add Tag Button */}
-              <button
-                type="button"
-                className="detail__add-tag tag"
-                onClick={() => navigate(`/detail/${id}/vote`, {
-                  replace: true,
-                })}
-              >
-                + 新增標籤
-              </button>
-            </div>
-          )}
-
-        </div>
-
-        <div className="detail__hero-right">
-          {branches.map((branch, index) => (
-            <Button
-              onClick={() => setCurrentBranchId(index)}
-              text={branch.branchName || '一般'}
-              color="white"
-              variant={{
-                underline: currentBranchId === index,
-              }}
+        <Grid item xs={12} md={6}>
+          <Stack direction="column" spacing={2} alignItems="center">
+            {/* Image */}
+            <ImageSlide
+              images={images}
+              altText={title}
             />
-          ))}
-          <DetailProperties branch={branches[currentBranchId]} />
 
-        </div>
+            {/* Title */}
+            <Typography variant="h4" component="h1">{title}</Typography>
 
-      </div>
+            {/* SubTitle */}
+            {subTitle && (
+              <Typography variant="h5" component="h2">{subTitle}</Typography>
+            )}
+
+            {/* Tags */}
+            {tags && (
+              <Stack flexWrap="wrap" spacing={3} direction="row">
+                {tags.map((tag: ActivityTagDataType) => (
+                  <Chip label={tag.text} color={activityTypeToColor(tag.type)} icon={<TagIcon />} variant="outlined" />
+                )).slice(0, 5)}
+                {/* Add Tag Button */}
+                <Chip
+                  clickable
+                  label=" + 新增標籤"
+                />
+              </Stack>
+            )}
+          </Stack>
+
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <BranchTabs branches={branches} />
+        </Grid>
+
+      </Grid>
 
       {/* main content */}
-      <div className="detail__main">
+      <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
 
         {/* Object */}
         {objective
           && (
-            <div className="detail__objective detail__item">
-              <h2 className="detail__header">
+            <Box component="section">
+              <Typography variant="h5" component="h3">
                 <FcReading />
                 活動對象
-              </h2>
-              <p>{objective}</p>
-            </div>
+              </Typography>
+              <Divider />
+              <Typography variant="body1" component="p" />
+            </Box>
           )}
 
         {/* Content */}
-        <div className="detail__content detail__item">
-          <h2 className="detail__header">
+        <Box component="section">
+          <Typography variant="h5" component="h3">
             <FcList />
             活動內容
-          </h2>
-          <div
-            className="detail__content__main"
+          </Typography>
+          <Divider />
+          <Typography
+            variant="body1"
+            component="p"
             dangerouslySetInnerHTML={{ __html: Buffer.from(content, 'base64').toString('utf-8') }}
           />
-        </div>
+        </Box>
 
         {/* Sources */}
         {sources && sources.length !== 0 && (
-          <div className="detail__source detail__item">
-            <h2 className="detail__header">
+          <Box component="section">
+            <Typography variant="h5" component="h3">
               <FcShare />
               原始來源
-            </h2>
-            {sources.map((source: string, index: number) => (
-              <a
-                href={source}
-                target="_blank"
-                className="detail__a"
-                key={`detail__source-${index}`}
-                rel="noreferrer"
-              >
-                {source}
-              </a>
-            ))}
-          </div>
+            </Typography>
+            <Divider />
+            <Stack direction="column" spacing={1} sx={{ padding: 1 }}>
+              {sources.map((source: string, index: number) => (
+                <Link
+                  href={source}
+                  target="_blank"
+                  rel="noreferrer"
+                  key={`detail-source-${index}`}
+                >
+                  {source}
+                </Link>
+              ))}
+            </Stack>
+          </Box>
         )}
 
         {/* Connection */}
         {connection && connection.length !== 0 && (
-          <div className="detail__connection detail__item">
-            <h2 className="detail__header">
+          <Box component="section">
+            <Typography variant="h5" component="h3">
               <FcPhone />
               聯絡資訊
-            </h2>
-            {connection.map((item: string, index: number) => (
-              <p key={`detail-connection-${index}`}>
-                {item}
-              </p>
-            ))}
-          </div>
+            </Typography>
+            <Divider />
+            <Stack direction="column">
+              {connection.map((item: string, index: number) => (
+                <Typography variant="body1" key={`detail-connection-${index}`}>
+                  {item}
+                </Typography>
+              ))}
+            </Stack>
+          </Box>
         )}
 
         {/* Holder */}
         {holder && holder.length !== 0 && (
-          <div className="detail__holder detail__item">
-            <h2 className="detail__header">
+          <Box component="section">
+            <Typography variant="h5" component="h3">
               <FcGraduationCap />
               主辦單位
-            </h2>
+            </Typography>
+            <Divider />
             {holder.map((item: string, index: number) => (
-              <p key={`detail-holder-${index}`}>
+              <Typography variant="body1" key={`detail-holder-${index}`}>
                 {item}
-              </p>
+              </Typography>
             ))}
-          </div>
+          </Box>
         )}
 
-      </div>
-    </div>
+      </Stack>
+    </Container>
   );
 }
 
