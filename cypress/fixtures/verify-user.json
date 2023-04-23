@@ -1,0 +1,19 @@
+{
+  "user": {
+    "id": 1,
+    "email": "onandon@onandon.com",
+    "verify": true,
+    "username": "onandon",
+    "avatar": "onandon",
+    "gender": "onandon",
+    "birthday": "2023-04-17T07:04:41.965Z",
+    "profession": "onandon",
+    "phone": "onandon",
+    "county": "onandon",
+    "area": "onandon"
+  },
+  "token": {
+    "accessToken": "test_token",
+    "expireIn": 52699
+  }
+}
