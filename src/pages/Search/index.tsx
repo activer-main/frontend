@@ -2,7 +2,7 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import SearchIcon from '@mui/icons-material/Search';
 import {
   CircularProgress,
-  Container, Divider, Skeleton, Stack,
+  Container, Divider, LinearProgress, Skeleton, Stack,
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -23,7 +23,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { MainCard } from 'components/Card';
 import dayjs from 'dayjs';
 import React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, createSearchParams } from 'react-router-dom';
 import {
   useGetSearchActivityQuery,
 } from 'store/search/searchService';
@@ -33,6 +33,7 @@ import {
   removeAllByType, selectSearchState, setField, setLocation, setValue,
 } from 'store/search/searchSlice';
 import _ from 'lodash';
+import { ActivityDataType } from 'types/data';
 import TagManage from './TagManage';
 
 const SlideTransition = React.forwardRef((
@@ -41,6 +42,32 @@ const SlideTransition = React.forwardRef((
   },
   ref: React.Ref<unknown>,
 ) => <Slide direction="up" ref={ref} {...props} />);
+
+interface SearchResultType {
+  isLoading: boolean;
+  searchResultData?: ActivityDataType[]
+}
+
+function SearchResult({ isLoading, searchResultData }: SearchResultType) {
+  if (isLoading) {
+    return <LinearProgress />;
+  }
+  if (!searchResultData) {
+    return <Typography variant="h4">查無資料</Typography>;
+  }
+
+  return (
+    <>
+      {
+        searchResultData.map((activity) => (
+          <Grid item xs={12} sm={6} md={4} xl={3} key={activity.id}>
+            <MainCard isLoading={isLoading} {...activity} />
+          </Grid>
+        ))
+      }
+    </>
+  );
+}
 
 function Search() {
   // hooks implementation
@@ -55,8 +82,8 @@ function Search() {
     keyword: searchParams.get('keyword') || '',
     tags: searchParams.getAll('tags') || [],
     date: searchParams.get('date') || '',
-    currentSegment: 1,
-    countPerSegment: 10,
+    page: parseInt(searchParams.get('page') || '1', 10),
+    per: 10,
   });
 
   // component @TagManage dialog display
@@ -72,6 +99,7 @@ function Search() {
       keyword: searchState.keyword,
       tags: _.join(_.map(searchState.tags, 'text'), ','),
       date: searchState.date,
+      page: searchState.page.toString(),
     });
     setSearchParams(newSearchParam);
   };
@@ -216,14 +244,8 @@ function Search() {
       {/* Result */}
 
       <Grid container spacing={3}>
-        {searchData?.searchResultData
-          ? searchData.searchResultData.map((activity) => (
-            <Grid item xs={12} sm={6} md={4} xl={3} key={activity.id}>
-              <MainCard {...activity} />
-            </Grid>
-          ))
-          : <Typography variant="h4">查無資料</Typography>}
 
+        <SearchResult isLoading={isLoading} searchResultData={searchData?.searchResultData} />
       </Grid>
 
       {/* Pagination */}
@@ -234,7 +256,12 @@ function Search() {
         alignContent="center"
         marginTop={1}
       >
-        <Pagination count={10} />
+        <Pagination
+          count={10}
+          onChange={(event, number) => {
+            setSearchParams(createSearchParams({ page: number.toString() }));
+          }}
+        />
 
       </Grid>
     </>

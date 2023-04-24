@@ -13,12 +13,12 @@ import Hero from './Hero';
 
 function Home() {
   const { data: trendData, isLoading: isLoadingTrendData } = useGetTrendActivityQuery({
-    currentSegment: 1,
-    countPerSegment: 4,
+    page: 1,
+    per: 4,
   });
   const { data: newestData, isLoading: isLoadingNewestData } = useGetNewestActivityQuery({
-    currentSegment: 1,
-    countPerSegment: 4,
+    page: 1,
+    per: 4,
   });
 
   return (

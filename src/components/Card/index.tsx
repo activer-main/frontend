@@ -12,12 +12,13 @@ import SendIcon from '@mui/icons-material/Send';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { TagType } from 'components/Tag';
-import { NewActivityDataType } from 'types/data';
+import { ActivityDataType } from 'types/data';
 import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
+import { Skeleton } from '@mui/material';
 
 export interface CardType {
   imgUrl: string,
@@ -26,16 +27,19 @@ export interface CardType {
   tags?: TagType[],
   detail?: React.ReactNode;
   control? : React.ReactNode;
+  isLoading?: boolean
 }
 
 export default function ActionCard({
-  imgUrl, title, tags, altText, detail, control,
+  imgUrl, title, tags, altText, detail, control, isLoading,
 }: CardType) {
   const [imageSrc, setImageSrc] = React.useState(imgUrl);
 
   const handleImageError = () => {
     setImageSrc('/DefaultActivityImage.svg');
   };
+
+  const handleLoad = () => (<Skeleton sx={{ height: '40%' }} />);
 
   return (
     <Card
@@ -46,15 +50,20 @@ export default function ActionCard({
       }}
     >
       {/* Card image */}
-      <CardMedia
-        component="img"
-        sx={{
-          height: '40%',
-        }}
-        onError={handleImageError}
-        image={imageSrc}
-        alt={altText}
-      />
+      {isLoading
+        ? <Skeleton sx={{ height: '40%' }} />
+        : (
+          <CardMedia
+            onLoad={handleLoad}
+            component="img"
+            sx={{
+              height: '40%',
+            }}
+            onError={handleImageError}
+            image={imageSrc}
+            alt={altText}
+          />
+        )}
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography
           gutterBottom
@@ -88,8 +97,11 @@ export default function ActionCard({
     </Card>
   );
 }
+interface MainCardType extends ActivityDataType {
+  isLoading?: boolean;
+}
 
-export function MainCard({ ...props }: NewActivityDataType) {
+export function MainCard({ ...props }:MainCardType) {
   const {
     title, tags, images, trend, id,
   } = props;

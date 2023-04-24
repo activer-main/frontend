@@ -11,6 +11,7 @@ interface SearchStateType {
   field: TagDataType[];
   tags: TagDataType[];
   recommendTags: TagDataType[];
+  page: number;
 }
 
 const initialState: SearchStateType = {
@@ -20,6 +21,7 @@ const initialState: SearchStateType = {
   field: [],
   tags: [],
   recommendTags: [],
+  page: 1,
 };
 
 const searchSlice = createSlice({
@@ -111,6 +113,7 @@ const searchSlice = createSlice({
             location: [],
             field: [],
             recommendTags: [],
+            page: payload.page,
           };
 
           _.forEach(payload.tags, (tag: TagDataType) => {
