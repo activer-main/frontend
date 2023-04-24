@@ -23,7 +23,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { MainCard } from 'components/Card';
 import dayjs from 'dayjs';
 import React from 'react';
-import { useSearchParams, createSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   useGetSearchActivityQuery,
 } from 'store/search/searchService';
@@ -259,7 +259,10 @@ function Search() {
         <Pagination
           count={10}
           onChange={(event, number) => {
-            setSearchParams(createSearchParams({ page: number.toString() }));
+            setSearchParams((prevSearchParam) => {
+              prevSearchParam.set('page', number.toString());
+              return prevSearchParam;
+            });
           }}
         />
 
