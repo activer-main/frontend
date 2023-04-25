@@ -7,12 +7,8 @@ export const tagApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: URL.concat('/api/tag'),
     prepareHeaders: (headers) => {
-      // const token = (getState() as RootState).auth.userToken?.accessToken;
-
       const token = localStorage.getItem('userToken');
-
       if (token) {
-        // include token in req header
         headers.set('Authorization', `Bearer ${token}`);
       }
       return headers;
@@ -26,9 +22,17 @@ export const tagApi = createApi({
         method: 'GET',
       }),
     }),
+    getFieldTag: builder.query<
+    TagDataType[], void>({
+      query: () => ({
+        url: 'field',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-// export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
-export const { useGetLocationTagQuery } = tagApi;
+export const {
+  useGetLocationTagQuery,
+  useGetFieldTagQuery,
+} = tagApi;

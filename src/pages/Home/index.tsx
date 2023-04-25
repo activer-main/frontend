@@ -8,17 +8,17 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import { MainCard } from 'components/Card';
+// import { MainCard } from 'components/Card';
 import Hero from './Hero';
 
 function Home() {
   const { data: trendData, isLoading: isLoadingTrendData } = useGetTrendActivityQuery({
-    currentSegment: 1,
-    countPerSegment: 4,
+    page: 1,
+    per: 4,
   });
   const { data: newestData, isLoading: isLoadingNewestData } = useGetNewestActivityQuery({
-    currentSegment: 1,
-    countPerSegment: 4,
+    page: 1,
+    per: 4,
   });
 
   return (
@@ -55,9 +55,10 @@ function Home() {
           : (
             <Grid container spacing={3} sx={{ mt: 1 }}>
               {
+                // eslint-disable-next-line
                 trendData?.searchResultData.map((activity) => (
-                  <Grid data-testid="trend-card" item xs={12} sm={6} lg={3}>
-                    <MainCard {...activity} />
+                  <Grid item xs={12} sm={6} lg={3}>
+                    {/* <MainCard {...activity} /> */}
                   </Grid>
                 ))
               }
@@ -88,9 +89,10 @@ function Home() {
           : (
             <Grid container spacing={3} sx={{ mt: 1 }}>
               {
+                // eslint-disable-next-line
                 newestData?.searchResultData.map((activity) => (
-                  <Grid data-testid="newest-card" item xs={12} sm={6} lg={3}>
-                    <MainCard {...activity} />
+                  <Grid item xs={12} sm={6} lg={3}>
+                    {/* <MainCard {...activity} /> */}
                   </Grid>
                 ))
               }

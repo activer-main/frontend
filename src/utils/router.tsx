@@ -1,4 +1,3 @@
-import MobileSidebar from 'components/Header/MobileSideBar';
 import ErrorBoundary from 'pages/Error';
 import Home from 'pages/Home';
 import Root from 'pages/root';
@@ -14,8 +13,8 @@ import ProtectedRoute from 'routing/ProtectedRoute';
 import User from 'pages/User';
 import MainRoute from 'routing/MainRoute';
 import Detail from 'pages/Detail';
-import Manage from 'pages/User/Manage';
 import Search from 'pages/Search';
+import Surf, { surfLoader } from 'pages/Surf';
 
 const routerConfig: RouteObject[] = [
   {
@@ -30,10 +29,6 @@ const routerConfig: RouteObject[] = [
           {
             path: '/',
             element: <Home />,
-          },
-          {
-            path: 'sidebar',
-            element: <MobileSidebar />,
           },
           {
             path: 'register',
@@ -55,6 +50,11 @@ const routerConfig: RouteObject[] = [
             path: '/search',
             element: <Search />,
           },
+          {
+            path: '/surf',
+            loader: surfLoader,
+            element: <Surf />,
+          },
         ],
       },
 
@@ -67,10 +67,6 @@ const routerConfig: RouteObject[] = [
             {
               path: 'profile',
               element: <Profile />,
-            },
-            {
-              path: 'manage/:type?',
-              element: <Manage />,
             },
           ],
         },

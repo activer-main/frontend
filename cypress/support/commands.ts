@@ -38,6 +38,7 @@
 //   }
 // }
 
+import { ActivityResponseType } from 'types/response';
 import { URL as API_URL } from 'utils/apiURL';
 
 declare global {
@@ -45,6 +46,9 @@ declare global {
     interface Chainable {
       mockSignInApi(data: string, statusCode: number, message?: string | null): Chainable<void>;
       mockSignUpApi(statusCode: number, message?: string | null): Chainable<void>;
+      mockTokenApi(data: string, token: string, statusCode: number): Chainable<void>;
+      mockTrendActivityApi(body: ActivityResponseType, statusCode: number): Chainable<void>;
+      mockNewestActivityApi(body: ActivityResponseType, statusCode: number): Chainable<void>;
       mockVerifyEmailApi(
         verifyCode: string, statusCode: number, message?: string | null): Chainable<void>;
       enterLoginForm(email: string, password: string): Chainable<void>;
@@ -81,6 +85,30 @@ Cypress.Commands.add('mockVerifyEmailApi', (verifyCode, statusCode, message) => 
         body: statusCode === 200 ? verifyUserData : message,
       },
     );
+  });
+});
+
+Cypress.Commands.add('mockTokenApi', (data, token, statusCode) => {
+  cy.fixture(`${data}.json`).then((userData) => {
+    cy.intercept('GET', `${API_URL}/api/user/auth/token`, {
+      statusCode,
+      headers: { authorization: token },
+      body: statusCode === 200 ? userData : null,
+    });
+  });
+});
+
+Cypress.Commands.add('mockTrendActivityApi', (body, statusCode) => {
+  cy.intercept('POST', `${API_URL}/api/activity/trend`, {
+    statusCode,
+    body,
+  });
+});
+
+Cypress.Commands.add('mockNewestActivityApi', (body, statusCode) => {
+  cy.intercept('POST', `${API_URL}/api/activity/trend`, {
+    statusCode,
+    body,
   });
 });
 

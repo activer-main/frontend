@@ -1,0 +1,258 @@
+{
+  "maxPage": 5,
+  "minPage": 1,
+  "page": 1,
+  "per": 10,
+  "count": 50,
+  "keyword": "test",
+  "tags": [
+    {
+      "id": 1,
+      "type": "location",
+      "text": "基隆市"
+    },
+    {
+      "id": 2,
+      "type": "location",
+      "text": "台北市"
+    },
+    {
+      "id": 1,
+      "type": "field",
+      "text": "教育"
+    },
+    {
+      "id": 2,
+      "type": "field",
+      "text": "藝術"
+    }
+  ],
+  "date": "2000-01-01",
+  "searchResultData": [
+    {
+      "id": 1,
+      "title": "Test Activity 1",
+      "subTitle": null,
+      "images": [
+        "https://via.placeholder.com/150",
+        "https://via.placeholder.com/250"
+      ],
+      "tags": [
+        {
+          "id": 4,
+          "type": "other",
+          "text": "test1",
+          "tagVoteCount": 10,
+          "userVoted": true
+        },
+        {
+          "id": 5,
+          "type": "other",
+          "text": "test2",
+          "tagVoteCount": 5,
+          "userVoted": false
+        }
+      ],
+      "branches": [
+        {
+          "id": 1,
+          "branchName": "Test Branch 1",
+          "date": [
+            {
+              "name": "Test Date 1",
+              "start": "2023-05-01T00:00:00.000Z",
+              "end": "2023-05-10T00:00:00.000Z"
+            },
+            {
+              "name": "Test Date 2",
+              "start": "2023-06-01T00:00:00.000Z",
+              "end": "2023-06-10T00:00:00.000Z"
+            }
+          ],
+          "location": [
+            "Taipei",
+            "Taoyuan"
+          ]
+        },
+        {
+          "id": 2,
+          "branchName": "Test Branch 2",
+          "date": [
+            {
+              "name": "Test Date 3",
+              "start": "2023-07-01T00:00:00.000Z",
+              "end": "2023-07-10T00:00:00.000Z"
+            },
+            {
+              "name": "Test Date 4",
+              "start": "2023-08-01T00:00:00.000Z",
+              "end": "2023-08-10T00:00:00.000Z"
+            }
+          ],
+          "location": [
+            "Taichung",
+            "Kaohsiung"
+          ]
+        }
+      ],
+      "status": "願望",
+      "fee": "$4000",
+      "content": "This is a test activity.",
+      "connection": null,
+      "holder": null,
+      "objective": null,
+      "sources": null,
+      "trend": 3
+    },
+    {
+      "id": 1,
+      "title": "Test Activity 1",
+      "subTitle": null,
+      "images": [
+        "https://via.placeholder.com/150",
+        "https://via.placeholder.com/250"
+      ],
+      "tags": [
+        {
+          "id": 4,
+          "type": "other",
+          "text": "test1",
+          "tagVoteCount": 10,
+          "userVoted": true
+        },
+        {
+          "id": 5,
+          "type": "other",
+          "text": "test2",
+          "tagVoteCount": 5,
+          "userVoted": false
+        }
+      ],
+      "branches": [
+        {
+          "id": 1,
+          "branchName": "Test Branch 1",
+          "date": [
+            {
+              "name": "Test Date 1",
+              "start": "2023-05-01T00:00:00.000Z",
+              "end": "2023-05-10T00:00:00.000Z"
+            },
+            {
+              "name": "Test Date 2",
+              "start": "2023-06-01T00:00:00.000Z",
+              "end": "2023-06-10T00:00:00.000Z"
+            }
+          ],
+          "location": [
+            "Taipei",
+            "Taoyuan"
+          ]
+        },
+        {
+          "id": 2,
+          "branchName": "Test Branch 2",
+          "date": [
+            {
+              "name": "Test Date 3",
+              "start": "2023-07-01T00:00:00.000Z",
+              "end": "2023-07-10T00:00:00.000Z"
+            },
+            {
+              "name": "Test Date 4",
+              "start": "2023-08-01T00:00:00.000Z",
+              "end": "2023-08-10T00:00:00.000Z"
+            }
+          ],
+          "location": [
+            "Taichung",
+            "Kaohsiung"
+          ]
+        }
+      ],
+      "status": "願望",
+      "fee": "$4000",
+      "content": "This is a test activity.",
+      "connection": null,
+      "holder": null,
+      "objective": null,
+      "sources": null,
+      "trend": 3
+    },
+    {
+      "id": 1,
+      "title": "Test Activity 1",
+      "subTitle": null,
+      "images": [
+        "https://via.placeholder.com/150",
+        "https://via.placeholder.com/250"
+      ],
+      "tags": [
+        {
+          "id": 4,
+          "type": "other",
+          "text": "test1",
+          "tagVoteCount": 10,
+          "userVoted": true
+        },
+        {
+          "id": 5,
+          "type": "other",
+          "text": "test2",
+          "tagVoteCount": 5,
+          "userVoted": false
+        }
+      ],
+      "branches": [
+        {
+          "id": 1,
+          "branchName": "Test Branch 1",
+          "date": [
+            {
+              "name": "Test Date 1",
+              "start": "2023-05-01T00:00:00.000Z",
+              "end": "2023-05-10T00:00:00.000Z"
+            },
+            {
+              "name": "Test Date 2",
+              "start": "2023-06-01T00:00:00.000Z",
+              "end": "2023-06-10T00:00:00.000Z"
+            }
+          ],
+          "location": [
+            "Taipei",
+            "Taoyuan"
+          ]
+        },
+        {
+          "id": 2,
+          "branchName": "Test Branch 2",
+          "date": [
+            {
+              "name": "Test Date 3",
+              "start": "2023-07-01T00:00:00.000Z",
+              "end": "2023-07-10T00:00:00.000Z"
+            },
+            {
+              "name": "Test Date 4",
+              "start": "2023-08-01T00:00:00.000Z",
+              "end": "2023-08-10T00:00:00.000Z"
+            }
+          ],
+          "location": [
+            "Taichung",
+            "Kaohsiung"
+          ]
+        }
+      ],
+      "status": "願望",
+      "fee": "$4000",
+      "content": "This is a test activity.",
+      "connection": null,
+      "holder": null,
+      "objective": null,
+      "sources": null,
+      "trend": 3
+    }
+  ]
+}

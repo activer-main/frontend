@@ -1,8 +1,9 @@
-export const activityTypeToColor = (type: string | undefined) :'primary' | 'secondary' | 'success' => {
+export const activityTypeToColor = (type: string | undefined) :
+'primary' | 'secondary' | 'success' | 'warning' => {
   switch (type) {
-    case 'area': return 'primary';
+    case 'field': return 'primary';
     case 'location': return 'secondary';
     case 'other': return 'success';
-    default: return 'primary';
+    default: return 'warning';
   }
 };

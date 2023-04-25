@@ -1,6 +1,6 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
-export const theme = createTheme({
+export const theme = responsiveFontSizes(createTheme({
   typography: {
     fontFamily: [
       'Noto Sans TC',
@@ -8,4 +8,4 @@ export const theme = createTheme({
       'sans-serif',
     ].join(','),
   },
-});
+}));

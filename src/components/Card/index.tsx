@@ -11,31 +11,33 @@ import TagIcon from '@mui/icons-material/Tag';
 import SendIcon from '@mui/icons-material/Send';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { TagType } from 'components/Tag';
-import { ActivityDataType } from 'types/data';
-import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
+import { ActivityDataType, TagDataType } from 'types/data';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
+import { Skeleton } from '@mui/material';
 
 export interface CardType {
   imgUrl: string,
   title: string,
   altText: string,
-  tags?: TagType[],
+  tags?: TagDataType[],
   detail?: React.ReactNode;
   control? : React.ReactNode;
+  isLoading?: boolean
 }
 
 export default function ActionCard({
-  imgUrl, title, tags, altText, detail, control,
+  imgUrl, title, tags, altText, detail, control, isLoading,
 }: CardType) {
   const [imageSrc, setImageSrc] = React.useState(imgUrl);
 
   const handleImageError = () => {
     setImageSrc('/DefaultActivityImage.svg');
   };
+
+  const handleLoad = () => (<Skeleton sx={{ height: '40%' }} />);
 
   return (
     <Card
@@ -46,15 +48,20 @@ export default function ActionCard({
       }}
     >
       {/* Card image */}
-      <CardMedia
-        component="img"
-        sx={{
-          height: '40%',
-        }}
-        onError={handleImageError}
-        image={imageSrc}
-        alt={altText}
-      />
+      {isLoading
+        ? <Skeleton sx={{ height: '40%' }} />
+        : (
+          <CardMedia
+            onLoad={handleLoad}
+            component="img"
+            sx={{
+              height: '40%',
+            }}
+            onError={handleImageError}
+            image={imageSrc}
+            alt={altText}
+          />
+        )}
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography
           gutterBottom
@@ -75,7 +82,7 @@ export default function ActionCard({
           useFlexGap
         >
           {tags?.slice(0, 3).map((tag) => (
-            <Chip icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
+            <Chip key={tag.id} icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
           ))}
         </Stack>
         <Typography variant="body2" gutterBottom>
@@ -88,8 +95,11 @@ export default function ActionCard({
     </Card>
   );
 }
+interface MainCardType extends ActivityDataType {
+  isLoading?: boolean;
+}
 
-export function MainCard({ ...props }: ActivityDataType) {
+export function MainCard({ ...props }:MainCardType) {
   const {
     title, tags, images, trend, id,
   } = props;
@@ -98,9 +108,9 @@ export function MainCard({ ...props }: ActivityDataType) {
   return (
     <ActionCard
       title={title}
-      tags={tags ? parseArrayTagDataToTag(tags) : undefined}
+      tags={tags?.map((tag) => ({ text: tag.text, id: tag.id, type: tag.type }))}
       imgUrl={images ? images[0] : '/DefaultActivityImage.svg'}
-      detail="date"
+      detail=""
       altText={title}
       control={(
         <Grid container sx={{ alignItems: 'center' }}>

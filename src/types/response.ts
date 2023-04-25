@@ -1,15 +1,22 @@
-import { ActivityDataType } from './data';
+import { ActivityDataType, TagDataType } from './data';
 import { UserInfoType, TokenType } from './user';
 
 export interface SegmentResponseType {
-  maxSegment: number;// maximun request page
-  minSegment: number;// minimun request page
-  currentSegment: number;// current page
-  countPerSegment: number; // max number of data in its page
-  totalCount: number; // total data
+  maxPage: number;// maximun request page
+  minPage: number;// minimun request page
+  page: number;// current page
+  per: number; // max number of data in its page
+  count: number; // total data
 }
 
 export interface ActivityResponseType extends SegmentResponseType {
+  searchResultData: ActivityDataType[];
+}
+
+export interface SearchResponseType extends SegmentResponseType {
+  keyword: string;
+  tags: TagDataType[];
+  date: string;
   searchResultData: ActivityDataType[];
 }
 

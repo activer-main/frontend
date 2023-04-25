@@ -1,16 +1,20 @@
 import { SegmentRequestType } from 'types/request';
 import { ActivityResponseType } from 'types/response';
 import { URL as API_URL } from 'utils/apiURL';
+import activityData from '../fixtures/activities.json';
 
 describe('Home page', () => {
   beforeEach(() => {
+    // mock token api
+    cy.mockTokenApi('user', '', 401);
+
     cy.visit('/');
   });
 
-  it('displays Trending Activities', () => {
+  it('應顯示熱門活動', () => {
     const trendRequest: SegmentRequestType = {
-      countPerSegment: 4,
-      currentSegment: 1,
+      page: 4,
+      per: 1,
     };
 
     cy.get('h2').contains('熱門活動').should('exist');
@@ -27,10 +31,10 @@ describe('Home page', () => {
     );
   });
 
-  it('displays Newest Activities', () => {
+  it('應顯示最新活動', () => {
     const newestActivityRequest: SegmentRequestType = {
-      countPerSegment: 4,
-      currentSegment: 1,
+      page: 4,
+      per: 1,
     };
     cy.get('h2').contains('最新活動').should('exist');
 
@@ -44,5 +48,14 @@ describe('Home page', () => {
           .should('have.length', res.body.searchResultData.length);
       },
     );
+  });
+});
+
+describe('Home Page', () => {
+  beforeEach(() => {
+    cy.intercept(`${API_URL}/api/activity/newest`, {
+      statusCode: 200,
+      body: activityData,
+    });
   });
 });

@@ -1,5 +1,3 @@
-@import "/src/styles/variables";
-@import "/src/styles/global";
 
 .image-slide {
   position: relative;
@@ -52,7 +50,6 @@
     &-button-prev,
     &-button-next {
       background-color: rgba($color: #fff, $alpha: 70%);
-      color: $primary-font-color;
       transform: scale(0.5);
     }
   }

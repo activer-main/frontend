@@ -1,12 +1,12 @@
 import { getResendVerifyEmail } from 'api/user';
-import Button from 'components/Button';
-import FormInput from 'components/FormInput';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from 'store';
 import { verifyUser } from 'store/auth/authAction';
-import './index.scss';
+import {
+  Button, Container, Typography, TextField, Box,
+} from '@mui/material';
 
 function Verify() {
   const dispatch = useAppDispatch();
@@ -37,23 +37,29 @@ function Verify() {
   };
 
   return (
-    <form className="verify" onSubmit={handleSubmit}>
-      <h1>驗證</h1>
-      <FormInput
+    <Container maxWidth="md" component="form" onSubmit={handleSubmit}>
+      {/* title */}
+      <Typography variant="h2" color="initial">驗證</Typography>
+
+      {/* input */}
+      <TextField
         label="驗證碼"
         name="verifyCode"
-        className="verify__input"
       />
-      <div className="verify__control">
-        <Button text="驗證" type="submit" />
+
+      {/* control */}
+      <Box sx={{ justifyContent: 'space-between' }}>
+        <Button type="submit">驗證</Button>
+
         <Button
-          text="重新傳送"
           type="button"
-          variant={{ outline: true }}
+          variant="outlined"
           onClick={handleResend}
-        />
-      </div>
-    </form>
+        >
+          重新傳送
+        </Button>
+      </Box>
+    </Container>
   );
 }
 

@@ -1,8 +1,8 @@
 import { UserInfoType } from './user';
 
 export interface SegmentRequestType {
-  currentSegment: number,
-  countPerSegment: number,
+  page: number,
+  per: number,
 }
 
 export interface RegisterRequestType {
@@ -21,3 +21,16 @@ export type UserUpdateRequestType = Omit<UserInfoType, 'email' | 'password' | 'v
 export type VerifyRequestTyep = {
   verifyCode: string,
 };
+
+export interface SearchRequestType extends SegmentRequestType {
+  keyword: string,
+  tags: string[],
+  date: string,
+}
+
+export const sortByUnion = ['trend', 'newest'];
+export const sortingUnion = ['desc', 'asc'];
+export interface ActivitiesRequestType extends SegmentRequestType {
+  sortby: typeof sortByUnion[number];
+  sorting: typeof sortByUnion[number];
+}

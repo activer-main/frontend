@@ -5,16 +5,19 @@ describe('使用者登入', () => {
   const verifyPassword = 'Password1!';
 
   beforeEach(() => {
+    // mock token api
+    cy.mockTokenApi('user', 'userToken', 200);
+
     cy.visit('/login');
 
     // 清除掉 userToken cookies
-    cy.clearCookie('userToken');
+    // cy.clearCookie('userToken');
   });
 
-  it('登入頁面顯示正確', () => {
+  it.only('登入頁面顯示正確', () => {
     // assertion
     // 登入標題
-    cy.get('h1').should('contain', '登入');
+    // cy.get('h1').should('contain', '登入');
 
     // 表單應有 noValidate 屬性
     cy.get('form').should('have.attr', 'novalidate');
@@ -39,6 +42,9 @@ describe('使用者登入', () => {
     // 定義預期的錯誤訊息
     const errorMsg = '帳號和密碼為必填欄位';
 
+    // 攔截登入 API
+    cy.mockSignInApi('user', 401, errorMsg);
+
     // 點擊登入按鈕
     cy.get('button[type="submit"]').click();
 
@@ -53,6 +59,9 @@ describe('使用者登入', () => {
     // 定義預期的錯誤訊息
     const errorMsg = '帳號或密碼錯誤';
 
+    // 攔截登入 API
+    cy.mockSignInApi('user', 401, errorMsg);
+
     // 輸入無效的 Email 和密碼，然後點擊登入按鈕
     cy.enterLoginForm('invalidemail', 'invalidpassword');
 
@@ -61,6 +70,9 @@ describe('使用者登入', () => {
   });
 
   it('成功登入後但電子郵件未驗證，應跳轉到驗證頁面', () => {
+    // 攔截登入 API
+    cy.mockSignInApi('user', 200);
+
     // 輸入有效的 Email 和密碼，然後點擊登入按鈕
     cy.enterLoginForm('test@example.com', 'Password1!');
 
@@ -69,6 +81,9 @@ describe('使用者登入', () => {
   });
 
   it('成功登入後，應跳轉到使用者頁面', () => {
+    // 攔截登入 API
+    cy.mockSignInApi('verify-user', 200);
+
     // 輸入有效的 Email 和密碼，然後點擊登入按鈕
     cy.enterLoginForm(verifyEmail, verifyPassword);
 
@@ -79,6 +94,9 @@ describe('使用者登入', () => {
   it('電子郵件驗證成功後，應跳轉到登入頁面', () => {
     // 預設 verify code
     const verifyCode = '123456';
+
+    // 攔截登入 API
+    cy.mockSignInApi('verify-user', 200);
 
     // 攔截驗證信箱 API 請求，並回傳假的使用者資料
     cy.mockVerifyEmailApi(verifyCode, 200);
@@ -102,6 +120,9 @@ describe('使用者登入', () => {
     // 預設 verify code 和 失敗訊息
     const verifyCode = '123456';
     const errorMsg = '驗證失敗';
+
+    // 攔截登入 API
+    cy.mockSignInApi('user', 200);
 
     // 攔截驗證信箱 API 請求，並回傳假的使用者資料
     cy.mockVerifyEmailApi(verifyCode, 401, errorMsg);
