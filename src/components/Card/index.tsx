@@ -11,9 +11,7 @@ import TagIcon from '@mui/icons-material/Tag';
 import SendIcon from '@mui/icons-material/Send';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { TagType } from 'components/Tag';
-import { ActivityDataType } from 'types/data';
-import { parseArrayTagDataToTag } from 'utils/parseArrayTagDatatoTag';
+import { ActivityDataType, TagDataType } from 'types/data';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +22,7 @@ export interface CardType {
   imgUrl: string,
   title: string,
   altText: string,
-  tags?: TagType[],
+  tags?: TagDataType[],
   detail?: React.ReactNode;
   control? : React.ReactNode;
   isLoading?: boolean
@@ -110,7 +108,7 @@ export function MainCard({ ...props }:MainCardType) {
   return (
     <ActionCard
       title={title}
-      tags={tags ? parseArrayTagDataToTag(tags) : undefined}
+      tags={tags?.map((tag) => ({ text: tag.text, id: tag.id, type: tag.type }))}
       imgUrl={images ? images[0] : '/DefaultActivityImage.svg'}
       detail=""
       altText={title}

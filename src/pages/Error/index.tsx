@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router-dom';
 import Header from 'components/Header';
-import Button from 'components/Button';
-import './index.scss';
+import { Button, Container, Typography } from '@mui/material';
 
 function generateErrorMessage(errorCode: number | undefined): string {
   switch (errorCode) {
@@ -79,26 +78,27 @@ function ErrorBoundary() {
   return (
     <div className="error">
       <Header />
-      <div className="error__main">
+      <Container maxWidth="lg">
 
-        <h1 className="error__title">
+        <Typography variant="h3">
           {errorTitle}
-        </h1>
+        </Typography>
 
-        <div className="error__message">
+        <Typography variant="h5">
           {errorCode}
           :
           {' '}
           {errorMessage}
-        </div>
+        </Typography>
 
-        <Button text="問題回報" />
+        <Button>問題回報</Button>
         <Button
-          text="按此返回上一頁"
-          variant={{ outline: true }}
+          variant="outlined"
           onClick={() => navigate(-1)}
-        />
-      </div>
+        >
+          按此返回上一頁
+        </Button>
+      </Container>
     </div>
   );
 }
