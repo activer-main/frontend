@@ -27,3 +27,10 @@ export interface SearchRequestType extends SegmentRequestType {
   tags: string[],
   date: string,
 }
+
+export const sortByUnion = ['trend', 'newest'];
+export const sortingUnion = ['desc', 'asc'];
+export interface ActivitiesRequestType extends SegmentRequestType {
+  sortby: typeof sortByUnion[number];
+  sorting: typeof sortByUnion[number];
+}

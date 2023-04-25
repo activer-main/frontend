@@ -16,6 +16,7 @@ import MainRoute from 'routing/MainRoute';
 import Detail from 'pages/Detail';
 import Manage from 'pages/User/Manage';
 import Search from 'pages/Search';
+import Surf, { surfLoader } from 'pages/Surf';
 
 const routerConfig: RouteObject[] = [
   {
@@ -54,6 +55,11 @@ const routerConfig: RouteObject[] = [
           {
             path: '/search',
             element: <Search />,
+          },
+          {
+            path: '/surf',
+            loader: surfLoader,
+            element: <Surf />,
           },
         ],
       },
