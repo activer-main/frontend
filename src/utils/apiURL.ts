@@ -1,5 +1,5 @@
-const IP = '220.132.244.41';
-const PORT = '5044';
+const IP = 'ck40292-everest.nord';
+const PORT = '5070';
 
 export const URL = `http://${IP}:${PORT}`;
 export const testURL = 'http://localhost:3000';

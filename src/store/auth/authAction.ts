@@ -1,7 +1,7 @@
 import { UserInfoType } from 'types/user';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
 import {
-  postRegist, postLogin, putUserData, getTokenLogin,
+  postRegist, postLogin, putUserData,
 } from 'api/user';
 import { RegisterRequestType } from 'types/request';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -33,23 +33,10 @@ LoginRequestType
   async (loginBody: LoginRequestType, { rejectWithValue }) => {
     try {
       const { data } = await postLogin(loginBody);
-      // store user's token in local storage
-      localStorage.setItem('userToken', data.token.accessToken);
       return data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
-  },
-);
-
-export const tokenLogin = createAsyncThunk<
-LoginResponseType,
-void>(
-  'auth/token',
-  async () => {
-    const { data } = await getTokenLogin();
-    localStorage.setItem('userToken', data.token.accessToken);
-    return data;
   },
 );
 

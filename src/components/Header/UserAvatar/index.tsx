@@ -38,7 +38,7 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }} src={avatar || username} alt={username} />
+            <Avatar sx={{ width: 32, height: 32 }} src={avatar || username || undefined} alt={username || 'avatar'} />
           </IconButton>
         </Tooltip>
       </Box>
