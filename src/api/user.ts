@@ -9,6 +9,10 @@ import { VerifyRequestTyep } from '../types/request';
 const userResquest = axios.create(
   {
     baseURL: URL.concat('/api/user'),
+    headers: {
+      'Access-Control-Allow-Origin': 'http://ck40292-everest.nord:5070',
+      Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+    },
   },
 );
 
@@ -25,21 +29,13 @@ export const postRegist = (
 );
 
 export const postLogin = (loginBody: LoginRequestType) => userResquest.post<LoginResponseType>(
-  '/auth/signin',
+  '/login',
   loginBody,
   {
     headers: { 'Content-Type': 'application/json' },
     withCredentials: false,
   },
 );
-
-export const getTokenLogin = () => (
-  userResquest.get<LoginResponseType>(
-    '/auth/token',
-    {
-      headers: { Authorization: `Bearer ${userToken}` },
-    },
-  ));
 
 // eslint-disable-next-line
 export const putUserData = (newUserInfo : UserUpdateRequestType) => userResquest.put<UserInfoType>(
@@ -67,20 +63,9 @@ export const putUserData = (newUserInfo : UserUpdateRequestType) => userResquest
 
 export const getVerifyUser = ({ verifyCode } : VerifyRequestTyep) => userResquest.get<
 LoginResponseType>(
-  `auth/verify/email?verifyCode=${verifyCode}`,
-  {
-    headers: {
-      Authorization: `Barear ${userToken}`,
-    },
-  },
-
+  `verifyEmail?verifyCode=${verifyCode}`,
 );
 
 export const getResendVerifyEmail = () => userResquest.get<void>(
-  'auth/resendVerify/email',
-  {
-    headers: {
-      Authorization: `Barear ${userToken}`,
-    },
-  },
+  'resendVerifyEmail',
 );

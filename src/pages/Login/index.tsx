@@ -2,7 +2,7 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -18,10 +18,6 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userInfo = useAppSelector(selectUserInfo);
-
-  if (userInfo) {
-    return <Navigate to="/user/profile" />;
-  }
 
   const { loading } = useAppSelector((state) => state.auth);
 
@@ -41,6 +37,12 @@ export default function Login() {
         toast(error.message);
       });
   };
+
+  React.useEffect(() => {
+    if (userInfo) {
+      navigate('/user/profile');
+    }
+  }, [userInfo]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -82,7 +84,6 @@ export default function Login() {
 
           <LoadingButton
             loading={loading}
-            loadingPosition="end"
             type="submit"
             fullWidth
             variant="contained"
