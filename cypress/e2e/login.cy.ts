@@ -1,4 +1,4 @@
-describe('使用者登入', () => {
+describe('Login Section', () => {
   const unVerifyEmail = 'test@example.com';
   const unVerifyPassword = 'Password1!';
   const verifyEmail = '047633597q@gmail.com';
@@ -6,7 +6,7 @@ describe('使用者登入', () => {
 
   beforeEach(() => {
     // mock token api
-    cy.mockTokenApi('user', 'userToken', 200);
+    cy.mockTokenApi('user', 'userToken', 401);
 
     cy.visit('/login');
 
@@ -14,7 +14,7 @@ describe('使用者登入', () => {
     // cy.clearCookie('userToken');
   });
 
-  it.only('登入頁面顯示正確', () => {
+  it('登入頁面顯示正確', () => {
     // assertion
     // 登入標題
     // cy.get('h1').should('contain', '登入');
@@ -80,7 +80,7 @@ describe('使用者登入', () => {
     cy.url().should('equal', `${Cypress.config().baseUrl}/verify`);
   });
 
-  it('成功登入後，應跳轉到使用者頁面', () => {
+  it('成功登入後，應跳轉到驗證頁面', () => {
     // 攔截登入 API
     cy.mockSignInApi('verify-user', 200);
 
@@ -141,5 +141,30 @@ describe('使用者登入', () => {
     cy.get('[role="alert"].Toastify__toast-body')
       .should('be.visible')
       .and('contain', errorMsg);
+  });
+
+  it('成功登入並驗證後，應跳轉到使用者頁面', () => {
+    // 先定義 verify code
+    const verifyCode = '123456';
+
+    // 攔截登入 API 回傳未驗證使用者資料
+    cy.mockSignInApi('verify-user', 200);
+
+    // 攔截驗證信箱 API 請求，並回傳以驗證使用者資料
+    cy.mockVerifyEmailApi(verifyCode, 200, '驗證成功');
+
+    // 輸入有效的 Email 和密碼，然後點擊登入
+    cy.enterLoginForm(unVerifyEmail, unVerifyPassword);
+
+    // 攔截驗證 Token API 請求，並回傳未驗證使用者資料
+    cy.mockTokenApi('user', 'userToken', 200);
+
+    // 驗證是否成功導向使用者頁面
+    cy.url().should('equal', `${Cypress.config().baseUrl}/user/profile`);
+
+    // 抓取驗證碼欄位
+    cy.get('#\\:rp\\:')
+      .should('be.focused')
+      .type(verifyCode);
   });
 });

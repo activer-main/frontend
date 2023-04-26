@@ -1,84 +1,73 @@
 {
-  "maxPage": 1,   
-  "minPage": 1,   
-  "page": 1, 
-  "per": 1,   
-  "count": 1, 
+  "maxPage": 10,
+  "minPage": 1,
+  "page": 1,
+  "per": 20,
+  "count": 200,
   "searchResultData": [
     {
       "id": 1,
-      "title": "Test Activity 1",
-      "subTitle": null,
-      "images": [
-        "https://via.placeholder.com/150",
-        "https://via.placeholder.com/250"
-      ],
+      "title": "Hiking in the Mountains",
+      "subTitle": "Explore the beauty of the mountain ranges",
+      "images": ["https://example.com/image1.jpg", "https://example.com/image2.jpg"],
       "tags": [
         {
-          "id": 4,
-          "type": "other",
-          "text": "test1",
-          "tagVoteCount": 10,
-          "userVoted": true
+          "id": 1,
+          "name": "Outdoors"
         },
         {
-          "id": 5,
-          "type": "other",
-          "text": "test2",
-          "tagVoteCount": 5,
-          "userVoted": false
+          "id": 2,
+          "name": "Adventure"
         }
       ],
       "branches": [
         {
           "id": 1,
-          "branchName": "Test Branch 1",
-          "date": [
-            {
-              "name": "Test Date 1",
-              "start": "2023-05-01T00:00:00.000Z",
-              "end": "2023-05-10T00:00:00.000Z"
-            },
-            {
-              "name": "Test Date 2",
-              "start": "2023-06-01T00:00:00.000Z",
-              "end": "2023-06-10T00:00:00.000Z"
-            }
-          ],
-          "location": [
-            "Taipei",
-            "Taoyuan"
-          ]
+          "name": "Mountain Ranges"
         },
         {
           "id": 2,
-          "branchName": "Test Branch 2",
-          "date": [
-            {
-              "name": "Test Date 3",
-              "start": "2023-07-01T00:00:00.000Z",
-              "end": "2023-07-10T00:00:00.000Z"
-            },
-            {
-              "name": "Test Date 4",
-              "start": "2023-08-01T00:00:00.000Z",
-              "end": "2023-08-10T00:00:00.000Z"
-            }
-          ],
-          "location": [
-            "Taichung",
-            "Kaohsiung"
-          ]
+          "name": "Nature Trails"
         }
       ],
-      "status": "願望",
-      "applyFee": "$4000",
-      "content": "This is a test activity.",
+      "content": "Join us for a thrilling hike through the mountain ranges. We'll explore...",
+      "connection": ["Meet at the trailhead", "Bring plenty of water and snacks"],
+      "holder": ["John Smith", "Jane Doe"],
+      "objective": ["Experience the beauty of nature", "Improve fitness levels"],
+      "sources": ["https://example.com/hikingtips", "https://example.com/trailmap"],
+      "trend": 5,
+      "applyFee": ["$20 per person"],
+      "status": "Open"
+    },
+    {
+      "id": 2,
+      "title": "Kayaking Adventure",
+      "subTitle": null,
+      "images": null,
+      "tags": [
+        {
+          "id": 1,
+          "name": "Outdoors"
+        },
+        {
+          "id": 3,
+          "name": "Water Sports"
+        }
+      ],
+      "branches": [
+        {
+          "id": 3,
+          "name": "Rivers"
+        }
+      ],
+      "content": "Join us for an exciting kayaking adventure down the river. We'll navigate through...",
       "connection": null,
-      "holder": null,
+      "holder": ["Mark Johnson"],
       "objective": null,
       "sources": null,
-      "trend": 3
+      "trend": 3,
+      "applyFee": null,
+      "status": "Closed"
     }
   ]
 }

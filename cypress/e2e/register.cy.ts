@@ -17,7 +17,7 @@ describe('Register screen', () => {
     // 使用者名稱輸入欄是否存在
     cy.get('#username').should('exist');
 
-    // 電子郵件輸入欄是否存在
+    // 電子郵件輸入欄屬性是否為 email
     cy.get('#email').should('have.attr', 'type', 'email');
 
     // 密碼輸入欄 type 是否為密碼
@@ -85,5 +85,9 @@ describe('Register screen', () => {
 
     // check if user is redirected to login screen
     cy.url().should('include', '/verify');
+  });
+
+  it('點擊取消按鈕, 回到登入頁面', () => {
+
   });
 });

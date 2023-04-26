@@ -2,16 +2,23 @@ import { SegmentRequestType } from 'types/request';
 import { ActivityResponseType } from 'types/response';
 import { URL as API_URL } from 'utils/apiURL';
 import activityData from '../fixtures/activities.json';
+// import activityResponse from '../fixtures/activity-response.json';
 
 describe('Home page', () => {
   beforeEach(() => {
     // mock token api
-    cy.mockTokenApi('user', '', 401);
+    cy.mockTokenApi('user', '', 200);
 
     cy.visit('/');
   });
 
-  it('應顯示熱門活動', () => {
+  it.only('進首頁時, 應顯示熱門活動', () => {
+    // cy.mockTrendActivityApi(activityResponse, 200);
+
+    cy.get('h2').contains('熱門活動').should('exist');
+  });
+
+  it.only('進首頁時, 應抓取並顯示熱門活動', () => {
     const trendRequest: SegmentRequestType = {
       page: 4,
       per: 1,

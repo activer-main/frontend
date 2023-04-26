@@ -171,7 +171,7 @@ function Search() {
               地區
             </Typography>
           </Grid>
-          <Grid item xs={12} md={11}>
+          <Grid item xs={12} md={11} data-testId="location-checkbox">
 
             {!isLoading ? locationTagData?.map((tag) => (
               <FormControlLabel
@@ -201,7 +201,7 @@ function Search() {
               領域
             </Typography>
           </Grid>
-          <Grid item xs={12} md={11}>
+          <Grid item xs={12} md={11} data-testId="field-checkbox">
             {!isLoading ? fieldTagData?.map((tag) => (
               <FormControlLabel
                 componentsProps={{
