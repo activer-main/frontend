@@ -1,11 +1,10 @@
 import { UserInfoType } from 'types/user';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
-import {
-  postRegist, postLogin, putUserData,
-} from 'api/user';
 import { RegisterRequestType } from 'types/request';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getVerifyUser } from '../../api/user';
+import {
+  postRegist, getVerifyUser, postLogin, putUserData,
+} from './authAPI';
 import { VerifyRequestTyep, UserUpdateRequestType, LoginRequestType } from '../../types/request';
 
 // Register

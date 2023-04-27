@@ -1,4 +1,4 @@
-import { getResendVerifyEmail } from 'api/user';
+import { getResendVerifyEmail } from 'store/auth/authAPI';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';

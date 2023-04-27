@@ -1,12 +1,13 @@
 import { UserInfoType } from 'types/user';
 import axios from 'axios';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
-import { RegisterRequestType, LoginRequestType, UserUpdateRequestType } from 'types/request';
+import {
+  RegisterRequestType, LoginRequestType, UserUpdateRequestType, VerifyRequestTyep,
+} from 'types/request';
 import { userToken } from 'store/auth/authSlice';
 import { URL } from 'utils/apiURL';
-import { VerifyRequestTyep } from '../types/request';
 
-const userResquest = axios.create(
+const authRequest = axios.create(
   {
     baseURL: URL.concat('/api/user'),
     headers: {
@@ -16,10 +17,11 @@ const userResquest = axios.create(
   },
 );
 
+// Register
 export const postRegist = (
   registBody : RegisterRequestType,
-) => userResquest.post<RegisterResponseType>(
-  '/auth/signup',
+) => authRequest.post<RegisterResponseType>(
+  '/signup',
   registBody,
   {
     headers: {
@@ -28,7 +30,8 @@ export const postRegist = (
   },
 );
 
-export const postLogin = (loginBody: LoginRequestType) => userResquest.post<LoginResponseType>(
+// Login
+export const postLogin = (loginBody: LoginRequestType) => authRequest.post<LoginResponseType>(
   '/login',
   loginBody,
   {
@@ -37,8 +40,19 @@ export const postLogin = (loginBody: LoginRequestType) => userResquest.post<Logi
   },
 );
 
+// Verify
+export const getVerifyUser = ({ verifyCode } : VerifyRequestTyep) => authRequest.get<
+LoginResponseType>(
+  `verifyEmail?verifyCode=${verifyCode}`,
+);
+
+// Resend Verify
+export const getResendVerifyEmail = () => authRequest.get<void>(
+  'resendVerifyEmail',
+);
+
 // eslint-disable-next-line
-export const putUserData = (newUserInfo : UserUpdateRequestType) => userResquest.put<UserInfoType>(
+export const putUserData = (newUserInfo : UserUpdateRequestType) => authRequest.put<UserInfoType>(
   '',
   {
     RealName: 'John Doe',
@@ -59,13 +73,4 @@ export const putUserData = (newUserInfo : UserUpdateRequestType) => userResquest
       Authorization: `Barear ${userToken}`,
     },
   },
-);
-
-export const getVerifyUser = ({ verifyCode } : VerifyRequestTyep) => userResquest.get<
-LoginResponseType>(
-  `verifyEmail?verifyCode=${verifyCode}`,
-);
-
-export const getResendVerifyEmail = () => userResquest.get<void>(
-  'resendVerifyEmail',
 );
