@@ -13,21 +13,19 @@
       "tags": [
         {
           "id": 1,
-          "name": "Outdoors"
-        },
-        {
-          "id": 2,
-          "name": "Adventure"
+          "type": "location", 
+          "text": "台北",
+          "tagVoteCount": 2,  
+          "userVoted": true  
         }
       ],
       "branches": [
         {
           "id": 1,
+          "branchName": null,
+          "date": [],
+          "location": null,
           "name": "Mountain Ranges"
-        },
-        {
-          "id": 2,
-          "name": "Nature Trails"
         }
       ],
       "content": "Join us for a thrilling hike through the mountain ranges. We'll explore...",
@@ -47,17 +45,19 @@
       "tags": [
         {
           "id": 1,
-          "name": "Outdoors"
-        },
-        {
-          "id": 3,
-          "name": "Water Sports"
+          "type": "location", 
+          "text": "台北",
+          "tagVoteCount": 2,  
+          "userVoted": true  
         }
       ],
       "branches": [
         {
-          "id": 3,
-          "name": "Rivers"
+          "id": 1,
+          "branchName": null,
+          "date": [],
+          "location": null,
+          "name": "Mountain Ranges"
         }
       ],
       "content": "Join us for an exciting kayaking adventure down the river. We'll navigate through...",
