@@ -45,6 +45,7 @@ function Verify() {
       <TextField
         label="驗證碼"
         name="verifyCode"
+        data-testId="verifyCode-input"
       />
 
       {/* control */}
