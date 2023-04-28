@@ -91,18 +91,24 @@ describe('Login Section', () => {
     cy.url().should('equal', `${Cypress.config().baseUrl}/user/profile`);
   });
 
-  it('電子郵件驗證過後，應跳轉到登入頁面', () => {
+  it('成功登入並電子郵件驗證過後，應跳轉到使用者頁面', () => {
     // 預設 verify code
     const verifyCode = '123456';
 
     // 攔截登入 API
     cy.mockSignInApi('user', 200);
 
+    // 攔截 token API
+    cy.mockTokenApi('user', 'userToken', 401);
+
     // 攔截驗證信箱 API 請求，並回傳假的使用者資料
     cy.mockVerifyEmailApi(verifyCode, 200);
 
     // 輸入有效的 Email 和密碼，然後點擊登入按鈕
     cy.enterLoginForm(unVerifyEmail, unVerifyPassword);
+
+    // 攔截 token API
+    cy.mockTokenApi('user', 'userToken', 200);
 
     // 驗證是否成功導向驗證頁面
     cy.url().should('equal', `${Cypress.config().baseUrl}/verify`);
@@ -111,7 +117,11 @@ describe('Login Section', () => {
     cy.get('[data-testId="verifyCode-input"]').type(verifyCode);
     cy.get('[type="submit"]').should('have.text', '驗證').click();
 
-    // 驗證是否成功導向使用者頁面
+    // 確認是否出現 toast 成功訊息
+    cy.get('.Toastify__toast-body')
+      .should('contain', '驗證成功');
+
+    // 確認是否成功導向使用者頁面
     cy.url().should('equal', `${Cypress.config().baseUrl}/user/profile`);
   });
 
@@ -136,36 +146,10 @@ describe('Login Section', () => {
     cy.get('[data-testId="verifyCode-input"]').type(verifyCode);
     cy.get('[type="submit"]').click();
 
-    // toast 錯誤訊息
+    // 確認是否出現 toast 錯誤訊息
     cy.get('[role="alert"].Toastify__toast-body')
       .should('be.visible')
       .and('contain', errorMsg);
-  });
-
-  it('成功登入並驗證後，應跳轉到使用者頁面', () => {
-    // 先定義 verify code
-    const verifyCode = '123456';
-
-    // 攔截登入 API 回傳未驗證使用者資料
-    cy.mockSignInApi('verify-user', 200);
-
-    // 攔截驗證信箱 API 請求，並回傳以驗證使用者資料
-    cy.mockVerifyEmailApi(verifyCode, 200, '驗證成功');
-
-    // 輸入有效的 Email 和密碼，然後點擊登入
-    cy.enterLoginForm(unVerifyEmail, unVerifyPassword);
-
-    // 攔截驗證 Token API 請求，並回傳未驗證使用者資料
-    cy.mockTokenApi('user', 'userToken', 200);
-
-    // 抓取驗證碼欄位並點擊驗證按鈕
-    cy.get('[data-testId="verifyCode-input"]')
-      .should('be.focused')
-      .type(verifyCode);
-    cy.get('[type="submit"]').click();
-
-    // 驗證是否成功導向使用者頁面
-    cy.url().should('equal', `${Cypress.config().baseUrl}/user/profile`);
   });
 });
 

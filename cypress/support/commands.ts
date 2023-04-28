@@ -59,7 +59,7 @@ declare global {
 
 Cypress.Commands.add('mockSignInApi', (data, statusCode, message) => {
   cy.fixture(`${data}.json`).then((userData) => {
-    cy.intercept('POST', `${API_URL}/api/user/auth/signin`, {
+    cy.intercept('POST', `${API_URL}/api/user/login`, {
       statusCode: statusCode || 200,
       body: statusCode === 200 ? userData : message,
     });
@@ -68,7 +68,7 @@ Cypress.Commands.add('mockSignInApi', (data, statusCode, message) => {
 
 Cypress.Commands.add('mockSignUpApi', (statusCode, message) => {
   cy.fixture('user.json').then((userData) => {
-    cy.intercept('POST', `${API_URL}/api/user/auth/signup`, {
+    cy.intercept('POST', `${API_URL}/api/user/signup`, {
       statusCode: statusCode || 200,
       body: statusCode === 200 ? userData : message,
     });
@@ -79,7 +79,7 @@ Cypress.Commands.add('mockVerifyEmailApi', (verifyCode, statusCode, message) => 
   cy.fixture('verify-user.json').then((verifyUserData) => {
     cy.intercept(
       'GET',
-      `${API_URL}/api/user/auth/verify/email?verifyCode=${verifyCode}`,
+      `${API_URL}/api/user/verifyEmail?verifyCode=${verifyCode}`,
       {
         statusCode,
         body: statusCode === 200 ? verifyUserData : message,
@@ -90,7 +90,7 @@ Cypress.Commands.add('mockVerifyEmailApi', (verifyCode, statusCode, message) => 
 
 Cypress.Commands.add('mockTokenApi', (data, token, statusCode) => {
   cy.fixture(`${data}.json`).then((userData) => {
-    cy.intercept('GET', `${API_URL}/api/user/auth/token`, {
+    cy.intercept('GET', `${API_URL}/api/user`, {
       statusCode,
       headers: { authorization: token },
       body: statusCode === 200 ? userData : null,

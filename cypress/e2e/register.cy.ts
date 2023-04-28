@@ -87,7 +87,7 @@ describe('Register screen', () => {
     cy.url().should('include', '/verify');
   });
 
-  it.only('點擊取消按鈕, 回到登入頁面', () => {
+  it('點擊取消按鈕, 回到登入頁面', () => {
     // 點擊取消按鈕
     cy.get('[data-testId="cancel-button"] a').click();
 
