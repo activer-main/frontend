@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'utils/apiURL';
-import { ActivityDataType } from 'types/data';
 import { LoginResponseType } from 'types/response';
+import { UserInfoType } from 'types/user';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: URL,
+    baseUrl: URL.concat('/api/user'),
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('userToken');
       if (token) {
@@ -17,15 +17,11 @@ export const authApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getManageActivity: builder.query<ActivityDataType[], void>({
+
+    // token login
+    getAuthtoken: builder.query<UserInfoType, void>({
       query: () => ({
-        url: 'api/activity/dreamAndRegistered',
-        method: 'GET',
-      }),
-    }),
-    getAuthtoken: builder.query<LoginResponseType, void>({
-      query: () => ({
-        url: 'api/user/auth/token',
+        url: '',
         method: 'GET',
       }),
     }),
@@ -34,4 +30,4 @@ export const authApi = createApi({
 
 // export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetManageActivityQuery, useGetAuthtokenQuery } = authApi;
+export const { useGetAuthtokenQuery } = authApi;

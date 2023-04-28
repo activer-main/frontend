@@ -8,7 +8,7 @@ import { LoginResponseType } from 'types/response';
 import { UserDataType } from '../../types/user';
 import { authApi } from './authService';
 import {
-  registerUser, userLogin, userUpdate, verifyUser, tokenLogin,
+  registerUser, userLogin, userUpdate, verifyUser,
 } from './authAction';
 
 // initialize userToken from local storage
@@ -18,8 +18,8 @@ export const userToken = localStorage.getItem('userToken')
 
 const initialState: UserDataType = {
   loading: false,
-  userInfo: null, // for user object
-  userToken: null, // for storing the JWT
+  userInfo: undefined, // for user object
+  userToken: undefined, // for storing the JWT
   error: null,
   success: false, // for monitoring the registration process.
 };
@@ -28,15 +28,15 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: (state) => {
+    logout: () => {
       redirect('/login');
       localStorage.removeItem('userToken');
       // deletes token from storage
       return ({
-        ...state,
+        success: true,
         loading: false,
-        userInfo: null,
-        userToken: null,
+        userInfo: undefined,
+        userToken: undefined,
         error: null,
       });
     },
@@ -47,6 +47,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
       // regist success
       .addCase(registerUser.fulfilled, (state) => {
         toast.success('註冊成功，請重新登入並驗證信箱!');
@@ -63,27 +64,42 @@ const authSlice = createSlice({
         loading: false,
         userInfo: payload,
       }))
-    // login and verify success
-      .addMatcher(isAnyOf(
-        userLogin.fulfilled,
-        verifyUser.fulfilled,
-        tokenLogin.fulfilled,
-      ), (state, { payload }) => {
-        localStorage.setItem('userToken', payload.token.accessToken);
-        return ({
-          ...state,
-          loading: false,
-          userInfo: payload.user,
-          userToken: payload.token,
-        });
-      })
 
+      // verify success
+      .addCase(
+        verifyUser.fulfilled,
+        (state, { payload }) => {
+          localStorage.setItem('userToken', payload.token.accessToken!);
+          toast.success('驗證成功');
+          return ({
+            ...state,
+            loading: false,
+            userInfo: payload.user,
+            userToken: payload.token,
+          });
+        },
+      )
+
+    // login success
+      .addCase(
+        userLogin.fulfilled,
+        (state, { payload }) => {
+          localStorage.setItem('userToken', payload.token.accessToken!);
+          return ({
+            ...state,
+            loading: false,
+            userInfo: payload.user,
+            userToken: payload.token,
+          });
+        },
+      )
+
+      // token login
       .addMatcher(
         authApi.endpoints.getAuthtoken.matchFulfilled,
         (state, { payload }) => ({
           ...state,
-          userToken: payload.token,
-          userInfo: payload.user,
+          userInfo: payload,
         }),
       )
 
@@ -94,7 +110,6 @@ const authSlice = createSlice({
           userLogin.pending,
           verifyUser.pending,
           userUpdate.pending,
-          tokenLogin.pending,
         ),
         (state) => ({
           ...state,
@@ -108,7 +123,6 @@ const authSlice = createSlice({
         userLogin.rejected,
         verifyUser.rejected,
         userUpdate.rejected,
-        tokenLogin.rejected,
       ), (state, { payload }) => {
         toast.error(payload as any);
         return ({

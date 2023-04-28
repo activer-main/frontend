@@ -1,5 +1,3 @@
-import { UserInfoType } from './user';
-
 export interface SegmentRequestType {
   page: number,
   per: number,
@@ -16,7 +14,15 @@ export type LoginRequestType = {
   password: string,
 };
 
-export type UserUpdateRequestType = Omit<UserInfoType, 'email' | 'password' | 'verify' | 'id'>;
+export type UserUpdateRequestType = {
+  username?: string;
+  gender? : string;
+  birthday?: string;
+  profession? : string[];
+  phone?: string;
+  county?: string;
+  area?: string;
+};
 
 export type VerifyRequestTyep = {
   verifyCode: string,

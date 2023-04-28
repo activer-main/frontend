@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store';
 import parseDate from 'utils/parseStringToYYYYMMDD';
 import { selectUserInfo } from 'store/auth/authSlice';
-import { ProfileFormDataType } from 'types/user';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Button from '@mui/material/Button';
@@ -16,6 +15,7 @@ import {
 } from '@mui/material';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
+import { ProfileFormDataType } from 'types/user';
 import CityCountyData from './countyArea.json';
 
 function Profile() {
@@ -37,11 +37,11 @@ function Profile() {
     const target = event.target as typeof event.target & ProfileFormDataType;
     dispatch(userUpdate({
       username: target.username.value,
-      avatar: '',
+      // avatar: '',
       // TODO: avatar input
       gender: target.gender.value,
-      profession: target.profession.value,
-      birthday: target.birthday.value as Date,
+      // profession: target.profession.value,
+      birthday: target.birthday.value,
       phone: target.phone.value,
       county: target.county.value,
       area: target.area.value,
@@ -52,7 +52,7 @@ function Profile() {
     <Container component="form" maxWidth="xl" onSubmit={handleSubmit}>
       <Avatar
         src={`http://220.132.244.41:5044${avatar}`}
-        alt={username}
+        alt={username || 'user-avatar'}
       >
         {username}
       </Avatar>
