@@ -87,7 +87,11 @@ describe('Register screen', () => {
     cy.url().should('include', '/verify');
   });
 
-  it('點擊取消按鈕, 回到登入頁面', () => {
+  it.only('點擊取消按鈕, 回到登入頁面', () => {
+    // 點擊取消按鈕
+    cy.get('[data-testId="cancel-button"] a').click();
 
+    // 確認是否在登入頁面
+    cy.url().should('equal', `${Cypress.config().baseUrl}/login`);
   });
 });

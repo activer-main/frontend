@@ -117,7 +117,7 @@ export default function Register() {
           >
             Sign Up
           </LoadingButton>
-          <Grid container justifyContent="flex-end">
+          <Grid container justifyContent="flex-end" data-testId="cancel-button">
             <Grid item>
               <Link to="/login">
                 已有帳號? 立即登入
