@@ -1,4 +1,4 @@
-const IP = 'ck40292-everest.nord';
+const IP = 'localhost';
 const PORT = '5070';
 
 export const URL = `http://${IP}:${PORT}`;

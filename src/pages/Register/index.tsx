@@ -36,8 +36,7 @@ export default function Register() {
     }))
       .unwrap()
       .then(() => {
-        toast.success('註冊成功，請重新登入!');
-        navigate('/login');
+        navigate('/user/profile');
       })
       .catch((error: any) => toast.error(error.message));
   };

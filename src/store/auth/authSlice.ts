@@ -47,25 +47,22 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
-      // regist success
-      .addCase(registerUser.fulfilled, (state) => {
-        toast.success('註冊成功，請重新登入並驗證信箱!');
-        return ({
-          ...state,
-          loading: false,
-          success: true,
-        });
-      })
-
-      // post user data
+      // Success: Register
+      .addCase(registerUser.fulfilled, (state, { payload }) => ({
+        ...state,
+        loading: false,
+        success: true,
+        userToken: payload.token,
+        userInfo: payload.user,
+      }))
+      // Success: update
       .addCase(userUpdate.fulfilled, (state, { payload }) => ({
         ...state,
         loading: false,
         userInfo: payload,
       }))
 
-      // verify success
+      // Success: verify
       .addCase(
         verifyUser.fulfilled,
         (state, { payload }) => {
@@ -74,13 +71,14 @@ const authSlice = createSlice({
           return ({
             ...state,
             loading: false,
+            success: true,
             userInfo: payload.user,
             userToken: payload.token,
           });
         },
       )
 
-    // login success
+    // Success: login
       .addCase(
         userLogin.fulfilled,
         (state, { payload }) => {
@@ -94,7 +92,7 @@ const authSlice = createSlice({
         },
       )
 
-      // token login
+      // Success: token login
       .addMatcher(
         authApi.endpoints.getAuthtoken.matchFulfilled,
         (state, { payload }) => ({
@@ -103,7 +101,7 @@ const authSlice = createSlice({
         }),
       )
 
-      // pending
+      // Pending:
       .addMatcher(
         isAnyOf(
           registerUser.pending,

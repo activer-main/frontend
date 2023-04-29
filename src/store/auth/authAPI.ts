@@ -2,7 +2,7 @@ import { UserInfoType } from 'types/user';
 import axios from 'axios';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
 import {
-  RegisterRequestType, LoginRequestType, UserUpdateRequestType, VerifyRequestTyep,
+  RegisterRequestType, LoginRequestType, UserUpdateRequestType, VerifyRequestType,
 } from 'types/request';
 import { userToken } from 'store/auth/authSlice';
 import { URL } from 'utils/apiURL';
@@ -41,7 +41,7 @@ export const postLogin = (loginBody: LoginRequestType) => authRequest.post<Login
 );
 
 // Verify
-export const getVerifyUser = ({ verifyCode } : VerifyRequestTyep) => authRequest.get<
+export const getVerifyUser = ({ verifyCode } : VerifyRequestType) => authRequest.get<
 LoginResponseType>(
   `verifyEmail?verifyCode=${verifyCode}`,
 );

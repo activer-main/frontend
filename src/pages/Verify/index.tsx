@@ -5,14 +5,17 @@ import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from 'store';
 import { verifyUser } from 'store/auth/authAction';
 import {
-  Button, Container, Typography, TextField, Stack,
+  Container, Typography, TextField, Stack,
 } from '@mui/material';
-import { selectUserInfo } from 'store/auth/authSlice';
+import { selectUserData, selectUserInfo } from 'store/auth/authSlice';
+import { LoadingButton } from '@mui/lab';
 
 function Verify() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userInfo = useAppSelector(selectUserInfo);
+  const { loading, error } = useAppSelector(selectUserData);
+  const [resendLoading, setResendLoading] = React.useState(false);
 
   React.useEffect(() => () => {
     if (userInfo?.emailVerified) {
@@ -27,15 +30,18 @@ function Verify() {
       verifyUser({
         verifyCode: target.verifyCode.value,
       }),
-    ).unwrap().then(() => navigate('/user/profile'));
+    ).unwrap().then(() => toast.success('驗證成功'))
+      .catch(() => toast.error(error.message));
   };
 
   const handleResend = async () => {
     try {
-      await getResendVerifyEmail();
+      setResendLoading(true);
+      await getResendVerifyEmail()
+        .then(() => setResendLoading(false));
       toast.success('已發送驗證碼至信箱');
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (e: any) {
+      toast.error(e.message);
     }
   };
 
@@ -54,15 +60,16 @@ function Verify() {
 
       {/* control */}
       <Stack spacing={2} direction="row">
-        <Button type="submit" variant="contained">驗證</Button>
+        <LoadingButton type="submit" variant="contained" loading={loading}>驗證</LoadingButton>
 
-        <Button
+        <LoadingButton
+          loading={resendLoading}
           type="button"
           variant="outlined"
           onClick={handleResend}
         >
           重新傳送
-        </Button>
+        </LoadingButton>
       </Stack>
     </Container>
   );

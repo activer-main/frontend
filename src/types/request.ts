@@ -24,7 +24,7 @@ export type UserUpdateRequestType = {
   area?: string;
 };
 
-export type VerifyRequestTyep = {
+export type VerifyRequestType = {
   verifyCode: string,
 };
 

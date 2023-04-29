@@ -3,9 +3,11 @@ import { LoginResponseType, RegisterResponseType } from 'types/response';
 import { RegisterRequestType } from 'types/request';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  postRegist, getVerifyUser, postLogin, putUserData,
+  VerifyRequestType, UserUpdateRequestType, LoginRequestType,
+} from '../../types/request';
+import {
+  getVerifyUser, postLogin, postRegist, putUserData,
 } from './authAPI';
-import { VerifyRequestTyep, UserUpdateRequestType, LoginRequestType } from '../../types/request';
 
 // Register
 export const registerUser = createAsyncThunk<
@@ -57,9 +59,9 @@ UserUpdateRequestType
 
 export const verifyUser = createAsyncThunk<
 LoginResponseType,
-VerifyRequestTyep>(
+VerifyRequestType>(
   'auth/verify',
-  async (request: VerifyRequestTyep, { rejectWithValue }) => {
+  async (request: VerifyRequestType, { rejectWithValue }) => {
     try {
       const { data } = await getVerifyUser(request);
       return data;
