@@ -15,13 +15,13 @@ export type LoginRequestType = {
 };
 
 export type UserUpdateRequestType = {
-  username?: string;
-  gender? : string;
-  birthday?: string;
-  profession? : string[];
-  phone?: string;
-  county?: string;
-  area?: string;
+  username?: string | null;
+  gender? : string | null;
+  birthday?: string | null;
+  profession? : string[] | null;
+  phone?: string | null;
+  county?: string | null;
+  area?: string | null;
 };
 
 export type VerifyRequestType = {

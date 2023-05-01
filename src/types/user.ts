@@ -16,8 +16,8 @@ export interface UserInfoType {
   birthday: string | null;
   profession: {
     id: number;
-    profession: string | null;
-  }[];
+    profession: string ;
+  }[] | null;
   phone: string | null;
   county: string | null;
   area: string | null;
@@ -40,12 +40,12 @@ export type LoginFormDataType = {
   password: { value: string };
 };
 export type ProfileFormDataType = {
-  avatar: { value: string | undefined }// TODO: remove undefined
-  username: { value: string };
-  gender:{ value: string };
-  profession: { value: string };
-  birthday: { value: string };
-  phone: { value: string };
-  county: { value: string };
-  area: { value: string };
+  avatar: { value?: string | undefined }// TODO: remove undefined
+  username: { value?: string };
+  gender:{ value?: string };
+  profession: { value?: string[] };
+  birthday: { value?: string };
+  phone: { value?: string };
+  county: { value?: string };
+  area: { value?: string };
 };

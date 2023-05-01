@@ -4,7 +4,6 @@ import { LoginResponseType, RegisterResponseType } from 'types/response';
 import {
   RegisterRequestType, LoginRequestType, UserUpdateRequestType, VerifyRequestType,
 } from 'types/request';
-import { userToken } from 'store/auth/authSlice';
 import { URL } from 'utils/apiURL';
 
 const authRequest = axios.create(
@@ -51,26 +50,9 @@ export const getResendVerifyEmail = () => authRequest.get<void>(
   'resendVerifyEmail',
 );
 
-// eslint-disable-next-line
-export const putUserData = (newUserInfo : UserUpdateRequestType) => authRequest.put<UserInfoType>(
+export const patchUserData = (
+  newUserInfo : UserUpdateRequestType,
+) => authRequest.patch<UserInfoType>(
   '',
-  {
-    RealName: 'John Doe',
-    NickName: 'johndoe123',
-    Avatar: 'https://example.com/avatar.png',
-    Gender: 'male',
-    Birthday: '1980-01-01T00:00:00.000Z',
-    Profession: 'Software Developer',
-    Phone: '123-456-7890',
-    County: 'Los Angeles',
-    Area: 'Santa Monica',
-    ActivityHistory: ['activity1', 'activity2', 'activity3'],
-    TagHistory: ['tag1', 'tag2', 'tag3'],
-  },
-  {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: `Barear ${userToken}`,
-    },
-  },
+  newUserInfo,
 );

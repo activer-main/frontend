@@ -5,7 +5,8 @@ import { redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { RootState } from 'store';
 import { LoginResponseType } from 'types/response';
-import { UserDataType } from '../../types/user';
+import { UserUpdateRequestType } from 'types/request';
+import { UserDataType, UserInfoType } from '../../types/user';
 import { authApi } from './authService';
 import {
   registerUser, userLogin, userUpdate, verifyUser,
@@ -44,6 +45,19 @@ const authSlice = createSlice({
       ...state,
       userInfo: action.payload.user,
     }),
+    setUserInfo: (state, action: PayloadAction<{
+      key: keyof UserInfoType,
+      value:any
+    }>) => {
+      const { key, value } = action.payload;
+      return {
+        ...state,
+        userInfo: {
+          ...state.userInfo!,
+          [key]: value,
+        },
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -92,6 +106,22 @@ const authSlice = createSlice({
         },
       )
 
+      // Reject: patch user data
+      .addCase(
+        userUpdate.rejected,
+        (state, { payload }: any) => {
+          toast.error(payload.message);
+          return (
+            {
+              ...state,
+              loading: false,
+              error: payload,
+              success: false,
+            }
+          );
+        },
+      )
+
       // Success: token login
       .addMatcher(
         authApi.endpoints.getAuthtoken.matchFulfilled,
@@ -120,7 +150,6 @@ const authSlice = createSlice({
         registerUser.rejected,
         userLogin.rejected,
         verifyUser.rejected,
-        userUpdate.rejected,
       ), (state, { payload }) => {
         toast.error(payload as any);
         return ({
@@ -132,8 +161,17 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, setCredentials } = authSlice.actions;
+export const { logout, setCredentials, setUserInfo } = authSlice.actions;
 export const selectUserData = (state: RootState) => state.auth;
 export const selectUserInfo = (state: RootState) => state.auth.userInfo;
+export const selectUpdateUserInfo = (state: RootState): UserUpdateRequestType => ({
+  username: state.auth.userInfo?.username,
+  gender: state.auth.userInfo?.gender,
+  profession: state.auth.userInfo?.profession?.map((p) => p.profession),
+  birthday: state.auth.userInfo?.birthday,
+  phone: state.auth.userInfo?.phone,
+  county: state.auth.userInfo?.county,
+  area: state.auth.userInfo?.area,
+});
 
 export default authSlice.reducer;

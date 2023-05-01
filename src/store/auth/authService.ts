@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'utils/apiURL';
 import { UserInfoType } from 'types/user';
+import { UserUpdateRequestType } from '../../types/request';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -15,6 +16,7 @@ export const authApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['User'],
   endpoints: (builder) => ({
 
     // token login
@@ -23,10 +25,19 @@ export const authApi = createApi({
         url: '',
         method: 'GET',
       }),
+      providesTags: ['User'],
+    }),
+    updateUser: builder.mutation<UserInfoType, UserUpdateRequestType>({
+      query: (body) => ({
+        url: '',
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['User'],
     }),
   }),
 });
 
 // export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAuthtokenQuery } = authApi;
+export const { useGetAuthtokenQuery, useUpdateUserMutation } = authApi;

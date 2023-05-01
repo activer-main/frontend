@@ -6,7 +6,7 @@ import {
   VerifyRequestType, UserUpdateRequestType, LoginRequestType,
 } from '../../types/request';
 import {
-  getVerifyUser, postLogin, postRegist, putUserData,
+  getVerifyUser, postLogin, postRegist, patchUserData,
 } from './authAPI';
 
 // Register
@@ -49,7 +49,7 @@ UserUpdateRequestType
   'auth/update',
   async (newUserData: UserUpdateRequestType, { rejectWithValue }) => {
     try {
-      const { data } = await putUserData(newUserData);
+      const { data } = await patchUserData(newUserData);
       return data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
