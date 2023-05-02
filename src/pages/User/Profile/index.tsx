@@ -9,13 +9,14 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import {
-  Avatar, FormControl, InputLabel, MenuItem,
+  FormControl, InputLabel, MenuItem,
 } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { useUpdateUserMutation } from 'store/auth/authService';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import AvatarUpload from './components/AvatarUpload';
 import CityCountyData from './countyArea.json';
 import Profession from './components/Profession';
 
@@ -23,7 +24,7 @@ function Profile() {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector(selectUserInfo);
   const {
-    avatar, username, email, phone, birthday, county, gender,
+    username, email, phone, birthday, county, gender,
     area,
   } = userInfo!;
   const [updateUser, { isLoading }] = useUpdateUserMutation();
@@ -39,12 +40,7 @@ function Profile() {
 
   return (
     <Container component="form" maxWidth="xl" onSubmit={handleSubmit}>
-      <Avatar
-        src={`http://220.132.244.41:5044${avatar}`}
-        alt={username || 'user-avatar'}
-      >
-        {username}
-      </Avatar>
+      <AvatarUpload />
       {/* Username */}
       <Stack maxWidth="sm" spacing={3} sx={{ mt: 2 }}>
 
