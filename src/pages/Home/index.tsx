@@ -53,12 +53,12 @@ function Home() {
         {isLoadingTrendData && trendData
           ? <Loading />
           : (
-            <Grid container spacing={3} sx={{ mt: 1 }}>
+            <Grid container spacing={3} sx={{ mt: 1 }} data-testId="trend-activity">
               {
                 // eslint-disable-next-line
                 trendData?.searchResultData.map((activity) => (
                   <Grid item xs={12} sm={6} lg={3}>
-                    <MainCard {...activity} />
+                    <MainCard data-testId="trend-activity-card" {...activity} />
                   </Grid>
                 ))
               }

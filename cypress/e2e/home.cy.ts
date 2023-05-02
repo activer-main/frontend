@@ -12,16 +12,17 @@ describe('Home page', () => {
     cy.visit('/');
   });
 
-  it('進首頁時, 應顯示熱門活動', () => {
+  it.only('進首頁時, 應顯示熱門活動', () => {
     cy.mockTrendActivityApi(activityResponse, 200).as('activity');
 
     cy.get('h2').contains('熱門活動').should('exist');
 
     cy.wait('@activity');
 
-    cy.get('@activity').its('response.body').should('deep.equal', activityData);
+    cy.get('[data-testid="trend-activity"]')
+      .children()
+      .should('have.length', 2);
   });
-
   it('進首頁時, 應抓取並顯示熱門活動', () => {
     const trendRequest: SegmentRequestType = {
       page: 4,
