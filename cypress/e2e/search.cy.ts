@@ -2,7 +2,7 @@ import { URL as API_URL } from 'utils/apiURL';
 import searchLocationData from '../fixtures/search-location.json';
 import searchResultData from '../fixtures/search-result.json';
 import searchFieldData from '../fixtures/search-field.json';
-import userData from '../fixtures/user.json';
+import userData from '../fixtures/unverify-user.json';
 
 describe('Search Page', () => {
   beforeEach(() => {

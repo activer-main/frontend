@@ -7,12 +7,12 @@ import activityResponse from '../fixtures/activity-response.json';
 describe('Home page', () => {
   beforeEach(() => {
     // mock token api
-    cy.mockTokenApi('user', '', 200);
+    cy.mockTokenApi('unverify-user', '', 200);
 
     cy.visit('/');
   });
 
-  it.only('進首頁時, 應顯示熱門活動', () => {
+  it('進首頁時, 應顯示熱門活動', () => {
     cy.mockTrendActivityApi(activityResponse, 200).as('activity');
 
     cy.get('h2').contains('熱門活動').should('exist');

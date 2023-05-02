@@ -2,7 +2,7 @@
   "user": {
     "id": 1,
     "email": "onandon@onandon.com",
-    "verify": false,
+    "emailVerified": false,
     "username": "onandon",
     "avatar": "onandon",
     "gender": "onandon",

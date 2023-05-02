@@ -67,8 +67,8 @@ Cypress.Commands.add('mockSignInApi', (data, statusCode, message) => {
 });
 
 Cypress.Commands.add('mockSignUpApi', (statusCode, message) => {
-  cy.fixture('user.json').then((userData) => {
-    cy.intercept('POST', `${API_URL}/api/user/signup`, {
+  cy.fixture('unverify-user.json').then((userData) => {
+    cy.intercept('POST', `${API_URL}/api/user/auth/signup`, {
       statusCode: statusCode || 200,
       body: statusCode === 200 ? userData : message,
     });

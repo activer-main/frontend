@@ -6,7 +6,7 @@ describe('Login Section', () => {
 
   beforeEach(() => {
     // mock token api
-    cy.mockTokenApi('user', 'userToken', 401);
+    cy.mockTokenApi('unverify-user', 'userToken', 401);
 
     cy.visit('/login');
 
@@ -43,7 +43,7 @@ describe('Login Section', () => {
     const errorMsg = '帳號和密碼為必填欄位';
 
     // 攔截登入 API
-    cy.mockSignInApi('user', 401, errorMsg);
+    cy.mockSignInApi('unverify-user', 401, errorMsg);
 
     // 點擊登入按鈕
     cy.get('button[type="submit"]').click();
@@ -60,7 +60,7 @@ describe('Login Section', () => {
     const errorMsg = '帳號或密碼錯誤';
 
     // 攔截登入 API
-    cy.mockSignInApi('user', 401, errorMsg);
+    cy.mockSignInApi('unverify-user', 401, errorMsg);
 
     // 輸入無效的 Email 和密碼，然後點擊登入按鈕
     cy.enterLoginForm('invalidemail', 'invalidpassword');
@@ -71,7 +71,7 @@ describe('Login Section', () => {
 
   it('成功登入後但電子郵件未驗證，應跳轉到驗證頁面', () => {
     // 攔截登入 API
-    cy.mockSignInApi('user', 200);
+    cy.mockSignInApi('unverify-user', 200);
 
     // 輸入有效的 Email 和密碼，然後點擊登入按鈕
     cy.enterLoginForm('test@example.com', 'Password1!');
@@ -96,10 +96,10 @@ describe('Login Section', () => {
     const verifyCode = '123456';
 
     // 攔截登入 API
-    cy.mockSignInApi('user', 200);
+    cy.mockSignInApi('unverify-user', 200);
 
     // 攔截 token API
-    cy.mockTokenApi('user', 'userToken', 401);
+    cy.mockTokenApi('unverify-user', 'userToken', 401);
 
     // 攔截驗證信箱 API 請求，並回傳假的使用者資料
     cy.mockVerifyEmailApi(verifyCode, 200);
@@ -108,7 +108,7 @@ describe('Login Section', () => {
     cy.enterLoginForm(unVerifyEmail, unVerifyPassword);
 
     // 攔截 token API
-    cy.mockTokenApi('user', 'userToken', 200);
+    cy.mockTokenApi('unverify-user', 'userToken', 200);
 
     // 驗證是否成功導向驗證頁面
     cy.url().should('equal', `${Cypress.config().baseUrl}/verify`);
@@ -131,7 +131,7 @@ describe('Login Section', () => {
     const errorMsg = '驗證失敗';
 
     // 攔截登入 API
-    cy.mockSignInApi('user', 200);
+    cy.mockSignInApi('unverify-user', 200);
 
     // 攔截驗證信箱 API 請求，並回傳假的使用者資料
     cy.mockVerifyEmailApi(verifyCode, 401, errorMsg);
