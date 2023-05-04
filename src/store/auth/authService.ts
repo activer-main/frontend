@@ -35,9 +35,15 @@ export const authApi = createApi({
       }),
       invalidatesTags: ['User'],
     }),
+    updateAvatar: builder.mutation<void, FormData >({
+      query: (body) => ({
+        url: 'avatar',
+        method: 'POST',
+        body,
+        responseHandler: (response) => response.text(),
+      }),
+    }),
   }),
 });
 
-// export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
-export const { useGetAuthtokenQuery, useUpdateUserMutation } = authApi;
+export const { useGetAuthtokenQuery, useUpdateUserMutation, useUpdateAvatarMutation } = authApi;

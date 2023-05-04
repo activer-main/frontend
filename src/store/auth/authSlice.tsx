@@ -61,6 +61,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
       // Success: Register
       .addCase(registerUser.fulfilled, (state, { payload }) => ({
         ...state,
@@ -119,6 +120,14 @@ const authSlice = createSlice({
               success: false,
             }
           );
+        },
+      )
+      // Success: avatar upload
+      .addMatcher(
+        authApi.endpoints.updateAvatar.matchFulfilled,
+        (state) => {
+          toast.success('使用者頭像上傳成功');
+          return state;
         },
       )
 
