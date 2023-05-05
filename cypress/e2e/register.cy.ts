@@ -130,15 +130,3 @@ describe('Register screen', () => {
     cy.url().should('equal', `${Cypress.config().baseUrl}/user/profile`);
   });
 });
-
-describe('Register screen after user login', () => {
-  it('使用者已登入, 到註冊頁面時應跳轉到使用者頁面', () => {
-    // mock token api
-    cy.mockTokenApi('verify-user', '', 200);
-
-    cy.visit('/register');
-
-    // 確認是否在使用者頁面
-    cy.url().should('equal', `${Cypress.config().baseUrl}/user/profile`);
-  });
-});

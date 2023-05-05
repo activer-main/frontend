@@ -106,7 +106,7 @@ Cypress.Commands.add('mockTrendActivityApi', (body, statusCode) => {
 });
 
 Cypress.Commands.add('mockNewestActivityApi', (body, statusCode) => {
-  cy.intercept('POST', `${API_URL}/api/activity/trend`, {
+  cy.intercept('POST', `${API_URL}/api/activity/newest`, {
     statusCode,
     body,
   });

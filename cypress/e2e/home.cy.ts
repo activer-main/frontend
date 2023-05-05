@@ -1,73 +1,39 @@
-import { SegmentRequestType } from 'types/request';
-import { ActivityResponseType } from 'types/response';
-import { URL as API_URL } from 'utils/apiURL';
-import activityData from '../fixtures/activities.json';
 import activityResponse from '../fixtures/activity-response.json';
 
 describe('Home page', () => {
   beforeEach(() => {
-    // mock token api
-    cy.mockTokenApi('unverify-user', '', 200);
-
     cy.visit('/');
   });
 
-  it.only('進首頁時, 應顯示熱門活動', () => {
-    cy.mockTrendActivityApi(activityResponse, 200).as('activity');
+  it('進首頁時, 應顯示熱門和最新活動', () => {
+    // 攔截熱門和最新活動 API
+    cy.mockTrendActivityApi(activityResponse, 200).as('trend-activity');
+    cy.mockNewestActivityApi(activityResponse, 200).as('newest-activity');
 
+    // 確認熱門和最新活動標籤是否存在
+    cy.get('h2').contains('最新活動').should('exist');
     cy.get('h2').contains('熱門活動').should('exist');
 
-    cy.wait('@activity');
+    // 等待活動 API 接收
+    cy.wait('@trend-activity');
+    cy.wait('@newest-activity');
 
+    // 確認熱門活動顯示正確
     cy.get('[data-testid="trend-activity"]')
       .children()
-      .should('have.length', 2);
-  });
-  it('進首頁時, 應抓取並顯示熱門活動', () => {
-    const trendRequest: SegmentRequestType = {
-      page: 4,
-      per: 1,
-    };
+      .should('have.length', activityResponse.searchResultData.length)
+      .each(($child, index) => {
+        cy.wrap($child)
+          .should('contain.text', activityResponse.searchResultData[index].title);
+      });
 
-    cy.get('h2').contains('熱門活動').should('exist');
-
-    cy.request(
-      'POST',
-      `${API_URL}/api/activity/trend`,
-      trendRequest,
-    ).then(
-      (res: { body: ActivityResponseType }) => {
-        cy.get('[data-testid="trend-card"]')
-          .should('have.length', res.body.searchResultData.length);
-      },
-    );
-  });
-
-  it('應顯示最新活動', () => {
-    const newestActivityRequest: SegmentRequestType = {
-      page: 4,
-      per: 1,
-    };
-    cy.get('h2').contains('最新活動').should('exist');
-
-    cy.request(
-      'POST',
-      `${API_URL}/api/activity/newest`,
-      newestActivityRequest,
-    ).then(
-      (res: { body: ActivityResponseType }) => {
-        cy.get('[data-testid="newest-card"]')
-          .should('have.length', res.body.searchResultData.length);
-      },
-    );
-  });
-});
-
-describe('Home Page', () => {
-  beforeEach(() => {
-    cy.intercept(`${API_URL}/api/activity/newest`, {
-      statusCode: 200,
-      body: activityData,
-    });
+    // 確認最新活動顯示正確
+    cy.get('[data-testid="newest-activity"]')
+      .children()
+      .should('have.length', activityResponse.searchResultData.length)
+      .each(($child, index) => {
+        cy.wrap($child)
+          .should('contain.text', activityResponse.searchResultData[index].title);
+      });
   });
 });

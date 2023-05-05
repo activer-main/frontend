@@ -53,12 +53,12 @@ function Home() {
         {isLoadingTrendData && trendData
           ? <Loading />
           : (
-            <Grid container spacing={3} sx={{ mt: 1 }} data-testId="trend-activity">
+            <Grid container spacing={3} sx={{ mt: 1 }} data-testid="trend-activity">
               {
                 // eslint-disable-next-line
                 trendData?.searchResultData.map((activity) => (
                   <Grid item xs={12} sm={6} lg={3}>
-                    <MainCard data-testId="trend-activity-card" {...activity} />
+                    <MainCard {...activity} />
                   </Grid>
                 ))
               }
@@ -87,7 +87,7 @@ function Home() {
         {/* Newest cards */}
         {isLoadingNewestData ? <Loading />
           : (
-            <Grid container spacing={3} sx={{ mt: 1 }}>
+            <Grid container spacing={3} sx={{ mt: 1 }} data-testid="newest-activity">
               {
                 // eslint-disable-next-line
                 newestData?.searchResultData.map((activity) => (
