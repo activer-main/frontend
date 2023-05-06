@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const drawerWidth = 200;
 
-export const drawerListItem = {
+export const userNavigationItems = {
   profile: {
     label: '基本資料',
     link: '/user/profile',
@@ -83,7 +83,7 @@ function UserDrawer({ setOpen, open } : UserDrawerType) {
 
         {/* Link Item */}
         <List>
-          {Object.values(drawerListItem).map((item) => (
+          {Object.values(userNavigationItems).map((item) => (
             <ListItem>
               <ListItemButton onClick={() => navigate(item.link)}>
                 <ListItemIcon>

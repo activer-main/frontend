@@ -8,7 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HouseIcon from '@mui/icons-material/House';
 import Button from '@mui/material/Button';
-import { drawerListItem, drawerWidth } from '../UserSidebar';
+import { userNavigationItems, drawerWidth } from '../UserSidebar';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -47,7 +47,7 @@ function UserHeader({ setOpen, open } : UserHeaderType) {
 
   React.useEffect(() => {
     try {
-      setTitle(drawerListItem[pathname.split('/')[2] as keyof typeof drawerListItem].label);
+      setTitle(userNavigationItems[pathname.split('/')[2] as keyof typeof userNavigationItems].label);
     } catch {
       setTitle('Welcome');
     }
