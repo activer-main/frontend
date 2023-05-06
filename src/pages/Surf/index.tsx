@@ -10,18 +10,19 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import { LoaderFunction, redirect, useSearchParams } from 'react-router-dom';
 import { MainCard } from 'components/Card';
-import { ActivitiesRequestType, sortByUnion, sortingUnion } from 'types/request';
+import { sortByUnion, orderByUnion } from 'types/request';
 
 export const surfLoader: LoaderFunction = ({ request }) => {
   const { searchParams } = new URL(request.url);
   const sorting = searchParams.get('sorting');
   const sortBy = searchParams.get('sortby');
 
-  if (!sorting || !sortingUnion.includes(sorting)) {
+  // search param check
+  if (!sorting || !Object.values(orderByUnion).includes(sorting)) {
     searchParams.set('sorting', 'desc');
     return redirect(`/surf?${searchParams.toString()}`);
   }
-  if (!sortBy || !sortByUnion.includes(sortBy)) {
+  if (!sortBy || !Object.values(sortByUnion).includes(sortBy)) {
     searchParams.set('sortby', 'trend');
     return redirect(`/surf?${searchParams.toString()}`);
   }
@@ -34,10 +35,13 @@ function Surf() {
 
   // get data by activity service
   const { data } = useGetActivitiesQuery({
-    sortby: searchParams.get('sortby') as ActivitiesRequestType['sortby'] || 'trend',
-    sorting: searchParams.get('sorting') as ActivitiesRequestType['sorting'] || 'desc',
+    // params has already check in loader some ignore ts in this
+    // @ts-ignore
+    sortBy: searchParams.get('sortBy') || sortByUnion.activityClickedCount,
+    // @ts-ignore
+    orderBy: searchParams.get('orderBy') || orderByUnion.descending,
     page: parseInt(searchParams.get('page') || '1', 10) || 1,
-    per: 20,
+    countPerPage: 20,
   });
 
   return (
@@ -50,11 +54,11 @@ function Surf() {
           <Button
             onClick={() => {
               setSearchParams((prevSearchParam) => {
-                prevSearchParam.set('sortby', 'trend');
+                prevSearchParam.set('sortBy', sortByUnion.activityClickedCount.toString());
                 return prevSearchParam;
               });
             }}
-            variant={searchParams.get('sortby') === 'trend' ? 'contained' : undefined}
+            variant={searchParams.get('sortBy') === sortByUnion.activityClickedCount.toString() ? 'contained' : undefined}
           >
             熱門活動
           </Button>
@@ -76,19 +80,19 @@ function Surf() {
           startIcon={searchParams.get('sorting') === 'desc' ? <KeyboardDoubleArrowDownIcon /> : <KeyboardDoubleArrowUpIcon />}
           onClick={() => {
             setSearchParams((prevSearchParam) => {
-              prevSearchParam.set('sorting', searchParams.get('sorting') === 'desc' ? 'asc' : 'desc');
+              prevSearchParam.set('orderBy', searchParams.get('orderBy') === 'descending' ? 'ascending' : 'descending');
               return prevSearchParam;
             });
           }}
           sx={{ width: '5em' }}
         >
-          {searchParams.get('sorting')}
+          {searchParams.get('orderBy')}
         </Button>
       </Box>
 
       {/* data */}
       <Grid container spacing={3} sx={{ mt: 2, mb: 2 }}>
-        {data?.searchResultData.map((activity) => (
+        {data?.searchData?.map((activity) => (
           <Grid item xs={12} sm={6} md={4} xl={3} key={activity.id}>
             <MainCard {...activity} />
           </Grid>
@@ -100,7 +104,7 @@ function Surf() {
         sx={{ justifyContent: 'center', alignItems: 'center' }}
       >
         <Pagination
-          count={data?.maxPage}
+          count={data?.totalPage}
           onChange={(event, number) => {
             setSearchParams((prevSearchParam) => {
               prevSearchParam.set('page', number.toString());

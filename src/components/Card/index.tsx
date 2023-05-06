@@ -19,8 +19,9 @@ import { activityTypeToColor } from 'utils/activityTypeToColor';
 import { Skeleton } from '@mui/material';
 
 export interface CardType {
+  id: string;
   imgUrl: string,
-  title: string,
+  title: string | null,
   altText: string,
   tags?: TagDataType[],
   detail?: React.ReactNode;
@@ -29,7 +30,7 @@ export interface CardType {
 }
 
 export default function ActionCard({
-  imgUrl, title, tags, altText, detail, control, isLoading,
+  imgUrl, title, tags, altText, detail, control, isLoading, id,
 }: CardType) {
   const [imageSrc, setImageSrc] = React.useState(imgUrl);
 
@@ -74,7 +75,7 @@ export default function ActionCard({
             WebkitLineClamp: 2,
           }}
         >
-          {title}
+          {title || `Activity#${id.slice(0, 5)}...`}
         </Typography>
         <Stack
           spacing={{ xs: 1, sm: 2 }}
@@ -107,11 +108,12 @@ export function MainCard({ ...props }:MainCardType) {
 
   return (
     <ActionCard
+      id={id.toString()}
       title={title}
       tags={tags?.map((tag) => ({ text: tag.text, id: tag.id, type: tag.type }))}
       imgUrl={images ? images[0] : '/DefaultActivityImage.svg'}
       detail=""
-      altText={title}
+      altText={title || 'activity-image'}
       control={(
         <Grid container sx={{ alignItems: 'center' }}>
           <Grid item xs>

@@ -1,40 +1,45 @@
 export interface ActivityTagDataType extends TagDataType {
   tagVoteCount: number; // user voted tag count
   userVoted: boolean; // check if user voted this tag
+  activityAmount: number;
+  trend: number;
 }
 
 export interface TagDataType {
   id: number;
   type: string; // 'area' | 'location' | 'other'
-  text: string;
+  // TODO: type nullable
+  text: string | null;
 }
 
 export interface ActivityDataType {
   id: number;
-  title: string;
-  subTitle:string | null;
-  images: string[] | null;
-  tags: ActivityTagDataType[] | null;
-  branches: BranchDataType[];
-  content: string;
-  connection: string[] | null;
-  holder: string[] | null ;
-  objective: string[] | null;
-  sources: string[] | null;
   trend: number;
+  title: string | null;
+  subTitle:string | null;
+  content: string | null;
+  html: string | null;
+  status: string | null;
+  fee: string[] | null;
+  images: string[] | null;
+  connections: string[] | null;
+  holders: string[] | null ;
+  objectives: string[] | null;
+  sources: string[] | null;
+  branches: BranchDataType[];
+  tags: ActivityTagDataType[] | null;
   applyFee: string[] | null;
-  status: string | undefined | null;
 }
 
 export interface BranchDataType {
   id: number;
   branchName: string | null;
-  date: DateType[];
   location: string[] | null;
+  date: DateType[];
 }
 
 export interface DateType {
-  name: string;
+  name: string | null;
   start: Date | null;
   end: Date | null;
 }

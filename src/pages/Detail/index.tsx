@@ -1,6 +1,5 @@
 import React from 'react';
 import Loading from 'components/Loading';
-import { useGetActivityQuery } from 'store/activity/activityService';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import ImageSlide from 'components/ImageSlide';
@@ -16,11 +15,12 @@ import {
   Chip, Container, Divider, Grid, Link, Typography,
 } from '@mui/material';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
+import { useGetActivityByIdQuery } from 'store/activity/activityService';
 import BranchTabs from './BranchTabs';
 
 function Detail() {
   const { id = '1' } = useParams();
-  const { data, isFetching, isError } = useGetActivityQuery(id as string);
+  const { data, isFetching, isError } = useGetActivityByIdQuery(id as string);
 
   if (isFetching) {
     return <Loading />;
@@ -36,11 +36,11 @@ function Detail() {
     title,
     subTitle,
     tags,
-    objective,
-    connection,
+    objectives,
+    connections,
     sources,
-    content,
-    holder,
+    html,
+    holders,
     branches,
   } = data;
 
@@ -54,7 +54,7 @@ function Detail() {
             {/* Image */}
             <ImageSlide
               images={images}
-              altText={title}
+              altText={title || 'activity-image'}
             />
 
             {/* Title */}
@@ -92,7 +92,7 @@ function Detail() {
       <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
 
         {/* Object */}
-        {objective
+        {objectives
           && (
             <Box component="section">
               <Typography variant="h5" component="h3">
@@ -100,7 +100,11 @@ function Detail() {
                 活動對象
               </Typography>
               <Divider />
-              <Typography variant="body1" component="p" />
+              {objectives.map((o) => (
+                <Typography variant="body1" component="p">
+                  {o}
+                </Typography>
+              ))}
             </Box>
           ) }
 
@@ -114,7 +118,7 @@ function Detail() {
           <Typography
             variant="body1"
             component="p"
-            dangerouslySetInnerHTML={{ __html: Buffer.from(content, 'base64').toString('utf-8') }}
+            dangerouslySetInnerHTML={{ __html: Buffer.from(html || '', 'base64').toString('utf-8') }}
           />
         </Box>
 
@@ -142,7 +146,7 @@ function Detail() {
         )}
 
         {/* Connection */}
-        {connection && connection.length !== 0 && (
+        {connections && connections.length !== 0 && (
           <Box component="section">
             <Typography variant="h5" component="h3">
               <FcPhone />
@@ -150,7 +154,7 @@ function Detail() {
             </Typography>
             <Divider />
             <Stack direction="column">
-              {connection.map((item: string, index: number) => (
+              {connections.map((item: string, index: number) => (
                 <Typography variant="body1" key={`detail-connection-${index}`}>
                   {item}
                 </Typography>
@@ -160,14 +164,14 @@ function Detail() {
         )}
 
         {/* Holder */}
-        {holder && holder.length !== 0 && (
+        {holders && holders.length !== 0 && (
           <Box component="section">
             <Typography variant="h5" component="h3">
               <FcGraduationCap />
               主辦單位
             </Typography>
             <Divider />
-            {holder.map((item: string, index:number) => (
+            {holders.map((item: string, index:number) => (
               <Typography variant="body1" key={`detail-holder-${index}`}>
                 {item}
               </Typography>

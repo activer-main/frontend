@@ -2,15 +2,16 @@ import { ActivityDataType, TagDataType } from './data';
 import { UserInfoType, TokenType } from './user';
 
 export interface SegmentResponseType {
-  maxPage: number;// maximun request page
-  minPage: number;// minimun request page
-  page: number;// current page
-  per: number; // max number of data in its page
-  count: number; // total data
+  orderBy: string | null;
+  sortBy:string | null;
+  countPerPage: number;
+  page: number;
+  totalPage: 2;
+  totalData: number;
 }
 
 export interface ActivityResponseType extends SegmentResponseType {
-  searchResultData: ActivityDataType[];
+  searchData: ActivityDataType[] | null;
 }
 
 export interface SearchResponseType extends SegmentResponseType {

@@ -1,6 +1,7 @@
 export interface SegmentRequestType {
-  page: number,
-  per: number,
+  orderby?: string ;
+  page? :number;
+  countPerPage?: number;
 }
 
 export interface RegisterRequestType {
@@ -34,9 +35,9 @@ export interface SearchRequestType extends SegmentRequestType {
   date: string,
 }
 
-export const sortByUnion = ['trend', 'newest'];
-export const sortingUnion = ['desc', 'asc'];
+export enum sortByUnion {'createdAt', 'title', 'activityClickedCount'}
+export enum orderByUnion { 'descending', 'ascending'}
 export interface ActivitiesRequestType extends SegmentRequestType {
-  sortby: typeof sortByUnion[number];
-  sorting: typeof sortByUnion[number];
+  sortBy: sortByUnion;
+  orderBy: orderByUnion;
 }

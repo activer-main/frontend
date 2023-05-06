@@ -83,7 +83,7 @@ function Search() {
     tags: searchParams.getAll('tags') || [],
     date: searchParams.get('date') || '',
     page: parseInt(searchParams.get('page') || '1', 10),
-    per: 10,
+    countPerPage: 10,
   });
 
   // component @TagManage dialog display

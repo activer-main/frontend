@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetNewestActivityQuery, useGetTrendActivityQuery } from 'store/activity/activityService';
+import { useGetActivitiesQuery } from 'store/activity/activityService';
 import Button from '@mui/material/Button';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -8,17 +8,24 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-// import { MainCard } from 'components/Card';
+import { MainCard } from 'components/Card';
+import { orderByUnion, sortByUnion } from 'types/request';
 import Hero from './Hero';
 
 function Home() {
-  const { data: trendData, isLoading: isLoadingTrendData } = useGetTrendActivityQuery({
+  const { data: trendData, isLoading: isLoadingTrendData } = useGetActivitiesQuery({
+    sortBy: sortByUnion.activityClickedCount,
+    orderBy: orderByUnion.descending,
     page: 1,
-    per: 4,
+    countPerPage: 5,
   });
-  const { data: newestData, isLoading: isLoadingNewestData } = useGetNewestActivityQuery({
+
+  // TODO: newest request
+  const { data: newestData, isLoading: isLoadingNewestData } = useGetActivitiesQuery({
+    sortBy: sortByUnion.createdAt,
+    orderBy: orderByUnion.descending,
     page: 1,
-    per: 4,
+    countPerPage: 5,
   });
 
   return (
@@ -55,10 +62,9 @@ function Home() {
           : (
             <Grid container spacing={3} sx={{ mt: 1 }}>
               {
-                // eslint-disable-next-line
-                trendData?.searchResultData.map((activity) => (
+                trendData?.searchData?.map((activity) => (
                   <Grid item xs={12} sm={6} lg={3}>
-                    {/* <MainCard {...activity} /> */}
+                    <MainCard {...activity} />
                   </Grid>
                 ))
               }
@@ -89,10 +95,9 @@ function Home() {
           : (
             <Grid container spacing={3} sx={{ mt: 1 }}>
               {
-                // eslint-disable-next-line
-                newestData?.searchResultData.map((activity) => (
+                newestData?.searchData?.map((activity) => (
                   <Grid item xs={12} sm={6} lg={3}>
-                    {/* <MainCard {...activity} /> */}
+                    <MainCard {...activity} />
                   </Grid>
                 ))
               }
