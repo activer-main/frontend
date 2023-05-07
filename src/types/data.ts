@@ -13,7 +13,7 @@ export interface TagDataType {
 }
 
 export interface ActivityDataType {
-  id: number;
+  id: string;
   trend: number;
   title: string | null;
   subTitle:string | null;

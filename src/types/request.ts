@@ -1,3 +1,5 @@
+import { ActivityDataType } from './data';
+
 export interface SegmentRequestType {
   orderby?: string ;
   page? :number;
@@ -41,3 +43,5 @@ export interface ActivitiesRequestType extends SegmentRequestType {
   sortBy: sortByUnion;
   orderBy: orderByUnion;
 }
+
+export type ActivityStatusRequestType = { activityId: ActivityDataType['id']; status: ActivityDataType['status'] };

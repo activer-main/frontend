@@ -14,20 +14,18 @@ import {
   Chip, Container, Divider, Grid, Link, Skeleton, Tooltip, Typography,
 } from '@mui/material';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
-import { useGetActivityByIdQuery } from 'store/activity/activityService';
+import { useGetActivityByIdQuery, usePostActivityStatusMutation } from 'store/activity/activityService';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import BranchTabs from './BranchTabs';
 
 function Detail() {
   const { id = '1' } = useParams();
-  const { data, isLoading } = useGetActivityByIdQuery(id as string, {
-    pollingInterval: 5000,
-    refetchOnMountOrArgChange: true,
-    skip: false,
-  });
+  const { data, isLoading } = useGetActivityByIdQuery(id as string);
+  const [updateStatus] = usePostActivityStatusMutation();
 
   const {
+    id: activityId,
     images,
     title,
     subTitle,
@@ -37,6 +35,7 @@ function Detail() {
     sources,
     html,
     holders,
+    status,
     branches,
   } = data || {};
 
@@ -96,6 +95,11 @@ function Detail() {
                   <Checkbox
                     icon={<FavoriteBorderIcon />}
                     checkedIcon={<FavoriteIcon />}
+                    checked={status === '願望'}
+                    onClick={() => updateStatus({
+                      activityId: activityId || id,
+                      status: '願望',
+                    })}
                     size="small"
                     color="warning"
                   />

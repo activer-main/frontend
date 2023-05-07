@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'utils/apiURL';
 import { ActivityDataType } from 'types/data';
 import { ActivityResponseType } from 'types/response';
-import { ActivitiesRequestType } from '../../types/request';
+import { ActivityStatusRequestType, ActivitiesRequestType } from 'types/request';
 
 export const activityApi = createApi({
   reducerPath: 'activityApi',
@@ -17,6 +17,7 @@ export const activityApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['Activity'],
   endpoints: (builder) => ({
     getActivities: builder.query<ActivityResponseType, ActivitiesRequestType>({
       query: (params) => ({
@@ -30,6 +31,15 @@ export const activityApi = createApi({
         url: `${id}`,
         method: 'GET',
       }),
+      providesTags: ['Activity'],
+    }),
+    postActivityStatus: builder.mutation<void, ActivityStatusRequestType>({
+      query: (params) => ({
+        url: 'activityStatus',
+        method: 'POST',
+        params,
+      }),
+      invalidatesTags: ['Activity'],
     }),
   }),
 });
@@ -37,4 +47,5 @@ export const activityApi = createApi({
 export const {
   useGetActivitiesQuery,
   useGetActivityByIdQuery,
+  usePostActivityStatusMutation,
 } = activityApi;
