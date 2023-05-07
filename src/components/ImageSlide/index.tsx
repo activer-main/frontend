@@ -9,7 +9,7 @@ import './index.scss';
 import { IconButton } from '@mui/material';
 
 interface DetailImagesType {
-  images: string[] | null;
+  images?: string[] | null;
   altText: string
 }
 

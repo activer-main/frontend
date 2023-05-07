@@ -6,7 +6,7 @@ export interface SegmentResponseType {
   sortBy:string | null;
   countPerPage: number;
   page: number;
-  totalPage: 2;
+  totalPage: number;
   totalData: number;
 }
 

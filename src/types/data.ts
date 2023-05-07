@@ -35,7 +35,7 @@ export interface BranchDataType {
   id: number;
   branchName: string | null;
   location: string[] | null;
-  date: DateType[];
+  date: DateType[] | null;
 }
 
 export interface DateType {

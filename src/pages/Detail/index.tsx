@@ -1,6 +1,4 @@
 import React from 'react';
-import Loading from 'components/Loading';
-import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import ImageSlide from 'components/ImageSlide';
 import { ActivityTagDataType } from 'types/data';
@@ -12,24 +10,22 @@ import {
 import Stack from '@mui/material/Stack';
 import {
   Box,
-  Chip, Container, Divider, Grid, Link, Typography,
+  Checkbox,
+  Chip, Container, Divider, Grid, Link, Skeleton, Tooltip, Typography,
 } from '@mui/material';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import { useGetActivityByIdQuery } from 'store/activity/activityService';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import BranchTabs from './BranchTabs';
 
 function Detail() {
   const { id = '1' } = useParams();
-  const { data, isFetching, isError } = useGetActivityByIdQuery(id as string);
-
-  if (isFetching) {
-    return <Loading />;
-  }
-
-  if (isError || !data) {
-    toast.error('載入發生錯誤');
-    return <div className="error" />;
-  }
+  const { data, isLoading } = useGetActivityByIdQuery(id as string, {
+    pollingInterval: 5000,
+    refetchOnMountOrArgChange: true,
+    skip: false,
+  });
 
   const {
     images,
@@ -42,27 +38,46 @@ function Detail() {
     html,
     holders,
     branches,
-  } = data;
+  } = data || {};
 
   return (
     <Container maxWidth="xl">
       {/* Introduction */}
-      <Grid container>
+      <Grid container sx={{ mt: 2 }}>
 
         <Grid item xs={12} md={6}>
-          <Stack direction="column" spacing={2} alignItems="center">
+          <Grid container spacing={1} direction="column">
+
             {/* Image */}
-            <ImageSlide
-              images={images}
-              altText={title || 'activity-image'}
-            />
+            <Grid item xs>
+              {isLoading
+                ? (
+                  <Skeleton width="100%">
+                    <ImageSlide
+                      images={images}
+                      altText={title || 'activity-image'}
+                    />
+                  </Skeleton>
+                )
+                : (
+                  <ImageSlide
+                    images={images}
+                    altText={title || 'activity-image'}
+                  />
+                )}
+            </Grid>
 
             {/* Title */}
-            <Typography variant="h4" component="h1">{title}</Typography>
+            <Grid item xs>
+              <Typography variant="h4" component="h1">{ isLoading ? <Skeleton width="100%" /> : title}</Typography>
+            </Grid>
 
             {/* SubTitle */}
+
             {subTitle && (
-              <Typography variant="h5" component="h2">{subTitle}</Typography>
+              <Grid item xs>
+                <Typography variant="h5" component="h2">{subTitle}</Typography>
+              </Grid>
             )}
 
             {/* Tags */}
@@ -71,18 +86,32 @@ function Detail() {
                 {tags.map((tag: ActivityTagDataType) => (
                   <Chip label={tag.text} color={activityTypeToColor(tag.type)} icon={<TagIcon />} variant="outlined" />
                 )).slice(0, 5)}
-                {/* Add Tag Button */}
-                <Chip
-                  clickable
-                  label=" + 新增標籤"
-                />
               </Stack>
             )}
-          </Stack>
+
+            {/* Control */}
+            <Grid item xs>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Tooltip title="加入願望清單">
+                  <Checkbox
+                    icon={<FavoriteBorderIcon />}
+                    checkedIcon={<FavoriteIcon />}
+                    size="small"
+                    color="warning"
+                  />
+                </Tooltip>
+                <Chip
+                  clickable
+                  label="+ 新增標籤"
+                />
+              </Stack>
+            </Grid>
+
+          </Grid>
 
         </Grid>
 
-        <Grid xs={12} md={6}>
+        <Grid item xs={12} md={6} sx={{ p: 2 }}>
           <BranchTabs branches={branches} />
         </Grid>
 
@@ -93,6 +122,7 @@ function Detail() {
 
         {/* Object */}
         {objectives
+        && objectives.length > 0
           && (
             <Box component="section">
               <Typography variant="h5" component="h3">
