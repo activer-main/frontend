@@ -2,7 +2,6 @@ import React from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import {
-  Box,
   Button, ButtonGroup, Grid, Pagination,
 } from '@mui/material';
 import { useGetActivitiesQuery } from 'store/activity/activityService';
@@ -11,19 +10,22 @@ import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp
 import { LoaderFunction, redirect, useSearchParams } from 'react-router-dom';
 import { MainCard } from 'components/Card';
 import { sortByUnion, orderByUnion } from 'types/request';
+import { toast } from 'react-toastify';
 
 export const surfLoader: LoaderFunction = ({ request }) => {
   const { searchParams } = new URL(request.url);
-  const sorting = searchParams.get('sorting');
-  const sortBy = searchParams.get('sortby');
+  const orderBy = searchParams.get('orderBy');
+  const sortBy = searchParams.get('sortBy');
 
-  // search param check
-  if (!sorting || !Object.values(orderByUnion).includes(sorting)) {
-    searchParams.set('sorting', 'desc');
+  if (!orderBy || !Object.values(orderByUnion).includes(orderBy)) {
+    toast.warn('排序參數錯誤，已重新導向至降序');
+    searchParams.set('orderBy', orderByUnion[orderByUnion.descending]);
     return redirect(`/surf?${searchParams.toString()}`);
   }
+
   if (!sortBy || !Object.values(sortByUnion).includes(sortBy)) {
-    searchParams.set('sortby', 'trend');
+    toast.warn('分類參數錯誤，已重新導向至熱門活動');
+    searchParams.set('sortBy', sortByUnion[sortByUnion.activityClickedCount]);
     return redirect(`/surf?${searchParams.toString()}`);
   }
 
@@ -46,63 +48,77 @@ function Surf() {
 
   return (
     <Container maxWidth="xl">
-      <Box sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h2" color="initial">所有活動</Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography variant="h3" color="initial">所有活動</Typography>
+        </Grid>
 
         {/* sortBy button group */}
-        <ButtonGroup>
-          <Button
-            onClick={() => {
-              setSearchParams((prevSearchParam) => {
-                prevSearchParam.set('sortBy', sortByUnion.activityClickedCount.toString());
-                return prevSearchParam;
-              });
-            }}
-            variant={searchParams.get('sortBy') === sortByUnion.activityClickedCount.toString() ? 'contained' : undefined}
-          >
-            熱門活動
-          </Button>
-          <Button
-            onClick={() => {
-              setSearchParams((prevSearchParam) => {
-                prevSearchParam.set('sortby', 'newest');
-                return prevSearchParam;
-              });
-            }}
-            variant={searchParams.get('sortby') === 'newest' ? 'contained' : undefined}
-          >
-            最新活動
-          </Button>
-        </ButtonGroup>
+        <Grid item xs={12} md>
+          <ButtonGroup>
+            <Button
+              onClick={() => {
+                setSearchParams((prevSearchParam) => {
+                  prevSearchParam.set('sortBy', sortByUnion[sortByUnion.activityClickedCount]);
+                  return prevSearchParam;
+                });
+              }}
+              variant={searchParams.get('sortBy') === sortByUnion[sortByUnion.activityClickedCount] ? 'contained' : undefined}
+            >
+              熱門活動
+            </Button>
+            <Button
+              onClick={() => {
+                setSearchParams((prevSearchParam) => {
+                  prevSearchParam.set('sortBy', sortByUnion[sortByUnion.createdAt]);
+                  return prevSearchParam;
+                });
+              }}
+              variant={searchParams.get('sortBy') === sortByUnion[sortByUnion.createdAt] ? 'contained' : undefined}
+            >
+              最新活動
+            </Button>
+          </ButtonGroup>
+        </Grid>
 
         {/* sorting button control */}
-        <Button
-          startIcon={searchParams.get('sorting') === 'desc' ? <KeyboardDoubleArrowDownIcon /> : <KeyboardDoubleArrowUpIcon />}
-          onClick={() => {
-            setSearchParams((prevSearchParam) => {
-              prevSearchParam.set('orderBy', searchParams.get('orderBy') === 'descending' ? 'ascending' : 'descending');
-              return prevSearchParam;
-            });
-          }}
-          sx={{ width: '5em' }}
-        >
-          {searchParams.get('orderBy')}
-        </Button>
-      </Box>
+        <Grid item>
+          <Button
+            startIcon={
+              searchParams.get('orderBy') === orderByUnion[orderByUnion.descending]
+                ? <KeyboardDoubleArrowDownIcon />
+                : <KeyboardDoubleArrowUpIcon />
+            }
+            onClick={() => {
+              setSearchParams((prevSearchParam) => {
+                prevSearchParam.set(
+                  'orderBy',
+                  searchParams.get('orderBy') === orderByUnion[orderByUnion.descending]
+                    ? 'ascending'
+                    : 'descending',
+                );
+                return prevSearchParam;
+              });
+            }}
+          >
+            {searchParams.get('orderBy')}
+          </Button>
+        </Grid>
+      </Grid>
 
       {/* data */}
-      <Grid container spacing={3} sx={{ mt: 2, mb: 2 }}>
-        {data?.searchData?.map((activity) => (
-          <Grid item xs={12} sm={6} md={4} xl={3} key={activity.id}>
-            <MainCard {...activity} />
-          </Grid>
-        ))}
+      <Grid item xs={12}>
+        <Grid container spacing={3} sx={{ mt: 2, mb: 2 }}>
+          {data?.searchData?.map((activity) => (
+            <Grid item xs={12} sm={6} md={4} xl={3} key={activity.id}>
+              <MainCard {...activity} />
+            </Grid>
+          ))}
+        </Grid>
       </Grid>
 
       {/* pagination */}
-      <Box
-        sx={{ justifyContent: 'center', alignItems: 'center' }}
-      >
+      <Grid item xs={12}>
         <Pagination
           count={data?.totalPage}
           onChange={(event, number) => {
@@ -112,7 +128,7 @@ function Surf() {
             });
           }}
         />
-      </Box>
+      </Grid>
 
     </Container>
   );
