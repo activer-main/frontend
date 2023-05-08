@@ -15,7 +15,7 @@ export interface TagDataType {
 export interface ActivityDataType {
   id: string;
   trend: number;
-  title: string | null;
+  title: string;
   subTitle:string | null;
   content: string | null;
   html: string | null;
@@ -29,6 +29,12 @@ export interface ActivityDataType {
   branches: BranchDataType[];
   tags: ActivityTagDataType[] | null;
   applyFee: string[] | null;
+}
+
+export interface ManageActivityDataType {
+  trend: ActivityDataType['trend']
+  createdTime: number;
+  title: ActivityDataType['title']
 }
 
 export interface BranchDataType {

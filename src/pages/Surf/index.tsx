@@ -17,15 +17,15 @@ export const surfLoader: LoaderFunction = ({ request }) => {
   const orderBy = searchParams.get('orderBy');
   const sortBy = searchParams.get('sortBy');
 
-  if (!orderBy || !Object.values(orderByUnion).includes(orderBy)) {
+  if (!orderBy || !Object.values(orderByUnion).includes(orderBy as orderByUnion)) {
     toast.warn('排序參數錯誤，已重新導向至降序');
-    searchParams.set('orderBy', orderByUnion[orderByUnion.descending]);
+    searchParams.set('orderBy', orderByUnion.DESC);
     return redirect(`/surf?${searchParams.toString()}`);
   }
 
-  if (!sortBy || !Object.values(sortByUnion).includes(sortBy)) {
+  if (!sortBy || !Object.values(sortByUnion).includes(sortBy as sortByUnion)) {
     toast.warn('分類參數錯誤，已重新導向至熱門活動');
-    searchParams.set('sortBy', sortByUnion[sortByUnion.activityClickedCount]);
+    searchParams.set('sortBy', sortByUnion.TREND);
     return redirect(`/surf?${searchParams.toString()}`);
   }
 
@@ -37,11 +37,9 @@ function Surf() {
 
   // get data by activity service
   const { data } = useGetActivitiesQuery({
-    // params has already check in loader some ignore ts in this
-    // @ts-ignore
-    sortBy: searchParams.get('sortBy') || sortByUnion.activityClickedCount,
-    // @ts-ignore
-    orderBy: searchParams.get('orderBy') || orderByUnion.descending,
+    // params has already check in surfLoader some ignore tye check in here
+    sortBy: searchParams.get('sortBy') as sortByUnion,
+    orderBy: searchParams.get('orderBy') as orderByUnion,
     page: parseInt(searchParams.get('page') || '1', 10) || 1,
     countPerPage: 20,
   });
@@ -59,22 +57,22 @@ function Surf() {
             <Button
               onClick={() => {
                 setSearchParams((prevSearchParam) => {
-                  prevSearchParam.set('sortBy', sortByUnion[sortByUnion.activityClickedCount]);
+                  prevSearchParam.set('sortBy', sortByUnion.TREND);
                   return prevSearchParam;
                 });
               }}
-              variant={searchParams.get('sortBy') === sortByUnion[sortByUnion.activityClickedCount] ? 'contained' : undefined}
+              variant={searchParams.get('sortBy') === sortByUnion.TREND ? 'contained' : undefined}
             >
               熱門活動
             </Button>
             <Button
               onClick={() => {
                 setSearchParams((prevSearchParam) => {
-                  prevSearchParam.set('sortBy', sortByUnion[sortByUnion.createdAt]);
+                  prevSearchParam.set('sortBy', sortByUnion.CREATEDAT);
                   return prevSearchParam;
                 });
               }}
-              variant={searchParams.get('sortBy') === sortByUnion[sortByUnion.createdAt] ? 'contained' : undefined}
+              variant={searchParams.get('sortBy') === sortByUnion.CREATEDAT ? 'contained' : undefined}
             >
               最新活動
             </Button>
@@ -85,7 +83,7 @@ function Surf() {
         <Grid item>
           <Button
             startIcon={
-              searchParams.get('orderBy') === orderByUnion[orderByUnion.descending]
+              searchParams.get('orderBy') === orderByUnion.DESC
                 ? <KeyboardDoubleArrowDownIcon />
                 : <KeyboardDoubleArrowUpIcon />
             }
@@ -93,7 +91,7 @@ function Surf() {
               setSearchParams((prevSearchParam) => {
                 prevSearchParam.set(
                   'orderBy',
-                  searchParams.get('orderBy') === orderByUnion[orderByUnion.descending]
+                  searchParams.get('orderBy') === orderByUnion.DESC
                     ? 'ascending'
                     : 'descending',
                 );

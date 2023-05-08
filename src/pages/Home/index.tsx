@@ -14,16 +14,16 @@ import Hero from './Hero';
 
 function Home() {
   const { data: trendData, isLoading: isLoadingTrendData } = useGetActivitiesQuery({
-    sortBy: sortByUnion.activityClickedCount,
-    orderBy: orderByUnion.descending,
+    sortBy: sortByUnion.TREND,
+    orderBy: orderByUnion.DESC,
     page: 1,
     countPerPage: 5,
   });
 
   // TODO: newest request
   const { data: newestData, isLoading: isLoadingNewestData } = useGetActivitiesQuery({
-    sortBy: sortByUnion.createdAt,
-    orderBy: orderByUnion.descending,
+    sortBy: sortByUnion.CREATEDAT,
+    orderBy: orderByUnion.DESC,
     page: 1,
     countPerPage: 5,
   });

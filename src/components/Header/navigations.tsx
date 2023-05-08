@@ -10,7 +10,7 @@ const navigations = [
     label: '搜尋活動',
   },
   {
-    link: `/surf?sortBy=${sortByUnion[sortByUnion.activityClickedCount]}&orderBy=${orderByUnion[orderByUnion.descending]}`,
+    link: `/surf?sortBy=${sortByUnion.TREND}&orderBy=${orderByUnion.DESC}`,
     icon: <FindInPageIcon />,
     label: '熱門活動',
   },

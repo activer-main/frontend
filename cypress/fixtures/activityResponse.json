@@ -1,0 +1,318 @@
+{
+  "orderBy": "string",
+  "countPerPage": 10,
+  "page": 1,
+  "totalPage": 5,
+  "totalData": 50,
+  "searchData": [
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "trend": 1,
+      "title": "Lorem ipsum dolor sit amet",
+      "subTitle": "consectetur adipiscing elit",
+      "content": "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "html": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
+      "status": "published",
+      "fee": [
+        "Free",
+        "Premium"
+      ],
+      "images": [
+        "https://example.com/image1.jpg",
+        "https://example.com/image2.jpg"
+      ],
+      "connections": [
+        "Lorem ipsum dolor",
+        "consectetur adipiscing",
+        "elit, sed do",
+        "eiusmod tempor"
+      ],
+      "holders": [
+        "Lorem ipsum",
+        "dolor sit",
+        "amet",
+        "consectetur"
+      ],
+      "objectives": [
+        "Lorem ipsum dolor",
+        "sit amet",
+        "consectetur adipiscing",
+        "elit"
+      ],
+      "sources": [
+        "Lorem ipsum dolor sit amet",
+        "consectetur adipiscing elit",
+        "sed do eiusmod tempor",
+        "incididunt ut labore et dolore magna aliqua"
+      ],
+      "branches": [
+        {
+          "id": 1,
+          "branchName": "Lorem ipsum",
+          "location": [
+            "New York",
+            "London"
+          ],
+          "date": [
+            {
+              "name": "Start Date",
+              "start": "2023-06-01",
+              "end": "2023-06-05"
+            },
+            {
+              "name": "End Date",
+              "start": "2023-06-10",
+              "end": "2023-06-15"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "branchName": "Dolor sit amet",
+          "location": [
+            "Paris",
+            "Tokyo"
+          ],
+          "date": [
+            {
+              "name": "Start Date",
+              "start": "2023-07-01",
+              "end": "2023-07-05"
+            },
+            {
+              "name": "End Date",
+              "start": "2023-07-10",
+              "end": "2023-07-15"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        {
+          "id": 1,
+          "text": "Lorem",
+          "type": "Topic",
+          "trend": 2,
+          "tagVoteCount": 10,
+          "userVoted": true,
+          "activityAmount": 20
+        },
+        {
+          "id": 2,
+          "text": "Ipsum",
+          "type": "Location",
+          "trend": 3,
+          "tagVoteCount": 5,
+          "userVoted": false,
+          "activityAmount": 15
+        }
+      ]
+    },
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "trend": 1,
+      "title": "Lorem ipsum dolor sit amet",
+      "subTitle": "consectetur adipiscing elit",
+      "content": "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "html": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
+      "status": "published",
+      "fee": [
+        "Free",
+        "Premium"
+      ],
+      "images": [
+        "https://example.com/image1.jpg",
+        "https://example.com/image2.jpg"
+      ],
+      "connections": [
+        "Lorem ipsum dolor",
+        "consectetur adipiscing",
+        "elit, sed do",
+        "eiusmod tempor"
+      ],
+      "holders": [
+        "Lorem ipsum",
+        "dolor sit",
+        "amet",
+        "consectetur"
+      ],
+      "objectives": [
+        "Lorem ipsum dolor",
+        "sit amet",
+        "consectetur adipiscing",
+        "elit"
+      ],
+      "sources": [
+        "Lorem ipsum dolor sit amet",
+        "consectetur adipiscing elit",
+        "sed do eiusmod tempor",
+        "incididunt ut labore et dolore magna aliqua"
+      ],
+      "branches": [
+        {
+          "id": 1,
+          "branchName": "Lorem ipsum",
+          "location": [
+            "New York",
+            "London"
+          ],
+          "date": [
+            {
+              "name": "Start Date",
+              "start": "2023-06-01",
+              "end": "2023-06-05"
+            },
+            {
+              "name": "End Date",
+              "start": "2023-06-10",
+              "end": "2023-06-15"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "branchName": "Dolor sit amet",
+          "location": [
+            "Paris",
+            "Tokyo"
+          ],
+          "date": [
+            {
+              "name": "Start Date",
+              "start": "2023-07-01",
+              "end": "2023-07-05"
+            },
+            {
+              "name": "End Date",
+              "start": "2023-07-10",
+              "end": "2023-07-15"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        {
+          "id": 1,
+          "text": "Lorem",
+          "type": "Topic",
+          "trend": 2,
+          "tagVoteCount": 10,
+          "userVoted": true,
+          "activityAmount": 20
+        },
+        {
+          "id": 2,
+          "text": "Ipsum",
+          "type": "Location",
+          "trend": 3,
+          "tagVoteCount": 5,
+          "userVoted": false,
+          "activityAmount": 15
+        }
+      ]
+    },
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "trend": 1,
+      "title": "Lorem ipsum dolor sit amet",
+      "subTitle": "consectetur adipiscing elit",
+      "content": "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "html": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
+      "status": "published",
+      "fee": [
+        "Free",
+        "Premium"
+      ],
+      "images": [
+        "https://example.com/image1.jpg",
+        "https://example.com/image2.jpg"
+      ],
+      "connections": [
+        "Lorem ipsum dolor",
+        "consectetur adipiscing",
+        "elit, sed do",
+        "eiusmod tempor"
+      ],
+      "holders": [
+        "Lorem ipsum",
+        "dolor sit",
+        "amet",
+        "consectetur"
+      ],
+      "objectives": [
+        "Lorem ipsum dolor",
+        "sit amet",
+        "consectetur adipiscing",
+        "elit"
+      ],
+      "sources": [
+        "Lorem ipsum dolor sit amet",
+        "consectetur adipiscing elit",
+        "sed do eiusmod tempor",
+        "incididunt ut labore et dolore magna aliqua"
+      ],
+      "branches": [
+        {
+          "id": 1,
+          "branchName": "Lorem ipsum",
+          "location": [
+            "New York",
+            "London"
+          ],
+          "date": [
+            {
+              "name": "Start Date",
+              "start": "2023-06-01",
+              "end": "2023-06-05"
+            },
+            {
+              "name": "End Date",
+              "start": "2023-06-10",
+              "end": "2023-06-15"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "branchName": "Dolor sit amet",
+          "location": [
+            "Paris",
+            "Tokyo"
+          ],
+          "date": [
+            {
+              "name": "Start Date",
+              "start": "2023-07-01",
+              "end": "2023-07-05"
+            },
+            {
+              "name": "End Date",
+              "start": "2023-07-10",
+              "end": "2023-07-15"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        {
+          "id": 1,
+          "text": "Lorem",
+          "type": "Topic",
+          "trend": 2,
+          "tagVoteCount": 10,
+          "userVoted": true,
+          "activityAmount": 20
+        },
+        {
+          "id": 2,
+          "text": "Ipsum",
+          "type": "Location",
+          "trend": 3,
+          "tagVoteCount": 5,
+          "userVoted": false,
+          "activityAmount": 15
+        }
+      ]
+    },
+  ]
+}

@@ -41,11 +41,19 @@ export const activityApi = createApi({
       }),
       invalidatesTags: ['Activity'],
     }),
+    getManageActivity: builder.query <ActivityResponseType, ActivitiesRequestType>({
+      query: (params) => ({
+        url: 'manage',
+        method: 'GET',
+        params,
+      }),
+    }),
   }),
 });
 
 export const {
   useGetActivitiesQuery,
   useGetActivityByIdQuery,
+  useGetManageActivityQuery,
   usePostActivityStatusMutation,
 } = activityApi;

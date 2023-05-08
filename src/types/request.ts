@@ -1,7 +1,6 @@
 import { ActivityDataType } from './data';
 
 export interface SegmentRequestType {
-  orderby?: string ;
   page? :number;
   countPerPage?: number;
 }
@@ -37,11 +36,15 @@ export interface SearchRequestType extends SegmentRequestType {
   date: string,
 }
 
-export enum sortByUnion {'createdAt', 'title', 'activityClickedCount'}
-export enum orderByUnion { 'descending', 'ascending'}
+export enum sortByUnion {
+  CREATEDAT = 'createdAt',
+  TITLE = 'title',
+  TREND = 'activityClickedCount',
+}
+export enum orderByUnion { DESC = 'descending', ASC = 'ascending'}
 export interface ActivitiesRequestType extends SegmentRequestType {
   sortBy: sortByUnion;
-  orderBy: orderByUnion;
+  orderBy:orderByUnion;
 }
 
 export type ActivityStatusRequestType = { activityId: ActivityDataType['id']; status: ActivityDataType['status'] };
