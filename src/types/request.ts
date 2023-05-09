@@ -47,4 +47,4 @@ export interface ActivitiesRequestType extends SegmentRequestType {
   orderBy:orderByUnion;
 }
 
-export type ActivityStatusRequestType = { activityId: ActivityDataType['id']; status: ActivityDataType['status'] };
+export type ActivityStatusRequestType = { id: ActivityDataType['id']; status: ActivityDataType['status'] };

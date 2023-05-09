@@ -11,6 +11,7 @@ import TagIcon from '@mui/icons-material/Tag';
 import SendIcon from '@mui/icons-material/Send';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { Buffer } from 'buffer';
 import { ActivityDataType, TagDataType } from 'types/data';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -86,7 +87,17 @@ export default function ActionCard({
             <Chip key={tag.id} icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
           ))}
         </Stack>
-        <Typography variant="body2" gutterBottom>
+        <Typography
+          variant="caption"
+          color=""
+          gutterBottom
+          sx={{
+            display: '-webkit-box',
+            overflow: 'hidden',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 5,
+          }}
+        >
           {detail}
         </Typography>
       </CardContent>
@@ -102,7 +113,7 @@ interface MainCardType extends ActivityDataType {
 
 export function MainCard({ ...props }:MainCardType) {
   const {
-    title, tags, images, trend, id,
+    title, tags, images, trend, id, content,
   } = props;
   const navigate = useNavigate();
 
@@ -112,7 +123,7 @@ export function MainCard({ ...props }:MainCardType) {
       title={title}
       tags={tags?.map((tag) => ({ text: tag.text, id: tag.id, type: tag.type }))}
       imgUrl={images ? images[0] : '/DefaultActivityImage.svg'}
-      detail=""
+      detail={Buffer.from(content || '', 'base64').toString('utf-8')}
       altText={title || 'activity-image'}
       control={(
         <Grid container sx={{ alignItems: 'center' }}>

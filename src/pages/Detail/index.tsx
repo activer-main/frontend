@@ -45,7 +45,7 @@ function Detail() {
       <Grid container sx={{ mt: 2 }}>
 
         <Grid item xs={12} md={6}>
-          <Grid container spacing={1} direction="column">
+          <Grid container spacing={2} direction="column">
 
             {/* Image */}
             <Grid item xs>
@@ -80,13 +80,15 @@ function Detail() {
             )}
 
             {/* Tags */}
-            {tags && (
-              <Stack flexWrap="wrap" spacing={3} direction="row">
-                {tags.map((tag: ActivityTagDataType) => (
-                  <Chip label={tag.text} color={activityTypeToColor(tag.type)} icon={<TagIcon />} variant="outlined" />
-                )).slice(0, 5)}
-              </Stack>
-            )}
+            <Grid item xs>
+              {tags && (
+                <Stack flexWrap="wrap" spacing={3} direction="row">
+                  {tags.map((tag: ActivityTagDataType) => (
+                    <Chip label={tag.text} color={activityTypeToColor(tag.type)} icon={<TagIcon />} variant="outlined" />
+                  )).slice(0, 5)}
+                </Stack>
+              )}
+            </Grid>
 
             {/* Control */}
             <Grid item xs>
@@ -97,7 +99,7 @@ function Detail() {
                     checkedIcon={<FavoriteIcon />}
                     checked={status === '願望'}
                     onClick={() => updateStatus({
-                      activityId: activityId || id,
+                      id: activityId || id,
                       status: '願望',
                     })}
                     size="small"
