@@ -23,6 +23,7 @@ const initialState: UserDataType = {
   userToken: undefined, // for storing the JWT
   error: null,
   success: false, // for monitoring the registration process.
+  changed: false,
 };
 
 const authSlice = createSlice({
@@ -39,6 +40,7 @@ const authSlice = createSlice({
         userInfo: undefined,
         userToken: undefined,
         error: null,
+        changed: false,
       });
     },
     setCredentials: (state, action: PayloadAction<LoginResponseType>) => ({
@@ -52,6 +54,7 @@ const authSlice = createSlice({
       const { key, value } = action.payload;
       return {
         ...state,
+        changed: true,
         userInfo: {
           ...state.userInfo!,
           [key]: value,
@@ -74,6 +77,7 @@ const authSlice = createSlice({
       .addCase(userUpdate.fulfilled, (state, { payload }) => ({
         ...state,
         loading: false,
+        changed: false,
         userInfo: payload,
       }))
 

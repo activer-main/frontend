@@ -84,7 +84,7 @@ function UserDrawer({ setOpen, open } : UserDrawerType) {
         {/* Link Item */}
         <List>
           {Object.values(userNavigationItems).map((item) => (
-            <ListItem>
+            <ListItem key={item.label}>
               <ListItemButton onClick={() => navigate(item.link)}>
                 <ListItemIcon>
                   {item.icon}

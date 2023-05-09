@@ -1,6 +1,8 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from 'store';
-import { selectUpdateUserInfo, selectUserInfo, setUserInfo } from 'store/auth/authSlice';
+import {
+  selectUpdateUserInfo, selectUserData, selectUserInfo, setUserInfo,
+} from 'store/auth/authSlice';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Button from '@mui/material/Button';
@@ -16,6 +18,7 @@ import { useUpdateUserMutation } from 'store/auth/authService';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import { useBeforeUnload } from 'hooks/useBeforeUnload';
 import AvatarUpload from './components/AvatarUpload';
 import CityCountyData from './countyArea.json';
 import Profession from './components/Profession';
@@ -29,6 +32,7 @@ function Profile() {
   } = userInfo!;
   const [updateUser, { isLoading }] = useUpdateUserMutation();
   const updateUserInfo = useAppSelector(selectUpdateUserInfo);
+  const { changed } = useAppSelector(selectUserData);
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -38,8 +42,11 @@ function Profile() {
       .catch((error: any) => toast.error(error.data.message));
   };
 
+  useBeforeUnload(changed, '尚未儲存，請問是否離開此頁面?');
+
   return (
     <Container component="form" maxWidth="xl" onSubmit={handleSubmit}>
+
       <AvatarUpload />
       {/* Username */}
       <Stack maxWidth="sm" spacing={3} sx={{ mt: 2 }}>

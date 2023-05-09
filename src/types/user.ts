@@ -4,6 +4,7 @@ export interface UserDataType {
   userToken?: TokenType, // for storing the JWT
   error: any,
   success: boolean, // for monitoring the registration process.
+  changed: boolean
 }
 
 export interface UserInfoType {
