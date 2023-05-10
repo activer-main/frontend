@@ -25,13 +25,14 @@ export const activityApi = createApi({
         method: 'GET',
         params,
       }),
+      providesTags: [{ type: 'Activity', id: 'List' }],
     }),
     getActivityById: builder.query<ActivityDataType, string>({
       query: (id) => ({
         url: `${id}`,
         method: 'GET',
       }),
-      providesTags: ['Activity'],
+      providesTags: (result, error, id) => [{ type: 'Activity', id }],
     }),
     postActivityStatus: builder.mutation<void, ActivityStatusRequestType>({
       query: (params) => ({
@@ -39,7 +40,7 @@ export const activityApi = createApi({
         method: 'POST',
         params,
       }),
-      invalidatesTags: ['Activity'],
+      invalidatesTags: [{ type: 'Activity', id: 'Manage' }, { type: 'Activity', id: 'List' }],
     }),
     getManageActivity: builder.query <ActivityResponseType, ActivitiesRequestType>({
       query: (params) => ({
@@ -47,6 +48,7 @@ export const activityApi = createApi({
         method: 'GET',
         params,
       }),
+      providesTags: [{ type: 'Activity', id: 'Manage' }],
     }),
   }),
 });

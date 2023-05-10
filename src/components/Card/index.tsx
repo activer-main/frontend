@@ -18,6 +18,7 @@ import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import { CardActionArea, Skeleton } from '@mui/material';
+import { usePostActivityStatusMutation } from 'store/activity/activityService';
 
 export interface CardType {
   id: string;
@@ -45,6 +46,8 @@ export default function ActionCard({
     <Card
       sx={{
         height: '490px',
+        display: 'flex',
+        flexDirection: 'column',
         '&:hover': {
           '& .card-img': {
             scale: '1.1',
@@ -53,7 +56,7 @@ export default function ActionCard({
       }}
     >
       {/* Card image */}
-      <CardActionArea onClick={() => navigate(`/detail/${id}`)}>
+      <CardActionArea onClick={() => navigate(`/detail/${id}`)} sx={{ flexGrow: 1 }}>
         {isLoading
           ? <Skeleton sx={{ height: '40%' }} />
           : (
@@ -121,9 +124,10 @@ interface MainCardType extends ActivityDataType {
 
 export function MainCard({ ...props }:MainCardType) {
   const {
-    title, tags, images, trend, id, content,
+    title, tags, images, trend, id, content, status,
   } = props;
   const navigate = useNavigate();
+  const [updateStatus] = usePostActivityStatusMutation();
 
   return (
     <ActionCard
@@ -148,7 +152,17 @@ export function MainCard({ ...props }:MainCardType) {
             </IconButton>
           </Grid>
           <Grid item>
-            <Checkbox icon={<FavoriteBorderIcon />} checkedIcon={<FavoriteIcon />} size="small" color="warning" />
+            <Checkbox
+              icon={<FavoriteBorderIcon />}
+              checkedIcon={<FavoriteIcon />}
+              size="small"
+              color="warning"
+              checked={status === '願望'}
+              onClick={() => updateStatus({
+                id,
+                status: status === '願望' ? null : '願望',
+              })}
+            />
           </Grid>
         </Grid>
       )}

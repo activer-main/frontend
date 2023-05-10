@@ -33,8 +33,8 @@ export interface ActivityDataType {
 
 export interface ManageActivityDataType {
   trend: ActivityDataType['trend']
-  createdTime: number;
-  title: ActivityDataType['title']
+  // createdTime: number;
+  title: ActivityDataType['title'],
 }
 
 export interface BranchDataType {

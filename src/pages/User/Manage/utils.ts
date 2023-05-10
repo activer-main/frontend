@@ -1,18 +1,4 @@
-import { ManageActivityDataType } from 'types/data';
-
 export type Order = 'asc' | 'desc';
-
-export function createData(
-  title: string,
-  trend: number,
-  createdTime: number,
-): ManageActivityDataType {
-  return {
-    title,
-    trend,
-    createdTime,
-  };
-}
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {

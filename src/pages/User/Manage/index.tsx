@@ -8,11 +8,19 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
+import DeleteIcon from '@mui/icons-material/Delete';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { useGetManageActivityQuery } from 'store/activity/activityService';
-import { ManageActivityDataType } from 'types/data';
+import { useGetManageActivityQuery, usePostActivityStatusMutation } from 'store/activity/activityService';
+import { ActivityDataType, ManageActivityDataType } from 'types/data';
+import TagIcon from '@mui/icons-material/Tag';
+
 import { orderByUnion, sortByUnion } from 'types/request';
+import {
+  Chip,
+  IconButton, MenuItem, Select, Stack, Typography,
+} from '@mui/material';
+import { activityTypeToColor } from 'utils/activityTypeToColor';
 import ManageToolbar from './ManageToolbar';
 import ManageHead from './ManageHead';
 import {
@@ -26,20 +34,11 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  let rows: ManageActivityDataType[] = [];
-  // eslint-disable-next-line
-  const { data: activityData, isSuccess } = useGetManageActivityQuery({
+  const { data: activityData } = useGetManageActivityQuery({
     orderBy: orderByUnion.DESC,
     sortBy: sortByUnion.CREATEDAT,
   });
-
-  if (isSuccess && activityData.searchData) {
-    rows = activityData.searchData.map((data) => ({
-      title: data.title,
-      trend: data.trend,
-      createdTime: 20,
-    }));
-  }
+  const [updateStatus] = usePostActivityStatusMutation();
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -52,8 +51,8 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.title);
-      setSelected(newSelected);
+      const newSelected = activityData?.searchData?.map((n) => n.title);
+      setSelected(newSelected || []);
       return;
     }
     setSelected([]);
@@ -95,14 +94,19 @@ export default function EnhancedTable() {
   const isSelected = (title: string) => selected.indexOf(title) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows = page > 0
+    ? Math.max(0, (1 + page) * rowsPerPage - (activityData?.searchData || []).length)
+    : 0;
 
   const visibleRows = React.useMemo(
-    () => stableSort(rows, getComparator(order, orderBy)).slice(
+    () => stableSort(
+      activityData?.searchData as readonly ActivityDataType[] || [],
+      getComparator(order, orderBy),
+    ).slice(
       page * rowsPerPage,
       page * rowsPerPage + rowsPerPage,
     ),
-    [order, orderBy, page, rowsPerPage],
+    [order, orderBy, page, rowsPerPage, activityData],
   );
 
   return (
@@ -121,17 +125,16 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={activityData?.searchData?.length || 0}
             />
             <TableBody>
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.title);
-                const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.title)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -139,7 +142,9 @@ export default function EnhancedTable() {
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
-                    <TableCell padding="checkbox">
+
+                    {/* checkbox */}
+                    <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.title)}>
                       <Checkbox
                         color="primary"
                         checked={isItemSelected}
@@ -148,16 +153,86 @@ export default function EnhancedTable() {
                         }}
                       />
                     </TableCell>
+
+                    {/* image and title */}
                     <TableCell
                       component="th"
                       id={labelId}
+                      onClick={(event) => handleClick(event, row.title)}
                       scope="row"
                       padding="none"
                     >
-                      {row.title}
+                      <Stack spacing={5} direction="row" alignItems="center" sx={{ p: 5 }}>
+                        {!dense
+                        && (
+                          <Box
+                            component="img"
+                            sx={{
+                              width: '150px',
+                              height: '150px',
+                              objectFit: 'cover',
+                              mr: 5,
+                            }}
+                            src={row.images ? row.images[0] : undefined}
+                          />
+                        )}
+                        <Typography variant="h5">
+                          {row.title}
+                        </Typography>
+                      </Stack>
                     </TableCell>
                     <TableCell align="right">{row.trend}</TableCell>
-                    <TableCell align="right">{row.createdTime}</TableCell>
+                    {/* <TableCell align="right">{row.createdTime}</TableCell> */}
+
+                    {/* 標籤 */}
+                    <TableCell align="left">
+                      <Stack spacing={2} direction="row">
+                        {row?.tags?.map((tag) => (
+                          <Chip
+                            color={activityTypeToColor(tag.type)}
+                            icon={<TagIcon />}
+                            size="small"
+                            label={tag.text}
+                            variant="outlined"
+                          />
+                        ))}
+                      </Stack>
+                    </TableCell>
+
+                    {/* 控制 */}
+                    <TableCell align="right">
+                      <Stack spacing={2} direction="row" justifyContent="flex-end">
+                        <Select
+                          inputProps={{ MenuProps: { disableScrollLock: true } }}
+                          autoWidth={false}
+                          defaultValue={row.status}
+                          onChange={(event) => updateStatus({
+                            id: row.id,
+                            status: event.target.value,
+                          })}
+                        >
+                          <MenuItem value="願望" key="願望">
+                            願望
+                          </MenuItem>
+                          <MenuItem value="已註冊" key="已註冊">
+                            已註冊
+                          </MenuItem>
+                          <MenuItem value="已完成" key="已完成">
+                            已完成
+                          </MenuItem>
+                        </Select>
+
+                        <IconButton
+                          size="large"
+                          onClick={() => updateStatus({
+                            id: row.id,
+                            status: null,
+                          })}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Stack>
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -176,16 +251,17 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={activityData?.searchData?.length || 0}
           rowsPerPage={rowsPerPage}
           page={page}
+          labelRowsPerPage="每頁筆數"
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label="密集排列"
       />
     </Box>
   );

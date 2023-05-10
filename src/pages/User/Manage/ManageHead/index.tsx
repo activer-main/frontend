@@ -3,7 +3,7 @@ import TableHead from '@mui/material/TableHead';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import {
-  Box, Checkbox, TableCell, TableRow,
+  Box, Checkbox, TableCell, TableRow, Typography,
 } from '@mui/material';
 import { ManageActivityDataType } from 'types/data';
 import { Order } from '../utils';
@@ -37,13 +37,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: '熱度',
   },
-  {
-    id: 'createdTime',
-    numeric: true,
-    disablePadding: false,
-    label: '活動加入時間',
-  },
-
+  // {
+  //   id: 'createdTime',
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: '活動加入時間',
+  // },
 ];
 
 export default function ManageHead(props: EnhancedTableProps) {
@@ -82,7 +81,9 @@ export default function ManageHead(props: EnhancedTableProps) {
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
             >
-              {headCell.label}
+              <Typography variant="h5">
+                {headCell.label}
+              </Typography>
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -91,6 +92,17 @@ export default function ManageHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell align="center">
+          <Typography variant="h5">
+            標籤
+          </Typography>
+        </TableCell>
+
+        <TableCell align="center">
+          <Typography variant="h5">
+            控制
+          </Typography>
+        </TableCell>
 
       </TableRow>
     </TableHead>
