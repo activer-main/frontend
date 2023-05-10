@@ -17,7 +17,7 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
-import { Skeleton } from '@mui/material';
+import { CardActionArea, Skeleton } from '@mui/material';
 
 export interface CardType {
   id: string;
@@ -29,11 +29,11 @@ export interface CardType {
   control? : React.ReactNode;
   isLoading?: boolean
 }
-
 export default function ActionCard({
   imgUrl, title, tags, altText, detail, control, isLoading, id,
 }: CardType) {
   const [imageSrc, setImageSrc] = React.useState(imgUrl);
+  const navigate = useNavigate();
 
   const handleImageError = () => {
     setImageSrc('/DefaultActivityImage.svg');
@@ -44,63 +44,71 @@ export default function ActionCard({
   return (
     <Card
       sx={{
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
+        height: '490px',
+        '&:hover': {
+          '& .card-img': {
+            scale: '1.1',
+          },
+        },
       }}
     >
       {/* Card image */}
-      {isLoading
-        ? <Skeleton sx={{ height: '40%' }} />
-        : (
-          <CardMedia
-            onLoad={handleLoad}
-            component="img"
+      <CardActionArea onClick={() => navigate(`/detail/${id}`)}>
+        {isLoading
+          ? <Skeleton sx={{ height: '40%' }} />
+          : (
+            <CardMedia
+              className="card-img"
+              onLoad={handleLoad}
+              component="img"
+              sx={{
+                height: '200px',
+                transition: 'all 0.3s ease-in-out',
+              }}
+              onError={handleImageError}
+              image={imageSrc}
+              alt={altText}
+            />
+          )}
+        <CardContent sx={{ flexGrow: 1 }}>
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="h2"
             sx={{
-              height: '40%',
+              display: '-webkit-box',
+              overflow: 'hidden',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
             }}
-            onError={handleImageError}
-            image={imageSrc}
-            alt={altText}
-          />
-        )}
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography
-          gutterBottom
-          variant="h5"
-          component="h2"
-          sx={{
-            display: '-webkit-box',
-            overflow: 'hidden',
-            WebkitBoxOrient: 'vertical',
-            WebkitLineClamp: 2,
-          }}
-        >
-          {title || `Activity#${id.slice(0, 5)}...`}
-        </Typography>
-        <Stack
-          spacing={{ xs: 1, sm: 2 }}
-          direction="row"
-          useFlexGap
-        >
-          {tags?.slice(0, 3).map((tag) => (
-            <Chip key={tag.id} icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
-          ))}
-        </Stack>
-        <Typography
-          variant="caption"
-          color=""
-          gutterBottom
-          sx={{
-            display: '-webkit-box',
-            overflow: 'hidden',
-            WebkitBoxOrient: 'vertical',
-            WebkitLineClamp: 5,
-          }}
-        >
-          {detail}
-        </Typography>
-      </CardContent>
+          >
+            {title || `Activity#${id.slice(0, 5)}...`}
+          </Typography>
+          <Stack
+            spacing={{ xs: 1, sm: 2 }}
+            direction="row"
+            useFlexGap
+          >
+            {tags?.slice(0, 3).map((tag) => (
+              <Chip key={tag.id} icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
+            ))}
+          </Stack>
+          <Typography
+            variant="caption"
+            color=""
+            gutterBottom
+            sx={{
+              display: '-webkit-box',
+              overflow: 'hidden',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 5,
+            }}
+          >
+            {detail}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+
       <CardActions>
         {control}
       </CardActions>
