@@ -14,18 +14,21 @@ import Switch from '@mui/material/Switch';
 import { useGetManageActivityQuery, usePostActivityStatusMutation } from 'store/activity/activityService';
 import { ActivityDataType, ManageActivityDataType } from 'types/data';
 import TagIcon from '@mui/icons-material/Tag';
-
+import NearMeIcon from '@mui/icons-material/NearMe';
 import { orderByUnion, sortByUnion } from 'types/request';
 import {
   Chip,
   IconButton, MenuItem, Select, Stack, Typography,
 } from '@mui/material';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
+import { useNavigate } from 'react-router-dom';
+import { times } from 'lodash';
 import ManageToolbar from './ManageToolbar';
 import ManageHead from './ManageHead';
 import {
   getComparator, stableSort, Order,
 } from './utils';
+import ManageRowSkeleton from './ManageRowSkeleton';
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -34,11 +37,12 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const { data: activityData } = useGetManageActivityQuery({
+  const { data: activityData, isLoading: isGettingActivity } = useGetManageActivityQuery({
     orderBy: orderByUnion.DESC,
     sortBy: sortByUnion.CREATEDAT,
   });
   const [updateStatus] = usePostActivityStatusMutation();
+  const navigate = useNavigate();
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -112,13 +116,17 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
+        {/* Toolbar */}
         <ManageToolbar numSelected={selected.length} />
+
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
+
+            {/* Header */}
             <ManageHead
               numSelected={selected.length}
               order={order}
@@ -127,7 +135,11 @@ export default function EnhancedTable() {
               onRequestSort={handleRequestSort}
               rowCount={activityData?.searchData?.length || 0}
             />
+
             <TableBody>
+              {isGettingActivity
+              && times(5, (index) => <ManageRowSkeleton key={index} />)}
+
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.title);
                 const labelId = `table-checkbox-${index}`;
@@ -181,7 +193,10 @@ export default function EnhancedTable() {
                         </Typography>
                       </Stack>
                     </TableCell>
+
+                    {/* Trend */}
                     <TableCell align="right">{row.trend}</TableCell>
+
                     {/* <TableCell align="right">{row.createdTime}</TableCell> */}
 
                     {/* 標籤 */}
@@ -201,7 +216,9 @@ export default function EnhancedTable() {
 
                     {/* 控制 */}
                     <TableCell align="right">
+
                       <Stack spacing={2} direction="row" justifyContent="flex-end">
+                        {/* Status Select */}
                         <Select
                           inputProps={{ MenuProps: { disableScrollLock: true } }}
                           autoWidth={false}
@@ -222,6 +239,7 @@ export default function EnhancedTable() {
                           </MenuItem>
                         </Select>
 
+                        {/* Delete Button */}
                         <IconButton
                           size="large"
                           onClick={() => updateStatus({
@@ -231,6 +249,14 @@ export default function EnhancedTable() {
                         >
                           <DeleteIcon />
                         </IconButton>
+
+                        <IconButton
+                          size="large"
+                          onClick={() => navigate(`/detail/${row.id}`)}
+                        >
+                          <NearMeIcon />
+                        </IconButton>
+
                       </Stack>
                     </TableCell>
                   </TableRow>
