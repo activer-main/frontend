@@ -1,9 +1,10 @@
 import { ActivityDataType, TagDataType } from './data';
+import { orderByUnion, sortByUnion } from './request';
 import { UserInfoType, TokenType } from './user';
 
 export interface SegmentResponseType {
-  orderBy: string | null;
-  sortBy:string | null;
+  orderBy: orderByUnion;
+  sortBy: sortByUnion;
   countPerPage: number;
   page: number;
   totalPage: number;

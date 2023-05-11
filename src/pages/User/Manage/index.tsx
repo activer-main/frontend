@@ -12,7 +12,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { useGetManageActivityQuery, usePostActivityStatusMutation } from 'store/activity/activityService';
-import { ActivityDataType, ManageActivityDataType } from 'types/data';
 import TagIcon from '@mui/icons-material/Tag';
 import NearMeIcon from '@mui/icons-material/NearMe';
 import { orderByUnion, sortByUnion } from 'types/request';
@@ -21,37 +20,57 @@ import {
   IconButton, MenuItem, Select, Stack, Typography,
 } from '@mui/material';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
-import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import {
+  LoaderFunction, redirect, useNavigate, useSearchParams,
+} from 'react-router-dom';
 import { times } from 'lodash';
 import ManageToolbar from './ManageToolbar';
 import ManageHead from './ManageHead';
-import {
-  getComparator, stableSort, Order,
-} from './utils';
 import ManageRowSkeleton from './ManageRowSkeleton';
 
-export default function EnhancedTable() {
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof ManageActivityDataType>('title');
+export const manageLoader:LoaderFunction = ({ request }) => {
+  const { searchParams } = new URL(request.url);
+  const orderBy = searchParams.get('orderBy');
+  const sortBy = searchParams.get('sortBy');
+  const isValidOrderBy = Object.values(orderByUnion).includes(orderBy as orderByUnion);
+  const isValidSortBy = Object.values(sortByUnion).includes(sortBy as sortByUnion);
+  if (!searchParams.get('page')) searchParams.set('page', '1');
+
+  if (!isValidOrderBy) {
+    if (orderBy) {
+      toast.warn('排序參數錯誤，已重新導向至降序');
+    }
+    searchParams.set('orderBy', orderByUnion.DESC);
+    return redirect(`/user/manage?${searchParams.toString()}`);
+  }
+
+  if (!isValidSortBy) {
+    if (sortBy) {
+      toast.warn('分類參數錯誤，已重新導向至熱門活動');
+    }
+    searchParams.set('sortBy', sortByUnion.TREND);
+    return redirect(`/user/manage?${searchParams.toString()}`);
+  }
+
+  return null;
+};
+
+function EnhancedTable() {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
-  const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const { data: activityData, isLoading: isGettingActivity } = useGetManageActivityQuery({
-    orderBy: orderByUnion.DESC,
-    sortBy: sortByUnion.CREATEDAT,
-  });
   const [updateStatus] = usePostActivityStatusMutation();
   const navigate = useNavigate();
 
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof ManageActivityDataType,
-  ) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+  // fetch data by params
+  const [searchParams, setSearchParams] = useSearchParams();
+  const orderBy = searchParams.get('orderBy') as orderByUnion || orderByUnion.DESC;
+  const sortBy = searchParams.get('sortBy') as sortByUnion || sortByUnion.CREATEDAT;
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const countPerPage = parseInt(searchParams.get('countPerPage') || '5', 10);
+  const { data: activityData, isLoading: isGettingActivity } = useGetManageActivityQuery({
+    orderBy, sortBy, page, countPerPage,
+  });
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -83,12 +102,18 @@ export default function EnhancedTable() {
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+    setSearchParams((prevSearchParam) => {
+      prevSearchParam.set('page', (newPage + 1).toString());
+      return prevSearchParam;
+    });
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setSearchParams((prevSearchParam) => {
+      prevSearchParam.set('countPerPage', event.target.value);
+      prevSearchParam.set('page', '1');
+      return prevSearchParam;
+    });
   };
 
   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,22 +121,6 @@ export default function EnhancedTable() {
   };
 
   const isSelected = (title: string) => selected.indexOf(title) !== -1;
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0
-    ? Math.max(0, (1 + page) * rowsPerPage - (activityData?.searchData || []).length)
-    : 0;
-
-  const visibleRows = React.useMemo(
-    () => stableSort(
-      activityData?.searchData as readonly ActivityDataType[] || [],
-      getComparator(order, orderBy),
-    ).slice(
-      page * rowsPerPage,
-      page * rowsPerPage + rowsPerPage,
-    ),
-    [order, orderBy, page, rowsPerPage, activityData],
-  );
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -129,10 +138,9 @@ export default function EnhancedTable() {
             {/* Header */}
             <ManageHead
               numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
+              orderBy={activityData?.orderBy || orderByUnion.DESC}
+              sortBy={activityData?.sortBy || sortByUnion.CREATEDAT}
               onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
               rowCount={activityData?.searchData?.length || 0}
             />
 
@@ -140,7 +148,7 @@ export default function EnhancedTable() {
               {isGettingActivity
               && times(5, (index) => <ManageRowSkeleton key={index} />)}
 
-              {visibleRows.map((row, index) => {
+              {activityData?.searchData?.map((row, index) => {
                 const isItemSelected = isSelected(row.title);
                 const labelId = `table-checkbox-${index}`;
 
@@ -262,24 +270,15 @@ export default function EnhancedTable() {
                   </TableRow>
                 );
               })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={activityData?.searchData?.length || 0}
-          rowsPerPage={rowsPerPage}
-          page={page}
+          count={activityData?.totalData || 0}
+          rowsPerPage={activityData?.countPerPage || 5}
+          page={(activityData?.page || 1) - 1 || 0}
           labelRowsPerPage="每頁筆數"
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
@@ -292,3 +291,5 @@ export default function EnhancedTable() {
     </Box>
   );
 }
+
+export default EnhancedTable;

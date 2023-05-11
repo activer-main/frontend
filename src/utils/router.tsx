@@ -15,7 +15,7 @@ import MainRoute from 'routing/MainRoute';
 import Detail from 'pages/Detail';
 import Search from 'pages/Search';
 import Surf, { surfLoader } from 'pages/Surf';
-import Manage from 'pages/User/Manage';
+import Manage, { manageLoader } from 'pages/User/Manage';
 
 const routerConfig: RouteObject[] = [
   {
@@ -71,6 +71,7 @@ const routerConfig: RouteObject[] = [
             },
             {
               path: 'manage',
+              loader: manageLoader,
               element: <Manage />,
             },
           ],

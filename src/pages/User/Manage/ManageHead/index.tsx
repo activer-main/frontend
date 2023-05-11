@@ -5,34 +5,33 @@ import { visuallyHidden } from '@mui/utils';
 import {
   Box, Checkbox, TableCell, TableRow, Typography,
 } from '@mui/material';
-import { ManageActivityDataType } from 'types/data';
-import { Order } from '../utils';
+import { useSearchParams } from 'react-router-dom';
+import { orderByUnion, sortByUnion } from 'types/request';
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof ManageActivityDataType;
+  id: sortByUnion;
   label: string;
   numeric: boolean;
 }
 
 interface EnhancedTableProps {
   numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof ManageActivityDataType) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
+  orderBy: orderByUnion;
+  sortBy: sortByUnion;
   rowCount: number;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'title',
+    id: sortByUnion.TITLE,
     numeric: false,
     disablePadding: true,
     label: '活動名稱',
   },
   {
-    id: 'trend',
+    id: sortByUnion.TREND,
     numeric: true,
     disablePadding: false,
     label: '熱度',
@@ -47,12 +46,20 @@ const headCells: readonly HeadCell[] = [
 
 export default function ManageHead(props: EnhancedTableProps) {
   const {
-    onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,
+    onSelectAllClick, orderBy, sortBy, numSelected, rowCount,
   } = props;
-  const createSortHandler = (
-    property: keyof ManageActivityDataType,
-  ) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property);
+  // eslint-disable-next-line
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleRequestSort = (
+    property: sortByUnion,
+  ) => {
+    const isAsc = sortBy === property && orderBy === orderByUnion.ASC;
+    setSearchParams((prevSearchParam) => {
+      prevSearchParam.set('orderBy', isAsc ? orderByUnion.DESC : orderByUnion.ASC);
+      prevSearchParam.set('sortBy', property);
+      return prevSearchParam;
+    });
   };
 
   return (
@@ -75,19 +82,18 @@ export default function ManageHead(props: EnhancedTableProps) {
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+              active={sortBy === headCell.id}
+              direction={orderBy === orderByUnion.DESC ? 'desc' : 'asc'}
+              onClick={() => handleRequestSort(headCell.id)}
             >
               <Typography variant="h5">
                 {headCell.label}
               </Typography>
-              {orderBy === headCell.id ? (
+              {sortBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  {orderBy === orderByUnion.DESC ? 'sorted descending' : 'sorted ascending'}
                 </Box>
               ) : null}
             </TableSortLabel>
