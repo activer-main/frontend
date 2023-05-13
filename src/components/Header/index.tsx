@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import LoginIcon from '@mui/icons-material/Login';
 import {
-  Container,
+  Container, Stack,
 } from '@mui/material';
 import Logo from './Logo';
 import Navigation from './Navigation';
@@ -20,7 +20,7 @@ function Haeder() {
   const navigate = useNavigate();
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg" sx={{ p: 1 }}>
       <Box sx={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -29,11 +29,13 @@ function Haeder() {
       >
         {/* Logo */}
 
-        <Logo />
+        <Stack direction="row" alignItems="baseline" spacing={4}>
+          <Logo />
 
-        {/* Navigation */}
-        {!isMobile ? <Navigation />
-          : <MobileNavigation />}
+          {/* Navigation */}
+          {!isMobile ? <Navigation />
+            : <MobileNavigation />}
+        </Stack>
 
         {/* Login-out */}
 
@@ -43,9 +45,9 @@ function Haeder() {
             <Button
               startIcon={<LoginIcon />}
               onClick={() => navigate('/login')}
-              variant="contained"
+              variant="text"
             >
-              登入
+              登入 / 註冊
             </Button>
           )}
       </Box>

@@ -7,8 +7,8 @@ function Logo() {
   return (
     <Link to="/">
       <SvgIcon
-        fontSize="large"
-        color="primary"
+        sx={{ fontSize: '3rem' }}
+        color="secondary"
         component={LogoIcon}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 31 32"

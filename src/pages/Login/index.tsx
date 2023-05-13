@@ -2,7 +2,7 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -13,11 +13,24 @@ import { userLogin } from 'store/auth/authAction';
 import { toast } from 'react-toastify';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { selectUserInfo } from 'store/auth/authSlice';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import InputAdornment from '@mui/material/InputAdornment';
+import LockIcon from '@mui/icons-material/Lock';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { IconButton, Link } from '@mui/material';
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userInfo = useAppSelector(selectUserInfo);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
 
   const { loading } = useAppSelector((state) => state.auth);
 
@@ -55,10 +68,10 @@ export default function Login() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1 }}>
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h4">
           登入
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -70,6 +83,13 @@ export default function Login() {
             label="帳戶"
             name="email"
             autoComplete="email"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             margin="normal"
@@ -77,9 +97,28 @@ export default function Login() {
             fullWidth
             name="password"
             label="密碼"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             id="password"
             autoComplete="current-password"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockIcon />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end" sx={{ mr: 1 }}>
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
           <LoadingButton
@@ -94,14 +133,41 @@ export default function Login() {
 
           <Grid container>
             <Grid item xs>
-              <Link to="/">
-                忘記密碼?
+              <Link
+                component="button"
+                underline="none"
+                sx={{
+                  color: 'secondary.main',
+                  '&:hover': {
+                    color: 'secondary.dark',
+                  },
+                }}
+                onClick={() => navigate('/')}
+              >
+                立即註冊
               </Link>
             </Grid>
             <Grid item>
-              <Link to="/register">
-                立即註冊
-              </Link>
+              <Grid container justifyContent="flex-end" alignItems="flex-end" spacing={1}>
+                <Grid item>
+                  已有帳號?
+                </Grid>
+                <Grid item>
+                  <Link
+                    component="button"
+                    underline="none"
+                    sx={{
+                      color: 'secondary.main',
+                      '&:hover': {
+                        color: 'secondary.dark',
+                      },
+                    }}
+                    onClick={() => navigate('/register')}
+                  >
+                    立即註冊
+                  </Link>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Box>

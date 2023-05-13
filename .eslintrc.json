@@ -91,6 +91,7 @@
       "react/jsx-props-no-spreading": "off",
       "@typescript-eslint/no-throw-literal": "off",
       "react/require-default-props": "off",
-      "import/prefer-default-export": "off"
+      "import/prefer-default-export": "off",
+      "jsx-a11y/anchor-is-valid": "off"
   }
 }
