@@ -23,17 +23,19 @@ import LockIcon from '@mui/icons-material/Lock';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LockClockIcon from '@mui/icons-material/LockClock';
-import { USERNAME_PATTERN } from 'utils/pattern';
-import _ from 'lodash';
+import { EMAIL_PATTERN, PASSWORD_PATTERN, USERNAME_PATTERN } from 'utils/pattern';
+import { useForm } from 'react-hook-form';
 
 export default function Register() {
-  const { loading } = useAppSelector(selectUserData);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-  const [validateError, setValidateError] = React.useState<string[]>([]);
+  const { loading } = useAppSelector(selectUserData);
+  const {
+    register, handleSubmit, watch, formState: { errors },
+  } = useForm();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
@@ -42,36 +44,13 @@ export default function Register() {
     event.preventDefault();
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    if (
-      data.get('password') !== data.get('confirmPassword')
-    ) {
-      toast.error('密碼不相同');
-      return;
-    }
-
-    dispatch(registerUser({
-      username: data.get('username') as string,
-      email: data.get('email') as string,
-      password: data.get('password') as string,
-    }))
+  const onSubmit = (data: any) => {
+    dispatch(registerUser(data))
       .unwrap()
       .then(() => {
         navigate('/user/profile');
       })
       .catch((error: any) => toast.error(error.message));
-  };
-
-  const handleValidate = (event:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (event.target.name === 'username') {
-      if (event.target.value.match(USERNAME_PATTERN)) {
-        setValidateError(_.filter(validateError, (item) => item !== 'username'));
-      } else {
-        setValidateError(_.uniq(_.concat(validateError, event.target.name)));
-      }
-    }
   };
 
   return (
@@ -91,38 +70,40 @@ export default function Register() {
         <Typography component="h1" variant="h4">
           註冊
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                error={validateError.includes('username')}
+                error={!!errors.username}
+                helperText={errors.username ? '使用者名稱須為2-16字中英數字' : undefined}
                 autoComplete="username"
-                name="username"
                 required
                 fullWidth
                 id="username"
                 label="使用者名稱"
-                helperText="使用者名稱須為2-16字中英數字"
                 autoFocus
-                inputProps={{
-                  pattern: USERNAME_PATTERN,
+                InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <BorderColorIcon />
                     </InputAdornment>
                   ),
                 }}
-                onChange={(e) => handleValidate(e)}
+                {...register('username', {
+                  required: true,
+                  pattern: USERNAME_PATTERN,
+                })}
               />
             </Grid>
 
             <Grid item xs={12}>
               <TextField
-                required
+                error={!!errors.email}
+                helperText={errors.email ? '請輸入有效的電子郵件地址' : undefined}
                 fullWidth
+                required
                 id="email"
                 label="帳號"
-                name="email"
                 autoComplete="email"
                 InputProps={{
                   startAdornment: (
@@ -131,14 +112,26 @@ export default function Register() {
                     </InputAdornment>
                   ),
                 }}
+                {...register('email', {
+                  required: true,
+                  pattern: EMAIL_PATTERN,
+                })}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                required
+                error={!!errors.password}
+                helperText={errors.password
+                  ? '密碼必須包含至少一個小寫字母、一個大寫字母、一個數字和一個特殊字符（!@#$%），並且長度在8到24個字符之間。'
+                  : undefined}
                 fullWidth
-                name="password"
+                required
                 label="密碼"
+                {... register('password', {
+                  required: true,
+                  pattern: PASSWORD_PATTERN,
+                })
+                }
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 autoComplete="new-password"
@@ -161,13 +154,15 @@ export default function Register() {
                     </InputAdornment>
                   ),
                 }}
+
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                required
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword ? '密碼需相同' : undefined}
                 fullWidth
-                name="confirmPassword"
+                required
                 type={showConfirmPassword ? 'text' : 'password'}
                 label="確認密碼"
                 id="confirmPassword"
@@ -191,13 +186,17 @@ export default function Register() {
                     </InputAdornment>
                   ),
                 }}
+                {...register('confirmPassword', {
+                  required: true,
+                  validate: (val: string) => watch('password') === val || '密碼需相同'
+                  ,
+                })}
               />
             </Grid>
 
           </Grid>
           <LoadingButton
             loading={loading}
-            loadingPosition="end"
             type="submit"
             fullWidth
             variant="contained"

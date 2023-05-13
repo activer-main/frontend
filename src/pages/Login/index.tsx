@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,6 +9,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from 'store';
 import { userLogin } from 'store/auth/authAction';
 import { toast } from 'react-toastify';
@@ -19,29 +21,20 @@ import LockIcon from '@mui/icons-material/Lock';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { IconButton, Link } from '@mui/material';
+import {EMAIL_PATTERN, PASSWORD_PATTERN} from 'utils/pattern'
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userInfo = useAppSelector(selectUserInfo);
-  const [showPassword, setShowPassword] = React.useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
-
   const { loading } = useAppSelector((state) => state.auth);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const {
+    register, handleSubmit, formState: { errors },
+  } = useForm();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
-    dispatch(userLogin({
-      email: data.get('email') as string,
-      password: data.get('password') as string,
-    }))
+  const onSubmit = (data: any) => {
+    dispatch(userLogin(data))
       .unwrap()
       .then(() => {
         navigate('/user/profile');
@@ -50,6 +43,13 @@ export default function Login() {
         toast(error.message);
       });
   };
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
 
   React.useEffect(() => {
     if (userInfo) {
@@ -74,14 +74,19 @@ export default function Login() {
         <Typography component="h1" variant="h4">
           登入
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{ mt: 1 }}
+        >
           <TextField
+            error={!!errors.email}
+            helperText={errors.email ? '請輸入有效的電子郵件地址': undefined}
             margin="normal"
             required
             fullWidth
             id="email"
             label="帳戶"
-            name="email"
             autoComplete="email"
             InputProps={{
               startAdornment: (
@@ -90,12 +95,14 @@ export default function Login() {
                 </InputAdornment>
               ),
             }}
+            {...register('email', { required: true, pattern: EMAIL_PATTERN })}
           />
           <TextField
+            error={errors.password ? true: false}
+            helperText={errors.password ? '密碼必須包含至少一個小寫字母、一個大寫字母、一個數字和一個特殊字符（!@#$%），並且長度在8到24個字符之間。': undefined}
             margin="normal"
             required
             fullWidth
-            name="password"
             label="密碼"
             type={showPassword ? 'text' : 'password'}
             id="password"
@@ -119,6 +126,11 @@ export default function Login() {
                 </InputAdornment>
               ),
             }}
+            {...register('password', { 
+              required: true,
+              pattern: PASSWORD_PATTERN
+            
+            })}
           />
 
           <LoadingButton
@@ -177,3 +189,4 @@ export default function Login() {
 
   );
 }
+/* eslin-enable */

@@ -10,7 +10,6 @@ const authRequest = axios.create(
   {
     baseURL: URL.concat('/api/user'),
     headers: {
-      'Access-Control-Allow-Origin': 'http://ck40292-everest.nord:5070',
       Authorization: `Bearer ${localStorage.getItem('userToken')}`,
     },
   },

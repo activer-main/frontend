@@ -5,10 +5,11 @@ import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from 'store';
 import { verifyUser } from 'store/auth/authAction';
 import {
-  Container, Typography, TextField, Stack,
+  Container, Typography, TextField, Stack, Avatar, Box,
 } from '@mui/material';
 import { selectUserData, selectUserInfo } from 'store/auth/authSlice';
 import { LoadingButton } from '@mui/lab';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 function Verify() {
   const dispatch = useAppDispatch();
@@ -46,32 +47,59 @@ function Verify() {
   };
 
   return (
-    <Container maxWidth="md" component="form" onSubmit={handleSubmit}>
-      {/* title */}
-      <Typography variant="h3">驗證</Typography>
+    <Container
+      maxWidth="xs"
+      component="form"
+      onSubmit={handleSubmit}
+    >
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        {/* title */}
+        <Typography component="h1" variant="h4">
+          驗證
+        </Typography>
 
-      {/* input */}
-      <TextField
-        label="驗證碼"
-        name="verifyCode"
-        sx={{ mt: 2, mb: 1 }}
-        required
-      />
+        {/* input */}
+        <TextField
+          label="驗證碼"
+          name="verifyCode"
+          sx={{ mt: 2, mb: 1 }}
+          required
+        />
 
-      {/* control */}
-      <Stack spacing={2} direction="row">
-        <LoadingButton type="submit" variant="contained" loading={loading}>驗證</LoadingButton>
+        {/* control */}
+        <Stack spacing={2} direction="row">
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            loading={loading}
+          >
+            驗證
 
-        <LoadingButton
-          loading={resendLoading}
-          type="button"
-          variant="outlined"
-          onClick={handleResend}
-        >
-          重新傳送
-        </LoadingButton>
-      </Stack>
+          </LoadingButton>
+
+          <LoadingButton
+            loading={resendLoading}
+            type="button"
+            variant="outlined"
+            onClick={handleResend}
+          >
+            重新傳送
+          </LoadingButton>
+        </Stack>
+
+      </Box>
     </Container>
+
   );
 }
 

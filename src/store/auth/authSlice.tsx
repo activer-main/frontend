@@ -66,13 +66,17 @@ const authSlice = createSlice({
     builder
 
       // Success: Register
-      .addCase(registerUser.fulfilled, (state, { payload }) => ({
-        ...state,
-        loading: false,
-        success: true,
-        userToken: payload.token,
-        userInfo: payload.user,
-      }))
+      .addCase(registerUser.fulfilled, (state, { payload }) => {
+        localStorage.setItem('userToken', payload.token.accessToken!);
+        toast.success('註冊成功');
+        return ({
+          ...state,
+          loading: false,
+          success: true,
+          userToken: payload.token,
+          userInfo: payload.user,
+        });
+      })
       // Success: update
       .addCase(userUpdate.fulfilled, (state, { payload }) => ({
         ...state,
@@ -84,17 +88,13 @@ const authSlice = createSlice({
       // Success: verify
       .addCase(
         verifyUser.fulfilled,
-        (state, { payload }) => {
-          localStorage.setItem('userToken', payload.token.accessToken!);
-          toast.success('驗證成功');
-          return ({
-            ...state,
-            loading: false,
-            success: true,
-            userInfo: payload.user,
-            userToken: payload.token,
-          });
-        },
+        (state, { payload }) => ({
+          ...state,
+          loading: false,
+          success: true,
+          userInfo: payload.user,
+          userToken: payload.token,
+        }),
       )
 
     // Success: login
