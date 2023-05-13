@@ -1,10 +1,18 @@
 import React from 'react';
+import { SvgIcon } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { ReactComponent as LogoIcon } from './logo.svg';
 
 function Logo() {
   return (
-    <Link className="logo" to="/">
-      <img src="/icon192.png" alt="activer-header-logo" width={64} />
+    <Link to="/">
+      <SvgIcon
+        fontSize="large"
+        color="primary"
+        component={LogoIcon}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 31 32"
+      />
     </Link>
   );
 }
