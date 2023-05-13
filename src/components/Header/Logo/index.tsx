@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function Logo() {
   return (
     <Link className="logo" to="/">
-      <img src="/icon192.png" alt="activer-header-logo" width={64} />
+      <img src="/icon192.png" alt="activer-header-logo" width={64} color="" />
     </Link>
   );
 }

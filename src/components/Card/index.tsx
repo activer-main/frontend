@@ -11,7 +11,6 @@ import TagIcon from '@mui/icons-material/Tag';
 import SendIcon from '@mui/icons-material/Send';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Buffer } from 'buffer';
 import { ActivityDataType, TagDataType } from 'types/data';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -135,7 +134,7 @@ export function MainCard({ ...props }:MainCardType) {
       title={title}
       tags={tags?.map((tag) => ({ text: tag.text, id: tag.id, type: tag.type }))}
       imgUrl={images ? images[0] : '/DefaultActivityImage.svg'}
-      detail={Buffer.from(content || '', 'base64').toString('utf-8')}
+      detail={content}
       altText={title || 'activity-image'}
       control={(
         <Grid container sx={{ alignItems: 'center' }}>
