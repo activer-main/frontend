@@ -226,7 +226,9 @@ export default function AvatarUpload() {
       <Stack spacing={2} direction="row" alignItems="flex-end">
         <Avatar
           src={currentAvatar}
-          sx={{ width: 70, height: 70 }}
+          sx={{
+            width: 200, height: 200, border: '4px solid white', backgroundColor: 'white',
+          }}
         />
 
         {/* upload button */}

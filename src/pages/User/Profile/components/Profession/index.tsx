@@ -13,7 +13,7 @@ export default function Profession() {
   const dispatch = useAppDispatch();
   const { profession } = useAppSelector(selectUserInfo)!;
   return (
-    <Stack spacing={3} sx={{ width: 500 }}>
+    <Stack spacing={3} sx={{ width: '100%' }}>
 
       <Autocomplete
         multiple
@@ -31,7 +31,6 @@ export default function Profession() {
           <TextField
             {...params}
             name="profession"
-            label="職業"
           />
         )}
       />

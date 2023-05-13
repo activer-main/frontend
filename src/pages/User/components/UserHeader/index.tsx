@@ -5,9 +5,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useLocation, useNavigate } from 'react-router-dom';
-import HouseIcon from '@mui/icons-material/House';
-import Button from '@mui/material/Button';
+import { useLocation } from 'react-router-dom';
 import { userNavigationItems, drawerWidth } from '../UserSidebar';
 
 interface AppBarProps extends MuiAppBarProps {
@@ -38,7 +36,7 @@ interface UserHeaderType {
 
 function UserHeader({ setOpen, open } : UserHeaderType) {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [title, setTitle] = React.useState('Welcome');
   const handleDrawerOpen = () => {
@@ -55,7 +53,7 @@ function UserHeader({ setOpen, open } : UserHeaderType) {
 
   return (
 
-    <AppBar position="fixed" open={open}>
+    <AppBar position="fixed" open={open} color="primary">
       <Toolbar>
         <IconButton
           color="inherit"
@@ -67,7 +65,8 @@ function UserHeader({ setOpen, open } : UserHeaderType) {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>{title}</Typography>
-        <Button color="inherit" startIcon={<HouseIcon />} onClick={() => navigate('/')}>返回首頁</Button>
+        {/* <Button color="inherit"
+        startIcon={<HouseIcon />} onClick={() => navigate('/')}>返回首頁</Button> */}
       </Toolbar>
     </AppBar>
   );

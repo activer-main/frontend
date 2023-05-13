@@ -16,6 +16,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useAppDispatch } from 'store';
 import { logout } from 'store/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { Stack, Typography } from '@mui/material';
 
 export const drawerWidth = 200;
 
@@ -73,7 +74,12 @@ function UserDrawer({ setOpen, open } : UserDrawerType) {
         open={open}
       >
         {/* Header */}
-        <DrawerHeader>
+        <DrawerHeader sx={{ justifyContent: 'space-between' }}>
+          <Stack alignItems="end" direction="row" component="a" href="/" sx={{ textDecoration: 'none' }}>
+            <img src="/icon192.png" alt="activer-header-logo" width={50} />
+            <Typography variant="h5" color="secondary">ctiver</Typography>
+          </Stack>
+
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
