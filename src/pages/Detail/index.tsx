@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import ImageSlide from 'components/ImageSlide';
 import { ActivityTagDataType } from 'types/data';
 import TagIcon from '@mui/icons-material/Tag';
@@ -11,18 +11,21 @@ import Stack from '@mui/material/Stack';
 import {
   Box,
   Checkbox,
-  Chip, Container, Divider, Grid, Link, Skeleton, Tooltip, Typography,
+  Chip, CircularProgress, Container, Divider, Grid, Link, Skeleton, Tooltip, Typography,
 } from '@mui/material';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import { useGetActivityByIdQuery, usePostActivityStatusMutation } from 'store/activity/activityService';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { toast } from 'react-toastify';
 import BranchTabs from './BranchTabs';
 
 function Detail() {
   const { id = '1' } = useParams();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { data, isLoading } = useGetActivityByIdQuery(id as string);
-  const [updateStatus] = usePostActivityStatusMutation();
+  const [updateStatus, { isLoading: isUpdatingStatus }] = usePostActivityStatusMutation();
 
   const {
     id: activityId,
@@ -93,15 +96,23 @@ function Detail() {
             {/* Control */}
             <Grid item xs>
               <Stack direction="row" alignItems="center" spacing={2}>
-                <Tooltip title="加入願望清單">
+                <Tooltip title={status === '願望' ? '從願望清單中移除' : '加入願望清單'}>
                   <Checkbox
-                    icon={<FavoriteBorderIcon />}
-                    checkedIcon={<FavoriteIcon />}
+                    icon={isUpdatingStatus ? <CircularProgress size="1em" /> : <FavoriteBorderIcon />}
+                    checkedIcon={isUpdatingStatus ? <CircularProgress size="1em" /> : <FavoriteIcon />}
                     checked={status === '願望'}
-                    onClick={() => updateStatus({
-                      id: activityId || id,
-                      status: '願望',
-                    })}
+                    onClick={() => {
+                      if (localStorage.getItem('userToken')) {
+                        updateStatus({
+                          id: activityId || id,
+                          status: status === '願望' ? null : '願望',
+                        });
+                      } else {
+                        toast.warn('請先登入');
+                        localStorage.setItem('next', pathname);
+                        navigate('/login');
+                      }
+                    }}
                     size="small"
                     color="warning"
                   />

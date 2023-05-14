@@ -40,7 +40,7 @@ export const activityApi = createApi({
         method: 'POST',
         params,
       }),
-      invalidatesTags: [{ type: 'Activity', id: 'Manage' }, { type: 'Activity', id: 'List' }],
+      invalidatesTags: (result, error, { id }) => [{ type: 'Activity', id: 'Manage' }, { type: 'Activity', id: 'List' }, { type: 'Activity', id }],
     }),
     getManageActivity: builder.query <ActivityResponseType, ActivitiesRequestType>({
       query: (params) => ({

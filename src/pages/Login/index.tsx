@@ -37,7 +37,11 @@ export default function Login() {
     dispatch(userLogin(data))
       .unwrap()
       .then(() => {
-        navigate('/user/profile');
+        const next =localStorage.getItem('next')
+        if(next){
+          navigate(next)
+        }
+        navigate('/');
       })
       .catch((error: any) => {
         toast(error.message);

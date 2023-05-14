@@ -27,10 +27,9 @@ export interface CardType {
   tags?: TagDataType[],
   detail?: React.ReactNode;
   control? : React.ReactNode;
-  isLoading?: boolean
 }
 export default function ActionCard({
-  imgUrl, title, tags, altText, detail, control, isLoading, id,
+  imgUrl, title, tags, altText, detail, control, id,
 }: CardType) {
   const [imageSrc, setImageSrc] = React.useState(imgUrl);
   const navigate = useNavigate();
@@ -56,23 +55,19 @@ export default function ActionCard({
     >
       {/* Card image */}
       <CardActionArea onClick={() => navigate(`/detail/${id}`)} sx={{ flexGrow: 1 }}>
-        {isLoading
-          ? <Skeleton sx={{ height: '40%' }} />
-          : (
-            <CardMedia
-              className="card-img"
-              onLoad={handleLoad}
-              component="img"
-              sx={{
-                height: '200px',
-                transition: 'all 0.3s ease-in-out',
-              }}
-              onError={handleImageError}
-              image={imageSrc}
-              alt={altText}
-            />
-          )}
-        <CardContent sx={{ flexGrow: 1 }}>
+        <CardMedia
+          className="card-img"
+          onLoad={handleLoad}
+          component="img"
+          sx={{
+            height: '200px',
+            transition: 'all 0.3s ease-in-out',
+          }}
+          onError={handleImageError}
+          image={imageSrc}
+          alt={altText}
+        />
+        <CardContent sx={{ flexGrow: 1, height: '100%' }}>
           <Typography
             gutterBottom
             variant="h5"
@@ -88,6 +83,7 @@ export default function ActionCard({
           </Typography>
           <Stack
             spacing={{ xs: 1, sm: 2 }}
+            sx={{ mb: 1 }}
             direction="row"
             useFlexGap
           >
@@ -97,7 +93,7 @@ export default function ActionCard({
           </Stack>
           <Typography
             variant="caption"
-            color=""
+            color="primary.light"
             gutterBottom
             sx={{
               display: '-webkit-box',
@@ -117,11 +113,8 @@ export default function ActionCard({
     </Card>
   );
 }
-interface MainCardType extends ActivityDataType {
-  isLoading?: boolean;
-}
 
-export function MainCard({ ...props }:MainCardType) {
+export function MainCard({ ...props }: ActivityDataType) {
   const {
     title, tags, images, trend, id, content, status,
   } = props;
