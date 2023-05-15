@@ -37,9 +37,8 @@ export interface SearchRequestType extends SegmentRequestType {
 }
 
 export enum sortByUnion {
-  CREATEDAT = 'createdAt',
-  TITLE = 'title',
-  TREND = 'activityClickedCount',
+  CREATEDAT = 'CreatedAt',
+  TREND = 'Trend',
 }
 export enum orderByUnion { DESC = 'descending', ASC = 'ascending'}
 export interface ActivitiesRequestType extends SegmentRequestType {

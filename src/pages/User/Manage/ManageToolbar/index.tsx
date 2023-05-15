@@ -7,12 +7,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { alpha } from '@mui/material/styles';
 
-interface EnhancedTableToolbarProps {
+interface ManageToolbarType {
   numSelected: number;
+  onDelete:React.MouseEventHandler;
 }
 
-export default function ManageToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
+export default function ManageToolbar(props: ManageToolbarType) {
+  const { numSelected, onDelete } = props;
 
   return (
     <Toolbar
@@ -50,7 +51,7 @@ export default function ManageToolbar(props: EnhancedTableToolbarProps) {
       )}
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={onDelete}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>

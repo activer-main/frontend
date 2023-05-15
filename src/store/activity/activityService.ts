@@ -3,6 +3,7 @@ import { URL } from 'utils/apiURL';
 import { ActivityDataType } from 'types/data';
 import { ActivityResponseType } from 'types/response';
 import { ActivityStatusRequestType, ActivitiesRequestType } from 'types/request';
+import _ from 'lodash';
 
 export const activityApi = createApi({
   reducerPath: 'activityApi',
@@ -50,6 +51,17 @@ export const activityApi = createApi({
       }),
       providesTags: [{ type: 'Activity', id: 'Manage' }],
     }),
+    deleteManageActivity: builder.mutation<void, string[]>({
+      query: (body) => ({
+        url: 'activityStatus',
+        method: 'DELETE',
+        body,
+      }),
+      invalidatesTags: (result, error, body) => _.concat([
+        { type: 'Activity', id: 'List' },
+        { type: 'Activity', id: 'Manage' },
+      ], _.map(body, (id) => ({ type: 'Activity', id }))),
+    }),
   }),
 });
 
@@ -58,4 +70,5 @@ export const {
   useGetActivityByIdQuery,
   useGetManageActivityQuery,
   usePostActivityStatusMutation,
+  useDeleteManageActivityMutation,
 } = activityApi;
