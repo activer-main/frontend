@@ -20,7 +20,7 @@ function ProtectedRoute() {
     );
   }
 
-  if (!userInfo.verify) {
+  if (!userInfo.emailVerified) {
     return (
       <Navigate to="/verify" />
     );

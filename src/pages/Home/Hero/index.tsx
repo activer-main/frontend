@@ -33,7 +33,9 @@ function HeroSection() {
               Book now
             </Button>
           </Grid>
-          <Grid item xs={12} sm={4} sx={{ position: 'relative' }}>
+
+          {/* right graphic */}
+          <Grid item xs={12} sm={4} sx={{ position: 'relative', display: { md: 'block', xs: 'none' } }}>
             <Graphic />
             <Box sx={{
               width: 300,

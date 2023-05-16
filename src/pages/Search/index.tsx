@@ -61,7 +61,7 @@ function SearchResult({ isLoading, searchResultData }: SearchResultType) {
       {
         searchResultData.map((activity) => (
           <Grid item xs={12} sm={6} md={4} xl={3} key={activity.id}>
-            <MainCard isLoading={isLoading} {...activity} />
+            <MainCard {...activity} />
           </Grid>
         ))
       }
@@ -83,7 +83,7 @@ function Search() {
     tags: searchParams.getAll('tags') || [],
     date: searchParams.get('date') || '',
     page: parseInt(searchParams.get('page') || '1', 10),
-    per: 10,
+    countPerPage: 10,
   });
 
   // component @TagManage dialog display

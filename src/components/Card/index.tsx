@@ -11,27 +11,28 @@ import TagIcon from '@mui/icons-material/Tag';
 import SendIcon from '@mui/icons-material/Send';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { ActivityDataType, TagDataType } from 'types/data';
+import { ActivityDataType, TagDataType, statusUnion } from 'types/data';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
-import { Skeleton } from '@mui/material';
+import { CardActionArea, CircularProgress, Skeleton } from '@mui/material';
+import { useDeleteManageActivityMutation, usePostActivityStatusMutation } from 'store/activity/activityService';
 
 export interface CardType {
+  id: string;
   imgUrl: string,
-  title: string,
+  title: string | null,
   altText: string,
   tags?: TagDataType[],
   detail?: React.ReactNode;
   control? : React.ReactNode;
-  isLoading?: boolean
 }
-
 export default function ActionCard({
-  imgUrl, title, tags, altText, detail, control, isLoading,
+  imgUrl, title, tags, altText, detail, control, id,
 }: CardType) {
   const [imageSrc, setImageSrc] = React.useState(imgUrl);
+  const navigate = useNavigate();
 
   const handleImageError = () => {
     setImageSrc('/DefaultActivityImage.svg');
@@ -42,76 +43,101 @@ export default function ActionCard({
   return (
     <Card
       sx={{
-        height: '100%',
+        height: '490px',
         display: 'flex',
         flexDirection: 'column',
+        '&:hover': {
+          '& .card-img': {
+            scale: '1.1',
+          },
+        },
       }}
     >
       {/* Card image */}
-      {isLoading
-        ? <Skeleton sx={{ height: '40%' }} />
-        : (
-          <CardMedia
-            onLoad={handleLoad}
-            component="img"
-            sx={{
-              height: '40%',
-            }}
-            onError={handleImageError}
-            image={imageSrc}
-            alt={altText}
-          />
-        )}
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography
-          gutterBottom
-          variant="h5"
-          component="h2"
+      <CardActionArea onClick={() => navigate(`/detail/${id}`)} sx={{ flexGrow: 1 }}>
+        <CardMedia
+          className="card-img"
+          onLoad={handleLoad}
+          component="img"
           sx={{
-            display: '-webkit-box',
-            overflow: 'hidden',
-            WebkitBoxOrient: 'vertical',
-            WebkitLineClamp: 2,
+            height: '200px',
+            transition: 'all 0.3s ease-in-out',
           }}
-        >
-          {title}
-        </Typography>
-        <Stack
-          spacing={{ xs: 1, sm: 2 }}
-          direction="row"
-          useFlexGap
-        >
-          {tags?.slice(0, 3).map((tag) => (
-            <Chip key={tag.id} icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
-          ))}
-        </Stack>
-        <Typography variant="body2" gutterBottom>
-          {detail}
-        </Typography>
-      </CardContent>
+          onError={handleImageError}
+          image={imageSrc}
+          alt={altText}
+        />
+        <CardContent sx={{ flexGrow: 1, height: '100%' }}>
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="h2"
+            sx={{
+              display: '-webkit-box',
+              overflow: 'hidden',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+            }}
+          >
+            {title || `Activity#${id.slice(0, 5)}...`}
+          </Typography>
+          <Stack
+            spacing={{ xs: 1, sm: 2 }}
+            sx={{ mb: 1 }}
+            direction="row"
+            useFlexGap
+          >
+            {tags?.slice(0, 3).map((tag) => (
+              <Chip key={tag.id} icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
+            ))}
+          </Stack>
+          <Typography
+            variant="caption"
+            color="primary.light"
+            gutterBottom
+            sx={{
+              display: '-webkit-box',
+              overflow: 'hidden',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 5,
+            }}
+          >
+            {detail}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+
       <CardActions>
         {control}
       </CardActions>
     </Card>
   );
 }
-interface MainCardType extends ActivityDataType {
-  isLoading?: boolean;
-}
 
-export function MainCard({ ...props }:MainCardType) {
+export function MainCard({ ...props }: ActivityDataType) {
   const {
-    title, tags, images, trend, id,
+    title, tags, images, trend, id, content, status,
   } = props;
   const navigate = useNavigate();
+  const [updateStatus, { isLoading: isUpdating }] = usePostActivityStatusMutation();
+  const [deleteStatus, { isLoading: isDeleting }] = useDeleteManageActivityMutation();
+
+  const handleClickStatus = () => {
+    if (status === statusUnion.DREAM) {
+      deleteStatus([id]);
+    } else if (status === null) {
+      updateStatus({ id, status: '願望' as statusUnion });
+    }
+  };
 
   return (
     <ActionCard
+      id={id.toString()}
       title={title}
       tags={tags?.map((tag) => ({ text: tag.text, id: tag.id, type: tag.type }))}
       imgUrl={images ? images[0] : '/DefaultActivityImage.svg'}
-      detail=""
-      altText={title}
+      detail={content}
+      altText={title || 'activity-image'}
       control={(
         <Grid container sx={{ alignItems: 'center' }}>
           <Grid item xs>
@@ -127,7 +153,14 @@ export function MainCard({ ...props }:MainCardType) {
             </IconButton>
           </Grid>
           <Grid item>
-            <Checkbox icon={<FavoriteBorderIcon />} checkedIcon={<FavoriteIcon />} size="small" color="warning" />
+            <Checkbox
+              icon={isUpdating ? <CircularProgress size="1em" /> : <FavoriteBorderIcon />}
+              checkedIcon={isDeleting ? <CircularProgress size="1em" /> : <FavoriteIcon />}
+              size="small"
+              color="warning"
+              checked={status === '願望'}
+              onClick={handleClickStatus}
+            />
           </Grid>
         </Grid>
       )}

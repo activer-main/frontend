@@ -1,16 +1,19 @@
-import { ActivityDataType, TagDataType } from './data';
+import { TagDataType } from 'types/data';
+import { ActivityDataType } from './data';
+import { orderByUnion, sortByUnion } from './request';
 import { UserInfoType, TokenType } from './user';
 
 export interface SegmentResponseType {
-  maxPage: number;// maximun request page
-  minPage: number;// minimun request page
-  page: number;// current page
-  per: number; // max number of data in its page
-  count: number; // total data
+  orderBy: orderByUnion;
+  sortBy: sortByUnion;
+  countPerPage: number;
+  page: number;
+  totalPage: number;
+  totalData: number;
 }
 
 export interface ActivityResponseType extends SegmentResponseType {
-  searchResultData: ActivityDataType[];
+  searchData: ActivityDataType[] | null;
 }
 
 export interface SearchResponseType extends SegmentResponseType {
@@ -25,3 +28,8 @@ export interface LoginResponseType {
   token: TokenType;
 }
 export type RegisterResponseType = LoginResponseType;
+
+export interface ManageFilterValueResponseType {
+  tags: TagDataType[];
+  status: string[];
+}

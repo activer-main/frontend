@@ -1,12 +1,13 @@
 import { UserInfoType } from 'types/user';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
-import {
-  postRegist, postLogin, putUserData, getTokenLogin,
-} from 'api/user';
 import { RegisterRequestType } from 'types/request';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getVerifyUser } from '../../api/user';
-import { VerifyRequestTyep, UserUpdateRequestType, LoginRequestType } from '../../types/request';
+import {
+  VerifyRequestType, UserUpdateRequestType, LoginRequestType,
+} from '../../types/request';
+import {
+  getVerifyUser, postLogin, postRegist, patchUserData,
+} from './authAPI';
 
 // Register
 export const registerUser = createAsyncThunk<
@@ -33,23 +34,10 @@ LoginRequestType
   async (loginBody: LoginRequestType, { rejectWithValue }) => {
     try {
       const { data } = await postLogin(loginBody);
-      // store user's token in local storage
-      localStorage.setItem('userToken', data.token.accessToken);
       return data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
-  },
-);
-
-export const tokenLogin = createAsyncThunk<
-LoginResponseType,
-void>(
-  'auth/token',
-  async () => {
-    const { data } = await getTokenLogin();
-    localStorage.setItem('userToken', data.token.accessToken);
-    return data;
   },
 );
 
@@ -61,7 +49,7 @@ UserUpdateRequestType
   'auth/update',
   async (newUserData: UserUpdateRequestType, { rejectWithValue }) => {
     try {
-      const { data } = await putUserData(newUserData);
+      const { data } = await patchUserData(newUserData);
       return data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -71,9 +59,9 @@ UserUpdateRequestType
 
 export const verifyUser = createAsyncThunk<
 LoginResponseType,
-VerifyRequestTyep>(
+VerifyRequestType>(
   'auth/verify',
-  async (request: VerifyRequestTyep, { rejectWithValue }) => {
+  async (request: VerifyRequestType, { rejectWithValue }) => {
     try {
       const { data } = await getVerifyUser(request);
       return data;

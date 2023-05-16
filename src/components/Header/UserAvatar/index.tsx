@@ -7,11 +7,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { useAppDispatch, useAppSelector } from 'store';
 import { logout, selectUserInfo } from 'store/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { userNavigationItems } from 'pages/User/components/UserSidebar';
 
 export default function AccountMenu() {
   const dispatch = useAppDispatch();
@@ -38,10 +38,12 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }} src={avatar || username} alt={username} />
+            <Avatar sx={{ width: 32, height: 32 }} src={avatar || username || undefined} alt={username || 'avatar'} />
           </IconButton>
         </Tooltip>
       </Box>
+
+      {/* dropdown menu */}
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -77,27 +79,23 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={() => {
-          setAnchorEl(null);
-          navigate('/user/profile');
-        }}
-        >
-          <Avatar />
-          {' '}
-          基本資料
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar />
-          {' '}
-          我的帳戶
-        </MenuItem>
+
+        {/* User navigation */}
+        {Object.values(userNavigationItems).map((item) => (
+          <MenuItem onClick={() => {
+            setAnchorEl(null);
+            navigate(item.link);
+          }}
+          >
+            {item.icon}
+            {' '}
+            {item.label}
+          </MenuItem>
+        ))}
+
         <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          設定
-        </MenuItem>
+
+        {/* Logout */}
         <MenuItem onClick={() => {
           setAnchorEl(null);
           dispatch(logout());

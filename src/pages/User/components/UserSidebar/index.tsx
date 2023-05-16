@@ -16,10 +16,11 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useAppDispatch } from 'store';
 import { logout } from 'store/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { Stack, Typography } from '@mui/material';
 
 export const drawerWidth = 200;
 
-export const drawerListItem = {
+export const userNavigationItems = {
   profile: {
     label: '基本資料',
     link: '/user/profile',
@@ -73,7 +74,12 @@ function UserDrawer({ setOpen, open } : UserDrawerType) {
         open={open}
       >
         {/* Header */}
-        <DrawerHeader>
+        <DrawerHeader sx={{ justifyContent: 'space-between' }}>
+          <Stack alignItems="end" direction="row" component="a" href="/" sx={{ textDecoration: 'none' }}>
+            <img src="/icon192.png" alt="activer-header-logo" width={50} />
+            <Typography variant="h5" color="secondary">ctiver</Typography>
+          </Stack>
+
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
@@ -83,8 +89,8 @@ function UserDrawer({ setOpen, open } : UserDrawerType) {
 
         {/* Link Item */}
         <List>
-          {Object.values(drawerListItem).map((item) => (
-            <ListItem>
+          {Object.values(userNavigationItems).map((item) => (
+            <ListItem key={item.label}>
               <ListItemButton onClick={() => navigate(item.link)}>
                 <ListItemIcon>
                   {item.icon}

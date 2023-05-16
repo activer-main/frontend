@@ -12,32 +12,43 @@ import { useAppDispatch, useAppSelector } from 'store';
 import { selectUserData } from 'store/auth/authSlice';
 import { toast } from 'react-toastify';
 import { registerUser } from 'store/auth/authAction';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import Link from '@mui/material/Link';
+import {
+  IconButton, InputAdornment,
+} from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import LockIcon from '@mui/icons-material/Lock';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import LockClockIcon from '@mui/icons-material/LockClock';
+import { EMAIL_PATTERN, PASSWORD_PATTERN, USERNAME_PATTERN } from 'utils/pattern';
+import { useForm } from 'react-hook-form';
 
 export default function Register() {
-  const { loading } = useAppSelector(selectUserData);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    if (
-      data.get('password') !== data.get('confirmPassword')
-    ) {
-      toast.error('密碼不相同');
-      return;
-    }
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const { loading } = useAppSelector(selectUserData);
+  const {
+    register, handleSubmit, watch, formState: { errors },
+  } = useForm();
 
-    dispatch(registerUser({
-      username: data.get('username') as string,
-      email: data.get('email') as string,
-      password: data.get('password') as string,
-    }))
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
+  const onSubmit = (data: any) => {
+    dispatch(registerUser(data))
       .unwrap()
       .then(() => {
-        toast.success('註冊成功，請重新登入!');
-        navigate('/login');
+        navigate('/user/profile');
       })
       .catch((error: any) => toast.error(error.message));
   };
@@ -53,74 +64,163 @@ export default function Register() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1 }}>
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
+        <Typography component="h1" variant="h4">
+          註冊
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                error={!!errors.username}
+                helperText={errors.username ? '使用者名稱須為2-16字中英數字' : undefined}
                 autoComplete="username"
-                name="username"
                 required
                 fullWidth
                 id="username"
                 label="使用者名稱"
                 autoFocus
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <BorderColorIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                {...register('username', {
+                  required: true,
+                  pattern: USERNAME_PATTERN,
+                })}
               />
             </Grid>
 
             <Grid item xs={12}>
               <TextField
-                required
+                error={!!errors.email}
+                helperText={errors.email ? '請輸入有效的電子郵件地址' : undefined}
                 fullWidth
+                required
                 id="email"
                 label="帳號"
-                name="email"
                 autoComplete="email"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                }}
+                {...register('email', {
+                  required: true,
+                  pattern: EMAIL_PATTERN,
+                })}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                required
+                error={!!errors.password}
+                helperText={errors.password
+                  ? '密碼必須包含至少一個小寫字母、一個大寫字母、一個數字和一個特殊字符（!@#$%），並且長度在8到24個字符之間。'
+                  : undefined}
                 fullWidth
-                name="password"
+                required
                 label="密碼"
-                type="password"
+                {... register('password', {
+                  required: true,
+                  pattern: PASSWORD_PATTERN,
+                })
+                }
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 autoComplete="new-password"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockIcon />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end" sx={{ mr: 1 }}>
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                required
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword ? '密碼需相同' : undefined}
                 fullWidth
-                name="confirmPassword"
+                required
+                type={showConfirmPassword ? 'text' : 'password'}
                 label="確認密碼"
-                type="password"
                 id="confirmPassword"
                 autoComplete="new-password"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockClockIcon />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end" sx={{ mr: 1 }}>
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowConfirmPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                {...register('confirmPassword', {
+                  required: true,
+                  validate: (val: string) => watch('password') === val || '密碼需相同'
+                  ,
+                })}
               />
             </Grid>
 
           </Grid>
           <LoadingButton
             loading={loading}
-            loadingPosition="end"
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign Up
+            註冊
           </LoadingButton>
-          <Grid container justifyContent="flex-end">
+          <Grid container justifyContent="flex-end" alignItems="flex-end" spacing={1}>
             <Grid item>
-              <Link to="/login">
-                已有帳號? 立即登入
+              已有帳號?
+            </Grid>
+            <Grid item>
+              <Link
+                component="button"
+                underline="none"
+                sx={{
+                  color: 'secondary.main',
+                  '&:hover': {
+                    color: 'secondary.dark',
+                  },
+                }}
+                onClick={() => navigate('/login')}
+              >
+                立即登入
               </Link>
             </Grid>
           </Grid>

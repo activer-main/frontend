@@ -1,8 +1,8 @@
-import { UserInfoType } from './user';
+import { ActivityDataType } from './data';
 
 export interface SegmentRequestType {
-  page: number,
-  per: number,
+  page? :number;
+  countPerPage?: number;
 }
 
 export interface RegisterRequestType {
@@ -16,9 +16,17 @@ export type LoginRequestType = {
   password: string,
 };
 
-export type UserUpdateRequestType = Omit<UserInfoType, 'email' | 'password' | 'verify' | 'id'>;
+export type UserUpdateRequestType = {
+  username?: string | null;
+  gender? : string | null;
+  birthday?: string | null;
+  profession? : string[] | null;
+  phone?: string | null;
+  county?: string | null;
+  area?: string | null;
+};
 
-export type VerifyRequestTyep = {
+export type VerifyRequestType = {
   verifyCode: string,
 };
 
@@ -28,9 +36,17 @@ export interface SearchRequestType extends SegmentRequestType {
   date: string,
 }
 
-export const sortByUnion = ['trend', 'newest'];
-export const sortingUnion = ['desc', 'asc'];
-export interface ActivitiesRequestType extends SegmentRequestType {
-  sortby: typeof sortByUnion[number];
-  sorting: typeof sortByUnion[number];
+export enum sortByUnion {
+  CREATEDAT = 'CreatedAt',
+  TREND = 'Trend',
+  ADDTIME = 'AddTime',
 }
+export enum orderByUnion { DESC = 'descending', ASC = 'ascending'}
+export interface ActivitiesRequestType extends SegmentRequestType {
+  tags?: string[];
+  status?: string[] ;
+  sortBy: sortByUnion;
+  orderBy:orderByUnion;
+}
+
+export type ActivityStatusRequestType = { id: ActivityDataType['id']; status: ActivityDataType['status'] };

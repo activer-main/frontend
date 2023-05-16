@@ -8,4 +8,12 @@ export const theme = responsiveFontSizes(createTheme({
       'sans-serif',
     ].join(','),
   },
+  palette: {
+    primary: {
+      main: '#4C3D3D',
+    },
+    secondary: {
+      main: '#FFD95A',
+    },
+  },
 }));

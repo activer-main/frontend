@@ -1,10 +1,7 @@
 import React from 'react';
-import Loading from 'components/Loading';
-import { useGetActivityQuery } from 'store/activity/activityService';
-import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import ImageSlide from 'components/ImageSlide';
-import { ActivityTagDataType } from 'types/data';
+import { ActivityTagDataType, statusUnion } from 'types/data';
 import TagIcon from '@mui/icons-material/Tag';
 import { Buffer } from 'buffer';
 import {
@@ -13,76 +10,124 @@ import {
 import Stack from '@mui/material/Stack';
 import {
   Box,
-  Chip, Container, Divider, Grid, Link, Typography,
+  Checkbox,
+  Chip, CircularProgress, Container, Divider, Grid, Link, Skeleton, Tooltip, Typography,
 } from '@mui/material';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
+import {
+  useDeleteManageActivityMutation,
+  useGetActivityByIdQuery,
+  usePostActivityStatusMutation,
+} from 'store/activity/activityService';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import BranchTabs from './BranchTabs';
 
 function Detail() {
   const { id = '1' } = useParams();
-  const { data, isFetching, isError } = useGetActivityQuery(id as string);
-
-  if (isFetching) {
-    return <Loading />;
-  }
-
-  if (isError || !data) {
-    toast.error('載入發生錯誤');
-    return <div className="error" />;
-  }
+  const { data, isLoading } = useGetActivityByIdQuery(id as string);
+  const [updateStatus, { isLoading: isUpdating }] = usePostActivityStatusMutation();
+  const [deleteStatus, { isLoading: isDeleting }] = useDeleteManageActivityMutation();
 
   const {
+    id: activityId,
     images,
     title,
     subTitle,
     tags,
-    objective,
-    connection,
+    objectives,
+    connections,
     sources,
-    content,
-    holder,
+    html,
+    holders,
+    status,
     branches,
-  } = data;
+  } = data || {};
+
+  const handleClickStatus = () => {
+    if (data?.status === statusUnion.DREAM && activityId) {
+      deleteStatus([activityId]);
+    } else if (data?.status === null && activityId) {
+      updateStatus({ id: activityId, status: '願望' as statusUnion });
+    }
+  };
 
   return (
     <Container maxWidth="xl">
       {/* Introduction */}
-      <Grid container>
+      <Grid container sx={{ mt: 2 }}>
 
         <Grid item xs={12} md={6}>
-          <Stack direction="column" spacing={2} alignItems="center">
+          <Grid container spacing={2} direction="column">
+
             {/* Image */}
-            <ImageSlide
-              images={images}
-              altText={title}
-            />
+            <Grid item xs>
+              {isLoading
+                ? (
+                  <Skeleton width="100%">
+                    <ImageSlide
+                      images={images}
+                      altText={title || 'activity-image'}
+                    />
+                  </Skeleton>
+                )
+                : (
+                  <ImageSlide
+                    images={images}
+                    altText={title || 'activity-image'}
+                  />
+                )}
+            </Grid>
 
             {/* Title */}
-            <Typography variant="h4" component="h1">{title}</Typography>
+            <Grid item xs>
+              <Typography variant="h4" component="h1">{ isLoading ? <Skeleton width="100%" /> : title}</Typography>
+            </Grid>
 
             {/* SubTitle */}
+
             {subTitle && (
-              <Typography variant="h5" component="h2">{subTitle}</Typography>
+              <Grid item xs>
+                <Typography variant="h5" component="h2">{subTitle}</Typography>
+              </Grid>
             )}
 
             {/* Tags */}
-            {tags && (
-              <Stack flexWrap="wrap" spacing={3} direction="row">
-                {tags.map((tag: ActivityTagDataType) => (
-                  <Chip label={tag.text} color={activityTypeToColor(tag.type)} icon={<TagIcon />} variant="outlined" />
-                )).slice(0, 5)}
-                {/* Add Tag Button */}
+            <Grid item xs>
+              {tags && (
+                <Stack flexWrap="wrap" spacing={3} direction="row">
+                  {tags.map((tag: ActivityTagDataType) => (
+                    <Chip label={tag.text} color={activityTypeToColor(tag.type)} icon={<TagIcon />} variant="outlined" />
+                  )).slice(0, 5)}
+                </Stack>
+              )}
+            </Grid>
+
+            {/* Control */}
+            <Grid item xs>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Tooltip title={status === '願望' ? '從願望清單中移除' : '加入願望清單'}>
+                  <Checkbox
+                    icon={isUpdating ? <CircularProgress size="1em" /> : <FavoriteBorderIcon />}
+                    checkedIcon={isDeleting ? <CircularProgress size="1em" /> : <FavoriteIcon />}
+                    checked={status === '願望'}
+                    onClick={handleClickStatus}
+                    size="small"
+                    color="warning"
+                  />
+                </Tooltip>
                 <Chip
                   clickable
-                  label=" + 新增標籤"
+                  label="+ 新增標籤"
                 />
               </Stack>
-            )}
-          </Stack>
+            </Grid>
+
+          </Grid>
 
         </Grid>
 
-        <Grid xs={12} md={6}>
+        <Grid item xs={12} md={6} sx={{ p: 2 }}>
           <BranchTabs branches={branches} />
         </Grid>
 
@@ -92,7 +137,8 @@ function Detail() {
       <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
 
         {/* Object */}
-        {objective
+        {objectives
+        && objectives.length > 0
           && (
             <Box component="section">
               <Typography variant="h5" component="h3">
@@ -100,7 +146,11 @@ function Detail() {
                 活動對象
               </Typography>
               <Divider />
-              <Typography variant="body1" component="p" />
+              {objectives.map((o) => (
+                <Typography variant="body1" component="p">
+                  {o}
+                </Typography>
+              ))}
             </Box>
           ) }
 
@@ -114,7 +164,7 @@ function Detail() {
           <Typography
             variant="body1"
             component="p"
-            dangerouslySetInnerHTML={{ __html: Buffer.from(content, 'base64').toString('utf-8') }}
+            dangerouslySetInnerHTML={{ __html: Buffer.from(html || '', 'base64').toString('utf-8') }}
           />
         </Box>
 
@@ -142,7 +192,7 @@ function Detail() {
         )}
 
         {/* Connection */}
-        {connection && connection.length !== 0 && (
+        {connections && connections.length !== 0 && (
           <Box component="section">
             <Typography variant="h5" component="h3">
               <FcPhone />
@@ -150,7 +200,7 @@ function Detail() {
             </Typography>
             <Divider />
             <Stack direction="column">
-              {connection.map((item: string, index: number) => (
+              {connections.map((item: string, index: number) => (
                 <Typography variant="body1" key={`detail-connection-${index}`}>
                   {item}
                 </Typography>
@@ -160,14 +210,14 @@ function Detail() {
         )}
 
         {/* Holder */}
-        {holder && holder.length !== 0 && (
+        {holders && holders.length !== 0 && (
           <Box component="section">
             <Typography variant="h5" component="h3">
               <FcGraduationCap />
               主辦單位
             </Typography>
             <Divider />
-            {holder.map((item: string, index:number) => (
+            {holders.map((item: string, index:number) => (
               <Typography variant="body1" key={`detail-holder-${index}`}>
                 {item}
               </Typography>
