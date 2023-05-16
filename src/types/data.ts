@@ -12,6 +12,11 @@ export interface TagDataType {
   text: string | null;
 }
 
+export enum statusUnion {
+  DREAM = '願望',
+  ENROLLED = '已註冊',
+  DONE = '已完成',
+}
 export interface ActivityDataType {
   id: string;
   trend: number;
@@ -19,7 +24,7 @@ export interface ActivityDataType {
   subTitle:string | null;
   content: string | null;
   html: string | null;
-  status: string | null;
+  status: statusUnion | null;
   fee: string[] | null;
   images: string[] | null;
   connections: string[] | null;

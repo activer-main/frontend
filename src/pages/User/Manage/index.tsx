@@ -25,6 +25,7 @@ import {
   LoaderFunction, redirect, useNavigate, useSearchParams,
 } from 'react-router-dom';
 import { times } from 'lodash';
+import { statusUnion } from 'types/data';
 import ManageToolbar from './ManageToolbar';
 import ManageHead from './ManageHead';
 import ManageRowSkeleton from './ManageRowSkeleton';
@@ -243,7 +244,7 @@ function EnhancedTable() {
                           defaultValue={row.status}
                           onChange={(event) => updateStatus({
                             id: row.id,
-                            status: event.target.value,
+                            status: event.target.value as statusUnion,
                           })}
                         >
                           <MenuItem value="願望" key="願望">

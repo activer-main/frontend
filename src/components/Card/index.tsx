@@ -11,13 +11,13 @@ import TagIcon from '@mui/icons-material/Tag';
 import SendIcon from '@mui/icons-material/Send';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { ActivityDataType, TagDataType } from 'types/data';
+import { ActivityDataType, TagDataType, statusUnion } from 'types/data';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
-import { CardActionArea, Skeleton } from '@mui/material';
-import { usePostActivityStatusMutation } from 'store/activity/activityService';
+import { CardActionArea, CircularProgress, Skeleton } from '@mui/material';
+import { useDeleteManageActivityMutation, usePostActivityStatusMutation } from 'store/activity/activityService';
 
 export interface CardType {
   id: string;
@@ -126,7 +126,16 @@ export function MainCard({ ...props }:MainCardType) {
     title, tags, images, trend, id, content, status,
   } = props;
   const navigate = useNavigate();
-  const [updateStatus] = usePostActivityStatusMutation();
+  const [updateStatus, { isLoading: isUpdating }] = usePostActivityStatusMutation();
+  const [deleteStatus, { isLoading: isDeleting }] = useDeleteManageActivityMutation();
+
+  const handleClickStatus = () => {
+    if (status === statusUnion.DREAM) {
+      deleteStatus([id]);
+    } else if (status === null) {
+      updateStatus({ id, status: '願望' as statusUnion });
+    }
+  };
 
   return (
     <ActionCard
@@ -152,15 +161,12 @@ export function MainCard({ ...props }:MainCardType) {
           </Grid>
           <Grid item>
             <Checkbox
-              icon={<FavoriteBorderIcon />}
-              checkedIcon={<FavoriteIcon />}
+              icon={isUpdating ? <CircularProgress size="1em" /> : <FavoriteBorderIcon />}
+              checkedIcon={isDeleting ? <CircularProgress size="1em" /> : <FavoriteIcon />}
               size="small"
               color="warning"
               checked={status === '願望'}
-              onClick={() => updateStatus({
-                id,
-                status: status === '願望' ? null : '願望',
-              })}
+              onClick={handleClickStatus}
             />
           </Grid>
         </Grid>
