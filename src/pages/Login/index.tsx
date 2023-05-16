@@ -102,8 +102,6 @@ export default function Login() {
             {...register('email', { required: true, pattern: EMAIL_PATTERN })}
           />
           <TextField
-            error={!!errors.password}
-            helperText={errors.password ? PASSWORD_HELPERTEXT : undefined}
             margin="normal"
             required
             fullWidth
@@ -132,7 +130,6 @@ export default function Login() {
             }}
             {...register('password', {
               required: true,
-              pattern: PASSWORD_PATTERN,
             })}
           />
 
