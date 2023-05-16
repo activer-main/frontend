@@ -21,7 +21,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { IconButton, Link } from '@mui/material';
-import {EMAIL_PATTERN, PASSWORD_PATTERN} from 'utils/pattern'
+import {EMAIL_PATTERN} from 'utils/pattern'
 
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -102,8 +102,6 @@ export default function Login() {
             {...register('email', { required: true, pattern: EMAIL_PATTERN })}
           />
           <TextField
-            error={errors.password ? true: false}
-            helperText={errors.password ? '密碼必須包含至少一個小寫字母、一個大寫字母、一個數字和一個特殊字符（!@#$%），並且長度在8到24個字符之間。': undefined}
             margin="normal"
             required
             fullWidth
@@ -132,8 +130,6 @@ export default function Login() {
             }}
             {...register('password', { 
               required: true,
-              pattern: PASSWORD_PATTERN
-            
             })}
           />
 
