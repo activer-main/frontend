@@ -1,3 +1,4 @@
+import qs from 'qs';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'utils/apiURL';
 import { ActivityDataType } from 'types/data';
@@ -17,6 +18,7 @@ export const activityApi = createApi({
       }
       return headers;
     },
+    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
   }),
   tagTypes: ['Activity'],
   endpoints: (builder) => ({

@@ -68,10 +68,12 @@ function EnhancedTable() {
   const [searchParams, setSearchParams] = useSearchParams();
   const orderBy = searchParams.get('orderBy') as orderByUnion || orderByUnion.DESC;
   const sortBy = searchParams.get('sortBy') as sortByUnion || sortByUnion.CREATEDAT;
+  const tags = searchParams.getAll('tags');
+  const status = searchParams.getAll('status');
   const page = parseInt(searchParams.get('page') || '1', 10);
   const countPerPage = parseInt(searchParams.get('countPerPage') || '5', 10);
   const { data: activityData, isLoading: isGettingActivity } = useGetManageActivityQuery({
-    orderBy, sortBy, page, countPerPage,
+    orderBy, sortBy, page, countPerPage, tags, status: status.length > 0 ? status : undefined,
   });
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {

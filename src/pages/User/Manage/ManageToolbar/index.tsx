@@ -6,6 +6,7 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { alpha } from '@mui/material/styles';
+import { Menu, MenuItem, Select } from '@mui/material';
 
 interface ManageToolbarType {
   numSelected: number;
@@ -13,6 +14,14 @@ interface ManageToolbarType {
 }
 
 export default function ManageToolbar(props: ManageToolbarType) {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const { numSelected, onDelete } = props;
 
   return (
@@ -28,6 +37,30 @@ export default function ManageToolbar(props: ManageToolbarType) {
         }),
       }}
     >
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+
+        }}
+        // sx={{ maxWidth: 0, maxHeight: 300, position: 'absolute' }}
+        disableScrollLock
+      >
+        <MenuItem>
+          <Select>
+            <MenuItem>標籤</MenuItem>
+            <MenuItem> 標籤 </MenuItem>
+          </Select>
+          <Select>
+            <MenuItem>願望</MenuItem>
+            <MenuItem>已完成</MenuItem>
+          </Select>
+        </MenuItem>
+
+      </Menu>
       {numSelected > 0 ? (
         <Typography
           sx={{ flex: '1 1 100%' }}
@@ -56,12 +89,16 @@ export default function ManageToolbar(props: ManageToolbarType) {
           </IconButton>
         </Tooltip>
       ) : (
+
+        // Filter
         <Tooltip title="Filter list">
-          <IconButton>
+          <IconButton onClick={handleClick}>
             <FilterListIcon />
           </IconButton>
         </Tooltip>
+
       )}
+
     </Toolbar>
   );
 }

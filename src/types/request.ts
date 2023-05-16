@@ -42,6 +42,8 @@ export enum sortByUnion {
 }
 export enum orderByUnion { DESC = 'descending', ASC = 'ascending'}
 export interface ActivitiesRequestType extends SegmentRequestType {
+  tags?: string[];
+  status?: string[] ;
   sortBy: sortByUnion;
   orderBy:orderByUnion;
 }
