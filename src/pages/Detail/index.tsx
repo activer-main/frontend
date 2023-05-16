@@ -1,7 +1,7 @@
 import React from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ImageSlide from 'components/ImageSlide';
-import { ActivityTagDataType } from 'types/data';
+import { ActivityTagDataType, statusUnion } from 'types/data';
 import TagIcon from '@mui/icons-material/Tag';
 import { Buffer } from 'buffer';
 import {
@@ -14,18 +14,20 @@ import {
   Chip, CircularProgress, Container, Divider, Grid, Link, Skeleton, Tooltip, Typography,
 } from '@mui/material';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
-import { useGetActivityByIdQuery, usePostActivityStatusMutation } from 'store/activity/activityService';
+import {
+  useDeleteManageActivityMutation,
+  useGetActivityByIdQuery,
+  usePostActivityStatusMutation,
+} from 'store/activity/activityService';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { toast } from 'react-toastify';
 import BranchTabs from './BranchTabs';
 
 function Detail() {
   const { id = '1' } = useParams();
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
   const { data, isLoading } = useGetActivityByIdQuery(id as string);
-  const [updateStatus, { isLoading: isUpdatingStatus }] = usePostActivityStatusMutation();
+  const [updateStatus, { isLoading: isUpdating }] = usePostActivityStatusMutation();
+  const [deleteStatus, { isLoading: isDeleting }] = useDeleteManageActivityMutation();
 
   const {
     id: activityId,
@@ -41,6 +43,14 @@ function Detail() {
     status,
     branches,
   } = data || {};
+
+  const handleClickStatus = () => {
+    if (data?.status === statusUnion.DREAM && activityId) {
+      deleteStatus([activityId]);
+    } else if (data?.status === null && activityId) {
+      updateStatus({ id: activityId, status: '願望' as statusUnion });
+    }
+  };
 
   return (
     <Container maxWidth="xl">
@@ -98,21 +108,10 @@ function Detail() {
               <Stack direction="row" alignItems="center" spacing={2}>
                 <Tooltip title={status === '願望' ? '從願望清單中移除' : '加入願望清單'}>
                   <Checkbox
-                    icon={isUpdatingStatus ? <CircularProgress size="1em" /> : <FavoriteBorderIcon />}
-                    checkedIcon={isUpdatingStatus ? <CircularProgress size="1em" /> : <FavoriteIcon />}
+                    icon={isUpdating ? <CircularProgress size="1em" /> : <FavoriteBorderIcon />}
+                    checkedIcon={isDeleting ? <CircularProgress size="1em" /> : <FavoriteIcon />}
                     checked={status === '願望'}
-                    onClick={() => {
-                      if (localStorage.getItem('userToken')) {
-                        updateStatus({
-                          id: activityId || id,
-                          status: status === '願望' ? null : '願望',
-                        });
-                      } else {
-                        toast.warn('請先登入');
-                        localStorage.setItem('next', pathname);
-                        navigate('/login');
-                      }
-                    }}
+                    onClick={handleClickStatus}
                     size="small"
                     color="warning"
                   />

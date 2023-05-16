@@ -11,7 +11,7 @@ import Checkbox from '@mui/material/Checkbox';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { useGetManageActivityQuery, usePostActivityStatusMutation } from 'store/activity/activityService';
+import { useDeleteManageActivityMutation, useGetManageActivityQuery, usePostActivityStatusMutation } from 'store/activity/activityService';
 import TagIcon from '@mui/icons-material/Tag';
 import NearMeIcon from '@mui/icons-material/NearMe';
 import { orderByUnion, sortByUnion } from 'types/request';
@@ -25,6 +25,7 @@ import {
   LoaderFunction, redirect, useNavigate, useSearchParams,
 } from 'react-router-dom';
 import { times } from 'lodash';
+import { statusUnion } from 'types/data';
 import ManageToolbar from './ManageToolbar';
 import ManageHead from './ManageHead';
 import ManageRowSkeleton from './ManageRowSkeleton';
@@ -57,9 +58,10 @@ export const manageLoader:LoaderFunction = ({ request }) => {
 };
 
 function EnhancedTable() {
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [selected, setSelected] = React.useState<string[]>([]);
   const [dense, setDense] = React.useState(false);
   const [updateStatus] = usePostActivityStatusMutation();
+  const [deleteManageActivities] = useDeleteManageActivityMutation();
   const navigate = useNavigate();
 
   // fetch data by params
@@ -74,19 +76,19 @@ function EnhancedTable() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = activityData?.searchData?.map((n) => n.title);
+      const newSelected = activityData?.searchData?.map((n) => n.id);
       setSelected(newSelected || []);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected: readonly string[] = [];
+  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+    const selectedIndex = selected.indexOf(id);
+    let newSelected: string[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -120,13 +122,16 @@ function EnhancedTable() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (title: string) => selected.indexOf(title) !== -1;
+  const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ width: '95vw', mb: 2 }}>
         {/* Toolbar */}
-        <ManageToolbar numSelected={selected.length} />
+        <ManageToolbar
+          numSelected={selected.length}
+          onDelete={() => deleteManageActivities(selected).unwrap().then(() => toast.success('刪除成功'))}
+        />
 
         <TableContainer>
           <Table
@@ -149,7 +154,7 @@ function EnhancedTable() {
               && times(5, (index) => <ManageRowSkeleton key={index} />)}
 
               {activityData?.searchData?.map((row, index) => {
-                const isItemSelected = isSelected(row.title);
+                const isItemSelected = isSelected(row.id);
                 const labelId = `table-checkbox-${index}`;
 
                 return (
@@ -164,7 +169,7 @@ function EnhancedTable() {
                   >
 
                     {/* checkbox */}
-                    <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.title)}>
+                    <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.id)}>
                       <Checkbox
                         color="primary"
                         checked={isItemSelected}
@@ -178,11 +183,11 @@ function EnhancedTable() {
                     <TableCell
                       component="th"
                       id={labelId}
-                      onClick={(event) => handleClick(event, row.title)}
+                      onClick={(event) => handleClick(event, row.id)}
                       scope="row"
                       padding="none"
                     >
-                      <Stack spacing={5} direction="row" alignItems="center" sx={{ p: 5 }}>
+                      <Stack spacing={2} direction="row" alignItems="center" sx={{ p: 5 }}>
                         {!dense
                         && (
                           <Box
@@ -191,9 +196,14 @@ function EnhancedTable() {
                               width: '150px',
                               height: '150px',
                               objectFit: 'cover',
-                              mr: 5,
                             }}
                             src={row.images ? row.images[0] : undefined}
+                            onError={({ currentTarget }) => {
+                              /* eslint-disable no-param-reassign */
+                              currentTarget.onerror = null; // prevents looping
+                              currentTarget.src = '/DefaultActivityImage.svg';
+                              /* eslint-enable no-param-reassign */
+                            }}
                           />
                         )}
                         <Typography variant="h5">
@@ -212,6 +222,7 @@ function EnhancedTable() {
                       <Stack spacing={2} direction="row">
                         {row?.tags?.map((tag) => (
                           <Chip
+                            key={tag.id}
                             color={activityTypeToColor(tag.type)}
                             icon={<TagIcon />}
                             size="small"
@@ -233,7 +244,7 @@ function EnhancedTable() {
                           defaultValue={row.status}
                           onChange={(event) => updateStatus({
                             id: row.id,
-                            status: event.target.value,
+                            status: event.target.value as statusUnion,
                           })}
                         >
                           <MenuItem value="願望" key="願望">
@@ -249,17 +260,15 @@ function EnhancedTable() {
 
                         {/* Delete Button */}
                         <IconButton
-                          size="large"
-                          onClick={() => updateStatus({
-                            id: row.id,
-                            status: null,
-                          })}
+                          sx={{ width: 50, height: 50 }}
+                          onClick={() => deleteManageActivities([row.id]).unwrap().then(() => toast.success('刪除成功'))}
                         >
                           <DeleteIcon />
                         </IconButton>
 
                         <IconButton
                           size="large"
+                          sx={{ width: 50, height: 50 }}
                           onClick={() => navigate(`/detail/${row.id}`)}
                         >
                           <NearMeIcon />

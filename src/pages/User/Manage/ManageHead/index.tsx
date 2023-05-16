@@ -25,19 +25,13 @@ interface EnhancedTableProps {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: sortByUnion.TITLE,
-    numeric: false,
-    disablePadding: true,
-    label: '活動名稱',
-  },
-  {
     id: sortByUnion.TREND,
     numeric: true,
     disablePadding: false,
     label: '熱度',
   },
   // {
-  //   id: 'createdTime',
+  //   id: sortByUnion.CREATEDAT,
   //   numeric: true,
   //   disablePadding: false,
   //   label: '活動加入時間',
@@ -65,6 +59,7 @@ export default function ManageHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
+
         <TableCell padding="checkbox">
           <Checkbox
             color="primary"
@@ -76,6 +71,14 @@ export default function ManageHead(props: EnhancedTableProps) {
             }}
           />
         </TableCell>
+
+        {/* Title */}
+        <TableCell align="left">
+          <Typography variant="h5">
+            標題
+          </Typography>
+        </TableCell>
+
         {headCells.map((headCell) => (
           <TableCell
             sx={{ whiteSpace: 'noWrap' }}
