@@ -25,6 +25,8 @@ export interface ActivityDataType {
   content: string | null;
   html: string | null;
   status: statusUnion | null;
+  addTime: string | null;
+  createAt: string | null;
   fee: string[] | null;
   images: string[] | null;
   connections: string[] | null;
@@ -33,7 +35,7 @@ export interface ActivityDataType {
   sources: string[] | null;
   branches: BranchDataType[];
   tags: ActivityTagDataType[] | null;
-  applyFee: string[] | null;
+
 }
 
 export interface ManageActivityDataType {

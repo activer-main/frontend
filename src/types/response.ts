@@ -1,4 +1,5 @@
-import { ActivityDataType, TagDataType } from './data';
+import { TagDataType } from 'types/data';
+import { ActivityDataType } from './data';
 import { orderByUnion, sortByUnion } from './request';
 import { UserInfoType, TokenType } from './user';
 
@@ -27,3 +28,8 @@ export interface LoginResponseType {
   token: TokenType;
 }
 export type RegisterResponseType = LoginResponseType;
+
+export interface ManageFilterValueResponseType {
+  tags: TagDataType[];
+  status: string[];
+}

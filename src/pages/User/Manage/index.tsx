@@ -26,6 +26,7 @@ import {
 } from 'react-router-dom';
 import { times } from 'lodash';
 import { statusUnion } from 'types/data';
+import { format, parseISO } from 'date-fns';
 import ManageToolbar from './ManageToolbar';
 import ManageHead from './ManageHead';
 import ManageRowSkeleton from './ManageRowSkeleton';
@@ -181,7 +182,7 @@ function EnhancedTable() {
                       />
                     </TableCell>
 
-                    {/* image and title */}
+                    {/*  title */}
                     <TableCell
                       component="th"
                       id={labelId}
@@ -190,25 +191,8 @@ function EnhancedTable() {
                       padding="none"
                     >
                       <Stack spacing={2} direction="row" alignItems="center" sx={{ p: 5 }}>
-                        {!dense
-                        && (
-                          <Box
-                            component="img"
-                            sx={{
-                              width: '150px',
-                              height: '150px',
-                              objectFit: 'cover',
-                            }}
-                            src={row.images ? row.images[0] : undefined}
-                            onError={({ currentTarget }) => {
-                              /* eslint-disable no-param-reassign */
-                              currentTarget.onerror = null; // prevents looping
-                              currentTarget.src = '/DefaultActivityImage.svg';
-                              /* eslint-enable no-param-reassign */
-                            }}
-                          />
-                        )}
-                        <Typography variant="h5">
+
+                        <Typography variant="body1">
                           {row.title}
                         </Typography>
                       </Stack>
@@ -217,10 +201,14 @@ function EnhancedTable() {
                     {/* Trend */}
                     <TableCell align="right">{row.trend}</TableCell>
 
-                    {/* <TableCell align="right">{row.createdTime}</TableCell> */}
+                    {/* Created Time */}
+                    <TableCell align="right">{row.createAt && format(parseISO(row.createAt), 'yyyy/M/d')}</TableCell>
+
+                    {/* Add time */}
+                    <TableCell align="right">{row.addTime && format(parseISO(row.addTime), 'yyyy/M/d')}</TableCell>
 
                     {/* 標籤 */}
-                    <TableCell align="left">
+                    <TableCell align="left" sx={{ width: '20px' }}>
                       <Stack spacing={2} direction="row">
                         {row?.tags?.map((tag) => (
                           <Chip
@@ -235,30 +223,33 @@ function EnhancedTable() {
                       </Stack>
                     </TableCell>
 
+                    <TableCell align="center">
+                      <Select
+                        inputProps={{ MenuProps: { disableScrollLock: true } }}
+                        autoWidth={false}
+                        defaultValue={row.status}
+                        onChange={(event) => updateStatus({
+                          id: row.id,
+                          status: event.target.value as statusUnion,
+                        })}
+                      >
+                        <MenuItem value="願望" key="願望">
+                          願望
+                        </MenuItem>
+                        <MenuItem value="已註冊" key="已註冊">
+                          已註冊
+                        </MenuItem>
+                        <MenuItem value="已完成" key="已完成">
+                          已完成
+                        </MenuItem>
+                      </Select>
+                    </TableCell>
+
                     {/* 控制 */}
                     <TableCell align="right">
 
                       <Stack spacing={2} direction="row" justifyContent="flex-end">
                         {/* Status Select */}
-                        <Select
-                          inputProps={{ MenuProps: { disableScrollLock: true } }}
-                          autoWidth={false}
-                          defaultValue={row.status}
-                          onChange={(event) => updateStatus({
-                            id: row.id,
-                            status: event.target.value as statusUnion,
-                          })}
-                        >
-                          <MenuItem value="願望" key="願望">
-                            願望
-                          </MenuItem>
-                          <MenuItem value="已註冊" key="已註冊">
-                            已註冊
-                          </MenuItem>
-                          <MenuItem value="已完成" key="已完成">
-                            已完成
-                          </MenuItem>
-                        </Select>
 
                         {/* Delete Button */}
                         <IconButton

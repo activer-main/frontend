@@ -26,8 +26,7 @@ function ManageRowSkeleton() {
         padding="none"
       >
         <Stack spacing={5} direction="row" alignItems="center" sx={{ p: 5 }}>
-          <Skeleton width="150px" height="150px" />
-          <Typography variant="h5">
+          <Typography variant="body1">
             <Skeleton />
           </Typography>
         </Stack>

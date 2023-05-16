@@ -3,10 +3,13 @@ import TableHead from '@mui/material/TableHead';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import {
-  Box, Checkbox, TableCell, TableRow, Typography,
+  Box, Checkbox, IconButton, ListItemText, Menu, MenuItem, Stack, TableCell, TableRow, Typography,
 } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 import { orderByUnion, sortByUnion } from 'types/request';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import { useGetFilterValueQuery } from 'store/activity/activityService';
+import _ from 'lodash';
 
 interface HeadCell {
   disablePadding: boolean;
@@ -30,20 +33,28 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: '熱度',
   },
-  // {
-  //   id: sortByUnion.CREATEDAT,
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: '活動加入時間',
-  // },
+  {
+    id: sortByUnion.CREATEDAT,
+    numeric: true,
+    disablePadding: false,
+    label: '活動建立時間',
+  },
+  {
+    id: sortByUnion.ADDTIME,
+    numeric: true,
+    disablePadding: false,
+    label: '加入願望清單時間',
+  },
 ];
 
 export default function ManageHead(props: EnhancedTableProps) {
   const {
     onSelectAllClick, orderBy, sortBy, numSelected, rowCount,
   } = props;
-  // eslint-disable-next-line
   const [searchParams, setSearchParams] = useSearchParams();
+  const { data: filterData } = useGetFilterValueQuery();
+  const [selectTags, setSelectTags] = React.useState<string[]>(searchParams.getAll('tags'));
+  const [selectStatus, setSelectStatus] = React.useState<string[]>(searchParams.getAll('status'));
 
   const handleRequestSort = (
     property: sortByUnion,
@@ -54,6 +65,49 @@ export default function ManageHead(props: EnhancedTableProps) {
       prevSearchParam.set('sortBy', property);
       return prevSearchParam;
     });
+  };
+
+  const [tagFilterAnchorEl, setTagFilterAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [statusFilterAnchorEl, setStatusFilterAnchorEl] = React.useState<null | HTMLElement>(null);
+  const openStatusFilterMenu = Boolean(statusFilterAnchorEl);
+  const openTagFilterMenu = Boolean(tagFilterAnchorEl);
+
+  const handleTagFilterClose = () => {
+    setTagFilterAnchorEl(null);
+    setSearchParams((prevSearchParam) => {
+      prevSearchParam.delete('tags');
+      selectTags.map((tag) => prevSearchParam.append('tags', tag));
+      return prevSearchParam;
+    });
+  };
+  const handleStatusFilterClose = () => {
+    setStatusFilterAnchorEl(null);
+    setSearchParams((prevSearchParam) => {
+      prevSearchParam.delete('status');
+      selectStatus.map((st) => prevSearchParam.append('status', st));
+      return prevSearchParam;
+    });
+  };
+
+  const handleTagMenuItemClick = (
+    event: React.MouseEvent<HTMLElement>,
+    text: string,
+  ) => {
+    if (_.includes(selectTags, text)) {
+      setSelectTags(selectTags.filter((tag) => tag !== text));
+    } else {
+      setSelectTags([...selectTags, text]);
+    }
+  };
+  const handleStatusMenuItemClick = (
+    event: React.MouseEvent<HTMLElement>,
+    text: string,
+  ) => {
+    if (_.includes(selectStatus, text)) {
+      setSelectStatus(selectStatus.filter((tag) => tag !== text));
+    } else {
+      setSelectStatus([...selectStatus, text]);
+    }
   };
 
   return (
@@ -74,7 +128,7 @@ export default function ManageHead(props: EnhancedTableProps) {
 
         {/* Title */}
         <TableCell align="left">
-          <Typography variant="h5">
+          <Typography variant="body1">
             標題
           </Typography>
         </TableCell>
@@ -91,7 +145,7 @@ export default function ManageHead(props: EnhancedTableProps) {
               direction={orderBy === orderByUnion.DESC ? 'desc' : 'asc'}
               onClick={() => handleRequestSort(headCell.id)}
             >
-              <Typography variant="h5">
+              <Typography variant="body1">
                 {headCell.label}
               </Typography>
               {sortBy === headCell.id ? (
@@ -102,14 +156,61 @@ export default function ManageHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell align="center">
-          <Typography variant="h5">
-            標籤
-          </Typography>
+        <TableCell>
+          <Stack spacing={1} direction="row" alignItems="center">
+            <Typography variant="body1">
+              標籤
+            </Typography>
+            <IconButton size="small" onClick={(event) => setTagFilterAnchorEl(event.currentTarget)}>
+              <FilterAltIcon />
+            </IconButton>
+          </Stack>
+
+          <Menu
+            open={openTagFilterMenu}
+            anchorEl={tagFilterAnchorEl}
+            onClose={handleTagFilterClose}
+          >
+            {filterData?.tags.map((tag) => (
+              <MenuItem
+                key={tag.id}
+                onClick={(event) => handleTagMenuItemClick(event, tag.text!)}
+              >
+                <Checkbox checked={selectTags.includes(tag.text!)} />
+                <ListItemText primary={tag.text} />
+              </MenuItem>
+            ))}
+          </Menu>
+        </TableCell>
+
+        <TableCell>
+          <Stack spacing={1} direction="row" alignItems="center">
+            <Typography variant="body1">
+              狀態
+            </Typography>
+            <IconButton size="small" onClick={(event) => setStatusFilterAnchorEl(event.currentTarget)}>
+              <FilterAltIcon />
+            </IconButton>
+          </Stack>
+          <Menu
+            open={openStatusFilterMenu}
+            anchorEl={statusFilterAnchorEl}
+            onClose={handleStatusFilterClose}
+          >
+            {filterData?.status.map((st, index) => (
+              <MenuItem
+                key={index}
+                onClick={(event) => handleStatusMenuItemClick(event, st)}
+              >
+                <Checkbox checked={selectStatus.includes(st!)} />
+                <ListItemText primary={st} />
+              </MenuItem>
+            ))}
+          </Menu>
         </TableCell>
 
         <TableCell align="center">
-          <Typography variant="h5">
+          <Typography variant="body1">
             控制
           </Typography>
         </TableCell>
