@@ -7,7 +7,7 @@ import {
 } from '../../types/request';
 import {
   getVerifyUser, postLogin, postRegist, patchUserData,
-} from './authAPI';
+} from './userAPI';
 
 // Register
 export const registerUser = createAsyncThunk<

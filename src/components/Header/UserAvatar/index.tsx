@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { useAppDispatch, useAppSelector } from 'store';
-import { logout, selectUserInfo } from 'store/auth/authSlice';
+import { logout, selectUserInfo } from 'store/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { userNavigationItems } from 'pages/User/components/UserSidebar';
 

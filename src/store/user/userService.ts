@@ -3,8 +3,8 @@ import { URL } from 'utils/apiURL';
 import { UserInfoType } from 'types/user';
 import { UserUpdateRequestType } from '../../types/request';
 
-export const authApi = createApi({
-  reducerPath: 'authApi',
+export const userApi = createApi({
+  reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
     baseUrl: URL.concat('/api/user'),
     prepareHeaders: (headers) => {
@@ -46,4 +46,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useGetAuthtokenQuery, useUpdateUserMutation, useUpdateAvatarMutation } = authApi;
+export const { useGetAuthtokenQuery, useUpdateUserMutation, useUpdateAvatarMutation } = userApi;

@@ -11,10 +11,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from 'store';
-import { userLogin } from 'store/auth/authAction';
+import { userLogin } from 'store/user/userAction';
 import { toast } from 'react-toastify';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { selectUserInfo } from 'store/auth/authSlice';
+import { selectUserInfo } from 'store/user/userSlice';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import LockIcon from '@mui/icons-material/Lock';
@@ -27,7 +27,7 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userInfo = useAppSelector(selectUserInfo);
-  const { loading } = useAppSelector((state) => state.auth);
+  const { loading } = useAppSelector((state) => state.user);
   const [showPassword, setShowPassword] = React.useState(false);
   const {
     register, handleSubmit, formState: { errors },

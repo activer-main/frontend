@@ -13,8 +13,8 @@ import ReactCrop, {
 import 'react-image-crop/dist/ReactCrop.css';
 import { toast } from 'react-toastify';
 import { useAppSelector } from 'store';
-import { useUpdateAvatarMutation } from 'store/auth/authService';
-import { selectUserInfo } from 'store/auth/authSlice';
+import { useUpdateAvatarMutation } from 'store/user/userService';
+import { selectUserInfo } from 'store/user/userSlice';
 import { canvasPreview } from './canvasPreview';
 import { useDebounceEffect } from './useDebounceEffect';
 

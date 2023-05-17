@@ -1,13 +1,13 @@
-import { getResendVerifyEmail } from 'store/auth/authAPI';
+import { getResendVerifyEmail } from 'store/user/userAPI';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from 'store';
-import { verifyUser } from 'store/auth/authAction';
+import { verifyUser } from 'store/user/userAction';
 import {
   Container, Typography, TextField, Stack, Avatar, Box,
 } from '@mui/material';
-import { selectUserData, selectUserInfo } from 'store/auth/authSlice';
+import { selectUserData, selectUserInfo } from 'store/user/userSlice';
 import { LoadingButton } from '@mui/lab';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 

@@ -15,7 +15,7 @@ import MobileNavigation from './MobileNavigation';
 
 function Haeder() {
   const isMobile = useIsMobile();
-  const { userInfo } = useAppSelector((state) => state.auth);
+  const { userInfo } = useAppSelector((state) => state.user);
 
   const navigate = useNavigate();
 

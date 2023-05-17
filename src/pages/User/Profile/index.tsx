@@ -2,7 +2,7 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from 'store';
 import {
   selectUpdateUserInfo, selectUserData, selectUserInfo, setUserInfo,
-} from 'store/auth/authSlice';
+} from 'store/user/userSlice';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Button from '@mui/material/Button';
@@ -15,7 +15,7 @@ import {
   FormControl, InputLabel, MenuItem, Paper, Typography,
 } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import { useUpdateUserMutation } from 'store/auth/authService';
+import { useUpdateUserMutation } from 'store/user/userService';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';

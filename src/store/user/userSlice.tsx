@@ -7,10 +7,10 @@ import type { RootState } from 'store';
 import { LoginResponseType } from 'types/response';
 import { UserUpdateRequestType } from 'types/request';
 import { UserDataType, UserInfoType } from '../../types/user';
-import { authApi } from './authService';
+import { userApi } from './userService';
 import {
   registerUser, userLogin, userUpdate, verifyUser,
-} from './authAction';
+} from './userAction';
 
 // initialize userToken from local storage
 export const userToken = localStorage.getItem('userToken')
@@ -26,8 +26,8 @@ const initialState: UserDataType = {
   changed: false,
 };
 
-const authSlice = createSlice({
-  name: 'auth',
+const userSlice = createSlice({
+  name: 'user',
   initialState,
   reducers: {
     logout: () => {
@@ -128,7 +128,7 @@ const authSlice = createSlice({
       )
       // Success: avatar upload
       .addMatcher(
-        authApi.endpoints.updateAvatar.matchFulfilled,
+        userApi.endpoints.updateAvatar.matchFulfilled,
         (state) => {
           toast.success('使用者頭像上傳成功');
           return state;
@@ -137,7 +137,7 @@ const authSlice = createSlice({
 
       // Success: token login
       .addMatcher(
-        authApi.endpoints.getAuthtoken.matchFulfilled,
+        userApi.endpoints.getAuthtoken.matchFulfilled,
         (state, { payload }) => ({
           ...state,
           userInfo: payload,
@@ -174,17 +174,17 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, setCredentials, setUserInfo } = authSlice.actions;
-export const selectUserData = (state: RootState) => state.auth;
-export const selectUserInfo = (state: RootState) => state.auth.userInfo;
+export const { logout, setCredentials, setUserInfo } = userSlice.actions;
+export const selectUserData = (state: RootState) => state.user;
+export const selectUserInfo = (state: RootState) => state.user.userInfo;
 export const selectUpdateUserInfo = (state: RootState): UserUpdateRequestType => ({
-  username: state.auth.userInfo?.username,
-  gender: state.auth.userInfo?.gender,
-  profession: state.auth.userInfo?.profession?.map((p) => p.profession),
-  birthday: state.auth.userInfo?.birthday,
-  phone: state.auth.userInfo?.phone,
-  county: state.auth.userInfo?.county,
-  area: state.auth.userInfo?.area,
+  username: state.user.userInfo?.username,
+  gender: state.user.userInfo?.gender,
+  profession: state.user.userInfo?.profession?.map((p) => p.profession),
+  birthday: state.user.userInfo?.birthday,
+  phone: state.user.userInfo?.phone,
+  county: state.user.userInfo?.county,
+  area: state.user.userInfo?.area,
 });
 
-export default authSlice.reducer;
+export default userSlice.reducer;

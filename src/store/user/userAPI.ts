@@ -6,7 +6,7 @@ import {
 } from 'types/request';
 import { URL } from 'utils/apiURL';
 
-const authRequest = axios.create(
+const userRequest = axios.create(
   {
     baseURL: URL.concat('/api/user'),
     headers: {
@@ -18,7 +18,7 @@ const authRequest = axios.create(
 // Register
 export const postRegist = (
   registBody : RegisterRequestType,
-) => authRequest.post<RegisterResponseType>(
+) => userRequest.post<RegisterResponseType>(
   '/signup',
   registBody,
   {
@@ -29,7 +29,7 @@ export const postRegist = (
 );
 
 // Login
-export const postLogin = (loginBody: LoginRequestType) => authRequest.post<LoginResponseType>(
+export const postLogin = (loginBody: LoginRequestType) => userRequest.post<LoginResponseType>(
   '/login',
   loginBody,
   {
@@ -39,19 +39,19 @@ export const postLogin = (loginBody: LoginRequestType) => authRequest.post<Login
 );
 
 // Verify
-export const getVerifyUser = ({ verifyCode } : VerifyRequestType) => authRequest.get<
+export const getVerifyUser = ({ verifyCode } : VerifyRequestType) => userRequest.get<
 LoginResponseType>(
   `verifyEmail?verifyCode=${verifyCode}`,
 );
 
 // Resend Verify
-export const getResendVerifyEmail = () => authRequest.get<void>(
+export const getResendVerifyEmail = () => userRequest.get<void>(
   'resendVerifyEmail',
 );
 
 export const patchUserData = (
   newUserInfo : UserUpdateRequestType,
-) => authRequest.patch<UserInfoType>(
+) => userRequest.patch<UserInfoType>(
   '',
   newUserInfo,
 );
