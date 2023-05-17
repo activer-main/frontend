@@ -50,3 +50,9 @@ export interface ActivitiesRequestType extends SegmentRequestType {
 }
 
 export type ActivityStatusRequestType = { id: ActivityDataType['id']; status: ActivityDataType['status'] };
+
+export type ResetPasswordRequestType = {
+  email:string;
+  token: string;
+  password: string;
+};

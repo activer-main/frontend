@@ -43,7 +43,12 @@ export const userApi = createApi({
         responseHandler: (response) => response.text(),
       }),
     }),
+
   }),
 });
 
-export const { useGetAuthtokenQuery, useUpdateUserMutation, useUpdateAvatarMutation } = userApi;
+export const {
+  useGetAuthtokenQuery,
+  useUpdateUserMutation,
+  useUpdateAvatarMutation,
+} = userApi;

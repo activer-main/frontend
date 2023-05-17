@@ -2,7 +2,8 @@ import { UserInfoType } from 'types/user';
 import axios from 'axios';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
 import {
-  RegisterRequestType, LoginRequestType, UserUpdateRequestType, VerifyRequestType,
+  RegisterRequestType, LoginRequestType,
+  UserUpdateRequestType, VerifyRequestType, ResetPasswordRequestType,
 } from 'types/request';
 import { URL } from 'utils/apiURL';
 
@@ -54,4 +55,12 @@ export const patchUserData = (
 ) => userRequest.patch<UserInfoType>(
   '',
   newUserInfo,
+);
+
+export const forgetPassword = (email: string) => userRequest.get<void>(
+  `resetPassword?email=${email}`,
+);
+
+export const resetPassword = (params: ResetPasswordRequestType) => userRequest.get<void>(
+  `verifyResetPassword?${new URLSearchParams(params).toString()}`,
 );

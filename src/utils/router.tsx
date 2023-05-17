@@ -16,6 +16,8 @@ import Detail from 'pages/Detail';
 import Search from 'pages/Search';
 import Surf, { surfLoader } from 'pages/Surf';
 import Manage, { manageLoader } from 'pages/User/Manage';
+import ForgetPassword from 'pages/ForgetPassword';
+import ResetPassword from 'pages/ResetPassword';
 
 const routerConfig: RouteObject[] = [
   {
@@ -55,6 +57,14 @@ const routerConfig: RouteObject[] = [
             path: '/surf',
             loader: surfLoader,
             element: <Surf />,
+          },
+          {
+            path: '/forgetPassword',
+            element: <ForgetPassword />,
+          },
+          {
+            path: '/resetPassword',
+            element: <ResetPassword />,
           },
         ],
       },
