@@ -8,7 +8,7 @@ import { AccountCircle } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { EMAIL_PATTERN } from 'utils/pattern';
+import { EMAIL_HELPERTEXT, EMAIL_PATTERN } from 'utils/pattern';
 import { forgetPassword } from 'store/user/userAPI';
 
 function ForgetPassword() {
@@ -53,7 +53,7 @@ function ForgetPassword() {
         >
           <TextField
             error={!!errors.email}
-            helperText={errors.email ? '請輸入有效的電子郵件地址' : undefined}
+            helperText={errors.email ? EMAIL_HELPERTEXT : undefined}
             margin="normal"
             required
             fullWidth

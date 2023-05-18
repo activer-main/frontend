@@ -23,7 +23,10 @@ import LockIcon from '@mui/icons-material/Lock';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LockClockIcon from '@mui/icons-material/LockClock';
-import { EMAIL_PATTERN, PASSWORD_PATTERN, USERNAME_PATTERN } from 'utils/pattern';
+import {
+  EMAIL_HELPERTEXT,
+  EMAIL_PATTERN, PASSWORD_HELPERTEXT, PASSWORD_PATTERN, USERNAME_HELPERTEXT, USERNAME_PATTERN,
+} from 'utils/pattern';
 import { useForm } from 'react-hook-form';
 
 export default function Register() {
@@ -75,7 +78,7 @@ export default function Register() {
             <Grid item xs={12}>
               <TextField
                 error={!!errors.username}
-                helperText={errors.username ? '使用者名稱須為2-16字中英數字' : undefined}
+                helperText={errors.username ? USERNAME_HELPERTEXT : undefined}
                 autoComplete="username"
                 required
                 fullWidth
@@ -99,7 +102,7 @@ export default function Register() {
             <Grid item xs={12}>
               <TextField
                 error={!!errors.email}
-                helperText={errors.email ? '請輸入有效的電子郵件地址' : undefined}
+                helperText={errors.email ? EMAIL_HELPERTEXT : undefined}
                 fullWidth
                 required
                 id="email"
@@ -122,7 +125,7 @@ export default function Register() {
               <TextField
                 error={!!errors.password}
                 helperText={errors.password
-                  ? '密碼必須包含至少一個小寫字母、一個大寫字母、一個數字和一個特殊字符（!@#$%），並且長度在8到24個字符之間。'
+                  ? PASSWORD_HELPERTEXT
                   : undefined}
                 fullWidth
                 required

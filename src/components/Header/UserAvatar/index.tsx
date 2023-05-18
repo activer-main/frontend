@@ -13,7 +13,7 @@ import { logout, selectUserInfo } from 'store/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { userNavigationItems } from 'pages/User/components/UserSidebar';
 
-export default function AccountMenu() {
+export default function UserAvatar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { username, avatar } = useAppSelector(selectUserInfo)!;
@@ -81,11 +81,13 @@ export default function AccountMenu() {
       >
 
         {/* User navigation */}
-        {Object.values(userNavigationItems).map((item) => (
-          <MenuItem onClick={() => {
-            setAnchorEl(null);
-            navigate(item.link);
-          }}
+        {Object.values(userNavigationItems).map((item, index) => (
+          <MenuItem
+            onClick={() => {
+              setAnchorEl(null);
+              navigate(item.link);
+            }}
+            key={index}
           >
             {item.icon}
             {' '}

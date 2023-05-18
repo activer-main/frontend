@@ -23,7 +23,7 @@ export type UserUpdateRequestType = {
   profession? : string[] | null;
   phone?: string | null;
   county?: string | null;
-  area?: string | null;
+  area?: string | null
 };
 
 export type VerifyRequestType = {

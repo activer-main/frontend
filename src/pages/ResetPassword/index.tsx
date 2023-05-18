@@ -8,7 +8,7 @@ import { AccountCircle } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { PASSWORD_PATTERN } from 'utils/pattern';
+import { PASSWORD_HELPERTEXT, PASSWORD_PATTERN } from 'utils/pattern';
 import { resetPassword } from 'store/user/userAPI';
 
 function ResetPassword() {
@@ -61,7 +61,7 @@ function ResetPassword() {
         >
           <TextField
             error={!!errors.password}
-            helperText={errors.password ? '請輸入有效' : undefined}
+            helperText={errors.password ? PASSWORD_HELPERTEXT : undefined}
             margin="normal"
             required
             fullWidth

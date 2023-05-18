@@ -9,7 +9,7 @@ import { UserUpdateRequestType } from 'types/request';
 import { UserDataType, UserInfoType } from '../../types/user';
 import { userApi } from './userService';
 import {
-  registerUser, userLogin, userUpdate, verifyUser,
+  registerUser, userLogin, verifyUser,
 } from './userAction';
 
 // initialize userToken from local storage
@@ -77,13 +77,6 @@ const userSlice = createSlice({
           userInfo: payload.user,
         });
       })
-      // Success: update
-      .addCase(userUpdate.fulfilled, (state, { payload }) => ({
-        ...state,
-        loading: false,
-        changed: false,
-        userInfo: payload,
-      }))
 
       // Success: verify
       .addCase(
@@ -106,26 +99,22 @@ const userSlice = createSlice({
             ...state,
             loading: false,
             userInfo: payload.user,
+            changed: false,
             userToken: payload.token,
           });
         },
       )
 
-      // Reject: patch user data
-      .addCase(
-        userUpdate.rejected,
-        (state, { payload }: any) => {
-          toast.error(payload.message);
-          return (
-            {
-              ...state,
-              loading: false,
-              error: payload,
-              success: false,
-            }
-          );
-        },
+    // Success: token login
+      .addMatcher(
+        userApi.endpoints.getAuthtoken.matchFulfilled,
+        (state, { payload }) => ({
+          ...state,
+          userInfo: payload,
+          changed: false,
+        }),
       )
+
       // Success: avatar upload
       .addMatcher(
         userApi.endpoints.updateAvatar.matchFulfilled,
@@ -135,22 +124,12 @@ const userSlice = createSlice({
         },
       )
 
-      // Success: token login
-      .addMatcher(
-        userApi.endpoints.getAuthtoken.matchFulfilled,
-        (state, { payload }) => ({
-          ...state,
-          userInfo: payload,
-        }),
-      )
-
       // Pending:
       .addMatcher(
         isAnyOf(
           registerUser.pending,
           userLogin.pending,
           verifyUser.pending,
-          userUpdate.pending,
         ),
         (state) => ({
           ...state,
@@ -158,6 +137,7 @@ const userSlice = createSlice({
           error: null,
         }),
       )
+
       // reject
       .addMatcher(isAnyOf(
         registerUser.rejected,

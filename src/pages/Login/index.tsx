@@ -20,7 +20,9 @@ import LockIcon from '@mui/icons-material/Lock';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { IconButton, Link } from '@mui/material';
-import { EMAIL_PATTERN, PASSWORD_PATTERN } from 'utils/pattern';
+import {
+  EMAIL_HELPERTEXT, EMAIL_PATTERN, PASSWORD_HELPERTEXT, PASSWORD_PATTERN,
+} from 'utils/pattern';
 
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -83,7 +85,7 @@ export default function Login() {
         >
           <TextField
             error={!!errors.email}
-            helperText={errors.email ? '請輸入有效的電子郵件地址' : undefined}
+            helperText={errors.email ? EMAIL_HELPERTEXT : undefined}
             margin="normal"
             required
             fullWidth
@@ -101,7 +103,7 @@ export default function Login() {
           />
           <TextField
             error={!!errors.password}
-            helperText={errors.password ? '密碼必須包含至少一個小寫字母、一個大寫字母、一個數字和一個特殊字符（!@#$%），並且長度在8到24個字符之間。' : undefined}
+            helperText={errors.password ? PASSWORD_HELPERTEXT : undefined}
             margin="normal"
             required
             fullWidth

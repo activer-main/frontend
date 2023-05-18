@@ -21,33 +21,41 @@ import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import { useBeforeUnload } from 'hooks/useBeforeUnload';
 import { blue } from '@mui/material/colors';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import {
+  PHONE_HELPERTEXT,
+  PHONE_PATTERN,
+  USERNAME_HELPERTEXT,
+  USERNAME_PATTERN,
+} from 'utils/pattern';
+import { UserUpdateRequestType } from 'types/request';
+import Location from './components/Location';
 import AvatarUpload from './components/AvatarUpload';
-import CityCountyData from './countyArea.json';
 import Profession from './components/Profession';
 
 function Profile() {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector(selectUserInfo);
   const {
-    username, email, phone, birthday, county, gender,
-    area,
+    username, email, phone, birthday, gender,
   } = userInfo!;
+  const { register, handleSubmit, formState: { errors } } = useForm<UserUpdateRequestType>();
   const [updateUser, { isLoading }] = useUpdateUserMutation();
+
   const updateUserInfo = useAppSelector(selectUpdateUserInfo);
   const { changed } = useAppSelector(selectUserData);
 
-  const handleSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
+  const onSubmit: SubmitHandler<UserUpdateRequestType> = async () => {
     await updateUser(updateUserInfo)
       .unwrap()
       .then(() => toast.success('修改成功!'))
-      .catch((error: any) => toast.error(error.data.message));
+      .catch((e: any) => toast.error(e.data.message));
   };
 
   useBeforeUnload(changed, '尚未儲存，請問是否離開此頁面?');
 
   return (
-    <Container maxWidth="xl" component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+    <Container maxWidth="xl" component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2 }}>
       <Stack spacing={3}>
 
         <Paper
@@ -70,21 +78,25 @@ function Profile() {
             <AvatarUpload />
             <Stack direction="column" spacing={3}>
               <TextField
+                error={!!errors.username}
+                helperText={errors.username ? USERNAME_HELPERTEXT : undefined}
                 sx={{
                   '& input': {
                     fontSize: '2rem',
                     fontWeight: 'bold',
                   },
                 }}
-                name="username"
                 variant="standard"
                 value={username || ''}
-                onChange={(e) => dispatch(setUserInfo({ key: 'username', value: e.target.value }))}
+                {...register('username', {
+                  required: true,
+                  pattern: USERNAME_PATTERN,
+                  onChange: (e) => dispatch(setUserInfo({ key: 'username', value: e.target.value })),
+                })}
               />
               <TextField
                 size="small"
                 variant="standard"
-                name="email"
                 label="Email"
                 value={email}
                 disabled
@@ -114,15 +126,16 @@ function Profile() {
             <FormControl>
               <InputLabel>性別</InputLabel>
               <Select
-                name="gender"
                 label="性別"
                 defaultValue={gender}
-                onChange={(e) => dispatch(setUserInfo({ key: 'gender', value: e.target.value }))}
+                {...register('gender', {
+                  required: true,
+                  onChange: (e) => dispatch(setUserInfo({ key: 'gender', value: e.target.value })),
+                })}
               >
                 <MenuItem value="Male">男性</MenuItem>
                 <MenuItem value="Female">女性</MenuItem>
                 <MenuItem value="Undefined">其他</MenuItem>
-
               </Select>
             </FormControl>
 
@@ -137,54 +150,18 @@ function Profile() {
               </DemoContainer>
             </LocalizationProvider>
             <TextField
-              name="phone"
+              error={!!errors.phone}
+              helperText={errors.phone ? PHONE_HELPERTEXT : undefined}
               label="電話"
-              inputProps={{
-                pattern: '^[0-9]{10}$',
-                title: '電話欄位需為10位數字',
-              }}
               value={phone || undefined}
-              onChange={(e) => dispatch(setUserInfo({ key: 'phone', value: e.target.value }))}
+              {...register('phone', {
+                pattern: PHONE_PATTERN,
+                onChange: (e) => dispatch(setUserInfo({ key: 'phone', value: e.target.value })),
+              })}
             />
 
             <Stack direction="row" spacing={2}>
-              {/* Country */}
-              <FormControl sx={{ width: '100%' }}>
-                <InputLabel>縣市</InputLabel>
-                <Select
-                  fullWidth
-                  label="縣市"
-                  name="county"
-                  onChange={(e) => dispatch(setUserInfo({ key: 'county', value: e.target.value }))}
-                  defaultValue={county || undefined}
-                >
-                  <MenuItem value={undefined}>未選擇</MenuItem>
-                  {CityCountyData.map((c) => (
-                    <MenuItem value={c.CityName} key={c.CityName}>{c.CityName}</MenuItem>
-                  ))}
-
-                </Select>
-              </FormControl>
-              <FormControl sx={{ width: '100%' }}>
-                <InputLabel>區鄉鎮</InputLabel>
-                <Select
-                  label="區鄉鎮"
-                  name="area"
-                  defaultValue={area || undefined}
-                >
-                  <MenuItem value={undefined}>未選擇</MenuItem>
-                  {
-                    CityCountyData.find(
-                      (c) => c.CityName === county,
-                    )?.AreaList.map((a) => (
-                      <MenuItem value={a.AreaName} key={a.AreaName}>
-                        { a.AreaName}
-                      </MenuItem>
-                    ))
-                  }
-
-                </Select>
-              </FormControl>
+              <Location />
             </Stack>
           </Stack>
         </Paper>

@@ -1,12 +1,11 @@
-import { UserInfoType } from 'types/user';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
 import { RegisterRequestType } from 'types/request';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  VerifyRequestType, UserUpdateRequestType, LoginRequestType,
+  VerifyRequestType, LoginRequestType,
 } from '../../types/request';
 import {
-  getVerifyUser, postLogin, postRegist, patchUserData,
+  getVerifyUser, postLogin, postRegist,
 } from './userAPI';
 
 // Register
@@ -34,22 +33,6 @@ LoginRequestType
   async (loginBody: LoginRequestType, { rejectWithValue }) => {
     try {
       const { data } = await postLogin(loginBody);
-      return data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
-  },
-);
-
-// update
-export const userUpdate = createAsyncThunk<
-UserInfoType,
-UserUpdateRequestType
->(
-  'auth/update',
-  async (newUserData: UserUpdateRequestType, { rejectWithValue }) => {
-    try {
-      const { data } = await patchUserData(newUserData);
       return data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

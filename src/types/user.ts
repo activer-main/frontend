@@ -15,13 +15,27 @@ export interface UserInfoType {
   avatar: string | null;
   gender: string | null;
   birthday: string | null;
-  profession: {
-    id: number;
-    profession: string ;
-  }[] | null;
+  profession: ProfessionType[] | null;
   phone: string | null;
   county: string | null;
   area: string | null;
+}
+
+export interface LocationType {
+  id: number;
+  cityName: string;
+  cityEngName: string;
+  areas:[
+    { id: number,
+      zipCode: string,
+      areaName:string,
+      areaEngName: string },
+  ]
+}
+
+export interface ProfessionType {
+  id: number;
+  profession: string;
 }
 
 export interface TokenType {
