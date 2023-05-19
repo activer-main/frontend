@@ -1,40 +1,42 @@
-import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-import SearchIcon from '@mui/icons-material/Search';
-import {
-  CircularProgress,
-  Container, Divider, LinearProgress, Skeleton, Stack,
-} from '@mui/material';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import Dialog from '@mui/material/Dialog';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid';
-import Pagination from '@mui/material/Pagination';
-import Slide from '@mui/material/Slide';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
-import { TransitionProps } from '@mui/material/transitions';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import InputAdornment from '@mui/material/InputAdornment';
-import { MainCard } from 'components/Card';
-import dayjs from 'dayjs';
 import React from 'react';
+import _ from 'lodash';
+import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from 'store';
 import {
   useGetSearchActivityQuery,
 } from 'store/search/searchService';
-import { useGetLocationTagQuery, useGetFieldTagQuery } from 'store/tag/tagService';
-import { useAppDispatch, useAppSelector } from 'store';
 import {
-  removeAllByType, selectSearchState, setField, setLocation, setValue,
+  removeAllByType,
+  selectSearchState,
+  setField,
+  setLocation,
+  setValue,
 } from 'store/search/searchSlice';
-import _ from 'lodash';
-import { ActivityDataType } from 'types/data';
+import { useGetFieldTagQuery, useGetLocationTagQuery } from 'store/tag/tagService';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TransitionProps } from '@mui/material/transitions';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import {
+  CircularProgress,
+  Container,
+  Divider,
+  Button,
+  Grid,
+  TextField,
+  InputAdornment,
+  Dialog,
+  Pagination,
+  Slide,
+} from '@mui/material';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+import SearchIcon from '@mui/icons-material/Search';
 import TagManage from './TagManage';
+import SearchResult from './components/SearchResult';
+import SearchTagSelect from './components/SearchTagSelect';
 
 const SlideTransition = React.forwardRef((
   props: TransitionProps & {
@@ -43,32 +45,6 @@ const SlideTransition = React.forwardRef((
   ref: React.Ref<unknown>,
 ) => <Slide direction="up" ref={ref} {...props} />);
 
-interface SearchResultType {
-  isLoading: boolean;
-  searchResultData?: ActivityDataType[]
-}
-
-function SearchResult({ isLoading, searchResultData }: SearchResultType) {
-  if (isLoading) {
-    return <LinearProgress />;
-  }
-  if (!searchResultData) {
-    return <Typography variant="h4">查無資料</Typography>;
-  }
-
-  return (
-    <>
-      {
-        searchResultData.map((activity) => (
-          <Grid item xs={12} sm={6} md={4} xl={3} key={activity.id}>
-            <MainCard {...activity} />
-          </Grid>
-        ))
-      }
-    </>
-  );
-}
-
 function Search() {
   // hooks implementation
   const dispatch = useAppDispatch();
@@ -76,8 +52,8 @@ function Search() {
   const searchState = useAppSelector(selectSearchState);
 
   // search data by rtk query
-  const { data: locationTagData } = useGetLocationTagQuery();
-  const { data: fieldTagData } = useGetFieldTagQuery();
+  const { data: locationTagData, isLoading: isGettingLocationTag } = useGetLocationTagQuery();
+  const { data: fieldTagData, isLoading: isGettingFieldTag } = useGetFieldTagQuery();
   const { data: searchData, isLoading } = useGetSearchActivityQuery({
     keyword: searchParams.get('keyword') || '',
     tags: searchParams.getAll('tags') || [],
@@ -166,63 +142,24 @@ function Search() {
         <Grid container spacing={1} alignItems="center" sx={{ mt: 1, mb: 1 }}>
 
           {/* Location */}
-          <Grid item xs={12} md={1}>
-            <Typography variant="h5">
-              地區
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={11}>
+          <SearchTagSelect
+            label="地區"
+            isLoading={isGettingLocationTag}
+            tagData={locationTagData}
+            selectedTags={searchState.field}
+            onChange={(tag) => dispatch(setLocation(tag))}
+            onClear={() => dispatch(removeAllByType('location'))}
+          />
 
-            {!isLoading ? locationTagData?.map((tag) => (
-              <FormControlLabel
-                key={tag.id}
-                componentsProps={{
-                  typography: { variant: 'caption' },
-                }}
-                label={tag.text}
-                checked={_.some(searchState.location, (stateTag) => _.isEqual(stateTag, tag))}
-                control={<Checkbox />}
-                onChange={() => dispatch(setLocation(tag))}
-              />
-            ))
-              : (
-                <Stack spacing={3} direction="row">
-                  <Skeleton variant="rectangular" width={40} />
-                  <Skeleton variant="rectangular" width={40} />
-                  <Skeleton variant="rectangular" width={40} />
-                  <Skeleton variant="rectangular" width={40} />
-                </Stack>
-              )}
-            <Button onClick={() => dispatch(removeAllByType('location'))}>清除選擇</Button>
-          </Grid>
           {/* Field */}
-          <Grid item xs={12} md={1}>
-            <Typography variant="h5">
-              領域
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={11}>
-            {!isLoading ? fieldTagData?.map((tag) => (
-              <FormControlLabel
-                componentsProps={{
-                  typography: { variant: 'caption' },
-                }}
-                checked={_.some(searchState.field, (stateTag) => _.isEqual(stateTag, tag))}
-                key={tag.id}
-                control={<Checkbox />}
-                label={tag.text}
-                onChange={() => dispatch(setField(tag))}
-              />
-            )) : (
-              <Stack spacing={3} direction="row">
-                <Skeleton variant="rectangular" width={40} />
-                <Skeleton variant="rectangular" width={40} />
-                <Skeleton variant="rectangular" width={40} />
-                <Skeleton variant="rectangular" width={40} />
-              </Stack>
-            ) }
-            <Button onClick={() => dispatch(removeAllByType('field'))}>清除選擇</Button>
-          </Grid>
+          <SearchTagSelect
+            label="領域"
+            isLoading={isGettingFieldTag}
+            tagData={fieldTagData}
+            selectedTags={searchState.field}
+            onChange={(tag) => dispatch(setField(tag))}
+            onClear={() => dispatch(removeAllByType('field'))}
+          />
         </Grid>
 
         {/* Tag Manage */}
@@ -244,7 +181,6 @@ function Search() {
       {/* Result */}
 
       <Grid container spacing={3}>
-
         <SearchResult isLoading={isLoading} searchResultData={searchData?.searchResultData} />
       </Grid>
 
