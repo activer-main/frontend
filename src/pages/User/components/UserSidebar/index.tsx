@@ -14,7 +14,7 @@ import Person2Icon from '@mui/icons-material/Person2';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAppDispatch } from 'store';
-import { logout } from 'store/auth/authSlice';
+import { logout } from 'store/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { Stack, Typography } from '@mui/material';
 

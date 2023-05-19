@@ -9,11 +9,11 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { useAppDispatch, useAppSelector } from 'store';
-import { logout, selectUserInfo } from 'store/auth/authSlice';
+import { logout, selectUserInfo } from 'store/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { userNavigationItems } from 'pages/User/components/UserSidebar';
 
-export default function AccountMenu() {
+export default function UserAvatar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { username, avatar } = useAppSelector(selectUserInfo)!;
@@ -81,11 +81,13 @@ export default function AccountMenu() {
       >
 
         {/* User navigation */}
-        {Object.values(userNavigationItems).map((item) => (
-          <MenuItem onClick={() => {
-            setAnchorEl(null);
-            navigate(item.link);
-          }}
+        {Object.values(userNavigationItems).map((item, index) => (
+          <MenuItem
+            onClick={() => {
+              setAnchorEl(null);
+              navigate(item.link);
+            }}
+            key={index}
           >
             {item.icon}
             {' '}

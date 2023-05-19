@@ -23,7 +23,7 @@ export type UserUpdateRequestType = {
   profession? : string[] | null;
   phone?: string | null;
   county?: string | null;
-  area?: string | null;
+  area?: string | null
 };
 
 export type VerifyRequestType = {
@@ -50,3 +50,9 @@ export interface ActivitiesRequestType extends SegmentRequestType {
 }
 
 export type ActivityStatusRequestType = { id: ActivityDataType['id']; status: ActivityDataType['status'] };
+
+export type ResetPasswordRequestType = {
+  email:string;
+  token: string;
+  password: string;
+};

@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'utils/apiURL';
-import { UserInfoType } from 'types/user';
+import { UserInfoType, ProfessionType, LocationType } from 'types/user';
 import { UserUpdateRequestType } from '../../types/request';
 
-export const authApi = createApi({
-  reducerPath: 'authApi',
+export const userApi = createApi({
+  reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
     baseUrl: URL.concat('/api/user'),
     prepareHeaders: (headers) => {
@@ -43,7 +43,25 @@ export const authApi = createApi({
         responseHandler: (response) => response.text(),
       }),
     }),
+    getProfessions: builder.query<ProfessionType[], void>({
+      query: () => ({
+        url: 'professions',
+        method: 'GET',
+      }),
+    }),
+    getLocations: builder.query<LocationType[], void>({
+      query: () => ({
+        url: 'locations',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useGetAuthtokenQuery, useUpdateUserMutation, useUpdateAvatarMutation } = authApi;
+export const {
+  useGetAuthtokenQuery,
+  useUpdateUserMutation,
+  useUpdateAvatarMutation,
+  useGetProfessionsQuery,
+  useGetLocationsQuery,
+} = userApi;

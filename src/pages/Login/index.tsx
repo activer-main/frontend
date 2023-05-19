@@ -1,4 +1,3 @@
-/* eslint-disable */
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,23 +10,25 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from 'store';
-import { userLogin } from 'store/auth/authAction';
+import { userLogin } from 'store/user/userAction';
 import { toast } from 'react-toastify';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { selectUserInfo } from 'store/auth/authSlice';
+import { selectUserInfo } from 'store/user/userSlice';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import LockIcon from '@mui/icons-material/Lock';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { IconButton, Link } from '@mui/material';
-import {EMAIL_PATTERN} from 'utils/pattern'
+import {
+  EMAIL_HELPERTEXT, EMAIL_PATTERN, PASSWORD_HELPERTEXT, PASSWORD_PATTERN,
+} from 'utils/pattern';
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userInfo = useAppSelector(selectUserInfo);
-  const { loading } = useAppSelector((state) => state.auth);
+  const { loading } = useAppSelector((state) => state.user);
   const [showPassword, setShowPassword] = React.useState(false);
   const {
     register, handleSubmit, formState: { errors },
@@ -37,9 +38,9 @@ export default function Login() {
     dispatch(userLogin(data))
       .unwrap()
       .then(() => {
-        const next =localStorage.getItem('next')
-        if(next){
-          navigate(next)
+        const next = localStorage.getItem('next');
+        if (next) {
+          navigate(next);
         }
         navigate('/');
       })
@@ -53,7 +54,6 @@ export default function Login() {
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
-
 
   React.useEffect(() => {
     if (userInfo) {
@@ -85,7 +85,7 @@ export default function Login() {
         >
           <TextField
             error={!!errors.email}
-            helperText={errors.email ? '請輸入有效的電子郵件地址': undefined}
+            helperText={errors.email ? EMAIL_HELPERTEXT : undefined}
             margin="normal"
             required
             fullWidth
@@ -102,6 +102,8 @@ export default function Login() {
             {...register('email', { required: true, pattern: EMAIL_PATTERN })}
           />
           <TextField
+            error={!!errors.password}
+            helperText={errors.password ? PASSWORD_HELPERTEXT : undefined}
             margin="normal"
             required
             fullWidth
@@ -128,8 +130,9 @@ export default function Login() {
                 </InputAdornment>
               ),
             }}
-            {...register('password', { 
+            {...register('password', {
               required: true,
+              pattern: PASSWORD_PATTERN,
             })}
           />
 
@@ -154,9 +157,9 @@ export default function Login() {
                     color: 'secondary.dark',
                   },
                 }}
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/forgetPassword')}
               >
-                立即註冊
+                忘記密碼?
               </Link>
             </Grid>
             <Grid item>
@@ -189,4 +192,3 @@ export default function Login() {
 
   );
 }
-/* eslin-enable */
