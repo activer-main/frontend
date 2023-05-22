@@ -62,6 +62,6 @@ export const {
   useGetAuthtokenQuery,
   useUpdateUserMutation,
   useUpdateAvatarMutation,
-  useGetProfessionsQuery,
-  useGetLocationsQuery,
+  useLazyGetLocationsQuery,
+  useLazyGetProfessionsQuery,
 } = userApi;
