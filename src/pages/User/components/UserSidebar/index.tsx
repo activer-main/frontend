@@ -16,7 +16,11 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useAppDispatch } from 'store';
 import { logout } from 'store/user/userSlice';
 import { useNavigate } from 'react-router-dom';
-import { Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Stack, Typography, useMediaQuery,
+} from '@mui/material';
+import Logo from 'components/Header/Logo';
 
 export const drawerWidth = 200;
 
@@ -51,6 +55,7 @@ function UserDrawer({ setOpen, open } : UserDrawerType) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const isSmall = useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleDrawerClose = () => {
     setOpen(false);
@@ -69,14 +74,17 @@ function UserDrawer({ setOpen, open } : UserDrawerType) {
             boxSizing: 'border-box',
           },
         }}
-        variant="persistent"
+        variant={isSmall ? 'persistent' : 'temporary'}
         anchor="left"
         open={open}
+        onClose={() => setOpen(false)}
       >
         {/* Header */}
         <DrawerHeader sx={{ justifyContent: 'space-between' }}>
-          <Stack alignItems="end" direction="row" component="a" href="/" sx={{ textDecoration: 'none' }}>
-            <img src="/icon192.png" alt="activer-header-logo" width={50} />
+          <Stack alignItems="center" spacing={1} direction="row" component="a" href="/" sx={{ textDecoration: 'none' }}>
+            <Box sx={{ fontSize: '2em' }}>
+              <Logo />
+            </Box>
             <Typography variant="h5" color="secondary">ctiver</Typography>
           </Stack>
 

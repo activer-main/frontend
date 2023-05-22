@@ -20,7 +20,7 @@ export type UserUpdateRequestType = {
   username?: string | null;
   gender? : string | null;
   birthday?: string | null;
-  profession? : string[] | null;
+  professions? : string[] | null;
   phone?: string | null;
   county?: string | null;
   area?: string | null

@@ -9,8 +9,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import { useDeleteManageActivityMutation, useGetManageActivityQuery, usePostActivityStatusMutation } from 'store/activity/activityService';
 import TagIcon from '@mui/icons-material/Tag';
 import NearMeIcon from '@mui/icons-material/NearMe';
@@ -60,7 +58,6 @@ export const manageLoader:LoaderFunction = ({ request }) => {
 
 function EnhancedTable() {
   const [selected, setSelected] = React.useState<string[]>([]);
-  const [dense, setDense] = React.useState(false);
   const [updateStatus] = usePostActivityStatusMutation();
   const [deleteManageActivities] = useDeleteManageActivityMutation();
   const navigate = useNavigate();
@@ -121,10 +118,6 @@ function EnhancedTable() {
     });
   };
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
   return (
@@ -139,8 +132,6 @@ function EnhancedTable() {
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
           >
 
             {/* Header */}
@@ -189,23 +180,32 @@ function EnhancedTable() {
                       onClick={(event) => handleClick(event, row.id)}
                       scope="row"
                       padding="none"
+                      sx={{ minWidth: '20em' }}
                     >
                       <Stack spacing={2} direction="row" alignItems="center" sx={{ p: 5 }}>
 
-                        <Typography variant="body1">
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            display: '-webkit-box',
+                            overflow: 'hidden',
+                            WebkitBoxOrient: 'vertical',
+                            WebkitLineClamp: 2,
+                          }}
+                        >
                           {row.title}
                         </Typography>
                       </Stack>
                     </TableCell>
 
                     {/* Trend */}
-                    <TableCell align="right">{row.trend}</TableCell>
+                    <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.trend}</TableCell>
 
                     {/* Created Time */}
-                    <TableCell align="right">{row.createAt && format(parseISO(row.createAt), 'yyyy/M/d')}</TableCell>
+                    <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.createAt && format(parseISO(row.createAt), 'yyyy/M/d')}</TableCell>
 
                     {/* Add time */}
-                    <TableCell align="right">{row.addTime && format(parseISO(row.addTime), 'yyyy/M/d')}</TableCell>
+                    <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.addTime && format(parseISO(row.addTime), 'yyyy/M/d')}</TableCell>
 
                     {/* 標籤 */}
                     <TableCell align="left" sx={{ width: '20px' }}>
@@ -286,10 +286,6 @@ function EnhancedTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="密集排列"
-      />
     </Box>
   );
 }

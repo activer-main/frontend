@@ -30,7 +30,9 @@ function Haeder() {
         {/* Logo */}
 
         <Stack direction="row" alignItems="baseline" spacing={4}>
-          <Logo />
+          <Box sx={{ fontSize: '3em' }}>
+            <Logo />
+          </Box>
 
           {/* Navigation */}
           {!isMobile ? <Navigation />
