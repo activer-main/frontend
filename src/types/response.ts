@@ -17,10 +17,10 @@ export interface ActivityResponseType extends SegmentResponseType {
 }
 
 export interface SearchResponseType extends SegmentResponseType {
-  keyword: string;
-  tags: TagDataType[];
-  date: string;
-  searchResultData: ActivityDataType[];
+  keyword: string | null;
+  tags: TagDataType[] | null;
+  date: string | null;
+  searchData: ActivityDataType[];
 }
 
 export interface LoginResponseType {

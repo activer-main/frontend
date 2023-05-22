@@ -13,6 +13,10 @@ function SearchResult({ isLoading, searchResultData }: SearchResultType) {
     return <Grid item><LinearProgress /></Grid>;
   }
   if (!searchResultData) {
+    return null;
+  }
+
+  if (!(searchResultData?.length > 0)) {
     return (
       <Grid item xs={12}>
         <Typography variant="h4">查無資料</Typography>

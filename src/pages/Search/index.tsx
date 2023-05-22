@@ -1,25 +1,21 @@
 import React from 'react';
-import _ from 'lodash';
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store';
 import {
-  useGetSearchActivityQuery,
-} from 'store/search/searchService';
-import {
   removeAllByType,
   selectSearchState,
-  setField,
+  setArea,
   setLocation,
   setValue,
 } from 'store/search/searchSlice';
-import { useGetFieldTagQuery, useGetLocationTagQuery } from 'store/tag/tagService';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TransitionProps } from '@mui/material/transitions';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import { useGetTagsQuery } from 'store/tag/tagService';
 import {
   CircularProgress,
   Container,
@@ -31,9 +27,11 @@ import {
   Dialog,
   Pagination,
   Slide,
+  Box,
 } from '@mui/material';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import SearchIcon from '@mui/icons-material/Search';
+import { useGetSearchActivityQuery } from 'store/search/searchService';
 import TagManage from './TagManage';
 import SearchResult from './components/SearchResult';
 import SearchTagSelect from './components/SearchTagSelect';
@@ -52,14 +50,16 @@ function Search() {
   const searchState = useAppSelector(selectSearchState);
 
   // search data by rtk query
-  const { data: locationTagData, isLoading: isGettingLocationTag } = useGetLocationTagQuery();
-  const { data: fieldTagData, isLoading: isGettingFieldTag } = useGetFieldTagQuery();
+  const { data: locationTagData, isLoading: isGettingLocationTag } = useGetTagsQuery({ type: ['location'] });
+  const { data: areaTagData, isLoading: isGettingAreaTag } = useGetTagsQuery({ type: ['area'] });
   const { data: searchData, isLoading } = useGetSearchActivityQuery({
     keyword: searchParams.get('keyword') || '',
     tags: searchParams.getAll('tags') || [],
     date: searchParams.get('date') || '',
     page: parseInt(searchParams.get('page') || '1', 10),
-    countPerPage: 10,
+    countPerPage: 24,
+  }, {
+    skip: searchParams.toString() === '',
   });
 
   // component @TagManage dialog display
@@ -67,23 +67,23 @@ function Search() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+  const handleSubmit = (event :React.SyntheticEvent) => {
     event.preventDefault();
-    const newSearchParam = new URLSearchParams({
-      keyword: searchState.keyword,
-      tags: _.join(_.map(searchState.tags, 'text'), ','),
-      date: searchState.date,
-      page: searchState.page.toString(),
+    setSearchParams((prevSearchParam) => {
+      prevSearchParam.delete('tags');
+      searchState.tags.map((tag) => prevSearchParam.append('tags', tag.text));
+      prevSearchParam.set('keyword', searchState.keyword);
+      prevSearchParam.set('date', searchState.date);
+      return prevSearchParam;
     });
-    setSearchParams(newSearchParam);
   };
 
   return (
-    <>
+    <Container maxWidth="xl">
       {/* Search Control Form */}
-      <Container component="form" sx={{ mt: 1, mb: 1 }} onSubmit={handleSubmit}>
+      <Box component="form" sx={{ mt: 1, mb: 1, pb: 1 }} onSubmit={handleSubmit}>
 
         {/* Basic Search setting */}
         <Grid container spacing={3} alignItems="center">
@@ -146,7 +146,7 @@ function Search() {
             label="地區"
             isLoading={isGettingLocationTag}
             tagData={locationTagData}
-            selectedTags={searchState.field}
+            selectedTags={searchState.location}
             onChange={(tag) => dispatch(setLocation(tag))}
             onClear={() => dispatch(removeAllByType('location'))}
           />
@@ -154,11 +154,11 @@ function Search() {
           {/* Field */}
           <SearchTagSelect
             label="領域"
-            isLoading={isGettingFieldTag}
-            tagData={fieldTagData}
-            selectedTags={searchState.field}
-            onChange={(tag) => dispatch(setField(tag))}
-            onClear={() => dispatch(removeAllByType('field'))}
+            isLoading={isGettingAreaTag}
+            tagData={areaTagData}
+            selectedTags={searchState.area}
+            onChange={(tag) => dispatch(setArea(tag))}
+            onClear={() => dispatch(removeAllByType('area'))}
           />
         </Grid>
 
@@ -171,39 +171,42 @@ function Search() {
           fullScreen={fullScreen}
           TransitionComponent={fullScreen ? SlideTransition : undefined}
           onClose={handleClose}
-          scroll="paper"
+          maxWidth="lg"
+          fullWidth
         >
-          <TagManage onClose={handleClose} />
+          <TagManage onClose={handleClose} onSearch={(event) => handleSubmit(event)} />
         </Dialog>
 
-      </Container>
+      </Box>
 
       {/* Result */}
 
       <Grid container spacing={3}>
-        <SearchResult isLoading={isLoading} searchResultData={searchData?.searchResultData} />
+        <SearchResult isLoading={isLoading} searchResultData={searchData?.searchData} />
       </Grid>
 
       {/* Pagination */}
-      <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignContent="center"
-        marginTop={1}
-      >
-        <Pagination
-          count={10}
-          onChange={(event, number) => {
-            setSearchParams((prevSearchParam) => {
-              prevSearchParam.set('page', number.toString());
-              return prevSearchParam;
-            });
-          }}
-        />
-
-      </Grid>
-    </>
+      {searchData
+      && (
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignContent="center"
+          marginTop={1}
+        >
+          <Pagination
+            count={searchData?.totalPage}
+            onChange={(event, number) => {
+              setSearchParams((prevSearchParam) => {
+                prevSearchParam.set('page', number.toString());
+                return prevSearchParam;
+              });
+            }}
+          />
+        </Grid>
+      )}
+    </Container>
   );
 }
 

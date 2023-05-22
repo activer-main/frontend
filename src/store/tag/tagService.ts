@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'utils/apiURL';
 import { TagDataType } from 'types/data';
+import qs from 'qs';
+import { TagsRequestType } from '../../types/request';
 
 export const tagApi = createApi({
   reducerPath: 'tagApi',
@@ -13,26 +15,19 @@ export const tagApi = createApi({
       }
       return headers;
     },
+    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
   }),
   endpoints: (builder) => ({
-    getLocationTag: builder.query<
-    TagDataType[], void>({
-      query: () => ({
-        url: 'location',
+    getTags: builder.query<TagDataType[], TagsRequestType>({
+      query: (params) => ({
+        url: '',
         method: 'GET',
-      }),
-    }),
-    getFieldTag: builder.query<
-    TagDataType[], void>({
-      query: () => ({
-        url: 'field',
-        method: 'GET',
+        params,
       }),
     }),
   }),
 });
 
 export const {
-  useGetLocationTagQuery,
-  useGetFieldTagQuery,
+  useGetTagsQuery,
 } = tagApi;

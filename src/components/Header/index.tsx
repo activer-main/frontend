@@ -20,7 +20,7 @@ function Haeder() {
   const navigate = useNavigate();
 
   return (
-    <Container maxWidth="lg" sx={{ p: 1 }}>
+    <Container maxWidth="xl" sx={{ p: 1 }}>
       <Box sx={{
         display: 'flex',
         justifyContent: 'space-between',

@@ -32,8 +32,9 @@ export type VerifyRequestType = {
 
 export interface SearchRequestType extends SegmentRequestType {
   keyword: string,
-  tags: string[],
-  date: string,
+  tags?: string[],
+  date?: string,
+  orderBy?: orderByUnion,
 }
 
 export enum sortByUnion {
@@ -56,3 +57,8 @@ export type ResetPasswordRequestType = {
   token: string;
   password: string;
 };
+
+export interface TagsRequestType {
+  key?: string;
+  type?: string[];
+}
