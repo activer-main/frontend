@@ -89,7 +89,9 @@ export default function UserAvatar() {
             }}
             key={index}
           >
-            {item.icon}
+            <ListItemIcon>
+              {item.icon}
+            </ListItemIcon>
             {' '}
             {item.label}
           </MenuItem>

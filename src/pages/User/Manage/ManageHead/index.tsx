@@ -128,7 +128,7 @@ export default function ManageHead(props: EnhancedTableProps) {
 
         {/* Title */}
         <TableCell align="left">
-          <Typography variant="body1">
+          <Typography variant="body1" sx={{ whiteSpace: 'nowrap' }}>
             標題
           </Typography>
         </TableCell>
@@ -158,7 +158,7 @@ export default function ManageHead(props: EnhancedTableProps) {
         ))}
         <TableCell>
           <Stack spacing={1} direction="row" alignItems="center">
-            <Typography variant="body1">
+            <Typography variant="body1" sx={{ whiteSpace: 'nowrap' }}>
               標籤
             </Typography>
             <IconButton size="small" onClick={(event) => setTagFilterAnchorEl(event.currentTarget)}>
@@ -185,7 +185,7 @@ export default function ManageHead(props: EnhancedTableProps) {
 
         <TableCell>
           <Stack spacing={1} direction="row" alignItems="center">
-            <Typography variant="body1">
+            <Typography variant="body1" sx={{ whiteSpace: 'nowrap' }}>
               狀態
             </Typography>
             <IconButton size="small" onClick={(event) => setStatusFilterAnchorEl(event.currentTarget)}>

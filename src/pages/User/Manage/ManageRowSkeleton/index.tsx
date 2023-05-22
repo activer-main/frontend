@@ -36,7 +36,21 @@ function ManageRowSkeleton() {
           <Skeleton />
         </Typography>
       </TableCell>
-      {/* <TableCell align="right">{row.createdTime}</TableCell> */}
+      <TableCell align="right">
+        <Typography variant="body1">
+          <Skeleton />
+        </Typography>
+      </TableCell>
+      <TableCell align="right">
+        <Typography variant="body1">
+          <Skeleton />
+        </Typography>
+      </TableCell>
+      <TableCell align="right">
+        <Typography variant="body1">
+          <Skeleton />
+        </Typography>
+      </TableCell>
 
       {/* 標籤 */}
       <TableCell align="left">
