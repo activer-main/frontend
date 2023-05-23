@@ -31,7 +31,7 @@ function SearchTagSelect({
             componentsProps={{
               typography: { variant: 'caption' },
             }}
-            checked={_.some(selectedTags, (stateTag) => _.isEqual(stateTag, tag))}
+            checked={selectedTags?.some((t) => t.id === tag.id)}
             key={tag.id}
             control={<Checkbox />}
             label={tag.text}

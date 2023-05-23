@@ -32,6 +32,7 @@ import {
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import SearchIcon from '@mui/icons-material/Search';
 import { useGetSearchActivityQuery } from 'store/search/searchService';
+import { toast } from 'react-toastify';
 import TagManage from './TagManage';
 import SearchResult from './components/SearchResult';
 import SearchTagSelect from './components/SearchTagSelect';
@@ -52,7 +53,9 @@ function Search() {
   // search data by rtk query
   const { data: locationTagData, isLoading: isGettingLocationTag } = useGetTagsQuery({ type: ['location'] });
   const { data: areaTagData, isLoading: isGettingAreaTag } = useGetTagsQuery({ type: ['area'] });
-  const { data: searchData, isLoading } = useGetSearchActivityQuery({
+  const {
+    data: searchData, isLoading, isError, error,
+  } = useGetSearchActivityQuery({
     keyword: searchParams.get('keyword') || '',
     tags: searchParams.getAll('tags') || [],
     date: searchParams.get('date') || '',
@@ -80,8 +83,15 @@ function Search() {
     });
   };
 
+  React.useEffect(() => {
+    if (isError) {
+      toast.error((error as any).data.message);
+    }
+  }, [isError]);
+
   return (
     <Container maxWidth="xl">
+
       {/* Search Control Form */}
       <Box component="form" sx={{ mt: 1, mb: 1, pb: 1 }} onSubmit={handleSubmit}>
 
