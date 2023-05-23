@@ -62,3 +62,7 @@ export interface TagsRequestType {
   key?: string;
   type?: string[];
 }
+
+export interface SearchHistoryRequestType extends SegmentRequestType {
+  orderBy: orderByUnion;
+}

@@ -55,3 +55,10 @@ export interface DateType {
   start: Date | null;
   end: Date | null;
 }
+
+export interface SearchHistoryDataType {
+  id: string;
+  keyword: string | null;
+  tags: TagDataType[] | null;
+  date: string | null
+}

@@ -21,6 +21,7 @@ import {
   Stack, Typography, useMediaQuery,
 } from '@mui/material';
 import Logo from 'components/Header/Logo';
+import HistoryIcon from '@mui/icons-material/History';
 
 export const drawerWidth = 200;
 
@@ -34,6 +35,11 @@ export const userNavigationItems = {
     label: '活動管理',
     link: '/user/manage',
     icon: <ManageSearchIcon />,
+  },
+  history: {
+    label: '搜尋紀錄',
+    link: '/user/history',
+    icon: <HistoryIcon />,
   },
 };
 

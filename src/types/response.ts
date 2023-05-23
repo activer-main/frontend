@@ -1,4 +1,4 @@
-import { TagDataType } from 'types/data';
+import { SearchHistoryDataType, TagDataType } from 'types/data';
 import { ActivityDataType } from './data';
 import { orderByUnion, sortByUnion } from './request';
 import { UserInfoType, TokenType } from './user';
@@ -32,4 +32,8 @@ export type RegisterResponseType = LoginResponseType;
 export interface ManageFilterValueResponseType {
   tags: TagDataType[];
   status: string[];
+}
+
+export interface SearchHistoryResponseType extends Omit<SegmentResponseType, 'sortBy' > {
+  searchData: SearchHistoryDataType[]
 }
