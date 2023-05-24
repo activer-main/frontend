@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -121,172 +120,168 @@ function EnhancedTable() {
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '95vw', mb: 2 }}>
-        {/* Toolbar */}
-        <ManageToolbar
-          numSelected={selected.length}
-          onDelete={() => deleteManageActivities(selected).unwrap().then(() => toast.success('刪除成功'))}
-        />
+    <Paper sx={{ p: 3, width: '100%' }}>
+      {/* Toolbar */}
+      <ManageToolbar
+        numSelected={selected.length}
+        onDelete={() => deleteManageActivities(selected).unwrap().then(() => toast.success('刪除成功'))}
+      />
 
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-          >
+      <TableContainer>
+        <Table>
 
-            {/* Header */}
-            <ManageHead
-              numSelected={selected.length}
-              orderBy={activityData?.orderBy || orderByUnion.DESC}
-              sortBy={activityData?.sortBy || sortByUnion.CREATEDAT}
-              onSelectAllClick={handleSelectAllClick}
-              rowCount={activityData?.searchData?.length || 0}
-            />
+          {/* Header */}
+          <ManageHead
+            numSelected={selected.length}
+            orderBy={activityData?.orderBy || orderByUnion.DESC}
+            sortBy={activityData?.sortBy || sortByUnion.CREATEDAT}
+            onSelectAllClick={handleSelectAllClick}
+            rowCount={activityData?.searchData?.length || 0}
+          />
 
-            <TableBody>
-              {isGettingActivity
+          <TableBody>
+            {isGettingActivity
               && times(5, (index) => <ManageRowSkeleton key={index} />)}
 
-              {activityData?.searchData?.map((row, index) => {
-                const isItemSelected = isSelected(row.id);
-                const labelId = `table-checkbox-${index}`;
+            {activityData?.searchData?.map((row, index) => {
+              const isItemSelected = isSelected(row.id);
+              const labelId = `table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.title}
-                    selected={isItemSelected}
-                    sx={{ cursor: 'pointer' }}
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={row.title}
+                  selected={isItemSelected}
+                  sx={{ cursor: 'pointer' }}
+                >
+
+                  {/* checkbox */}
+                  <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.id)}>
+                    <Checkbox
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        'aria-labelledby': labelId,
+                      }}
+                    />
+                  </TableCell>
+
+                  {/*  title */}
+                  <TableCell
+                    component="th"
+                    id={labelId}
+                    onClick={(event) => handleClick(event, row.id)}
+                    scope="row"
+                    padding="none"
+                    sx={{ minWidth: '20em' }}
                   >
+                    <Stack spacing={2} direction="row" alignItems="center" sx={{ p: 5 }}>
 
-                    {/* checkbox */}
-                    <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.id)}>
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          'aria-labelledby': labelId,
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          display: '-webkit-box',
+                          overflow: 'hidden',
+                          WebkitBoxOrient: 'vertical',
+                          WebkitLineClamp: 2,
                         }}
-                      />
-                    </TableCell>
-
-                    {/*  title */}
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      onClick={(event) => handleClick(event, row.id)}
-                      scope="row"
-                      padding="none"
-                      sx={{ minWidth: '20em' }}
-                    >
-                      <Stack spacing={2} direction="row" alignItems="center" sx={{ p: 5 }}>
-
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            display: '-webkit-box',
-                            overflow: 'hidden',
-                            WebkitBoxOrient: 'vertical',
-                            WebkitLineClamp: 2,
-                          }}
-                        >
-                          {row.title}
-                        </Typography>
-                      </Stack>
-                    </TableCell>
-
-                    {/* Trend */}
-                    <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.trend}</TableCell>
-
-                    {/* Created Time */}
-                    <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.createAt && format(parseISO(row.createAt), 'yyyy/M/d')}</TableCell>
-
-                    {/* Add time */}
-                    <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.addTime && format(parseISO(row.addTime), 'yyyy/M/d')}</TableCell>
-
-                    {/* 標籤 */}
-                    <TableCell align="left" sx={{ width: '20px' }}>
-                      <Stack spacing={2} direction="row">
-                        {row?.tags?.map((tag) => (
-                          <Chip
-                            key={tag.id}
-                            color={activityTypeToColor(tag.type)}
-                            icon={<TagIcon />}
-                            size="small"
-                            label={tag.text}
-                            variant="outlined"
-                          />
-                        ))}
-                      </Stack>
-                    </TableCell>
-
-                    <TableCell align="center">
-                      <Select
-                        inputProps={{ MenuProps: { disableScrollLock: true } }}
-                        autoWidth={false}
-                        defaultValue={row.status}
-                        onChange={(event) => updateStatus({
-                          id: row.id,
-                          status: event.target.value as statusUnion,
-                        })}
                       >
-                        <MenuItem value="願望" key="願望">
-                          願望
-                        </MenuItem>
-                        <MenuItem value="已註冊" key="已註冊">
-                          已註冊
-                        </MenuItem>
-                        <MenuItem value="已完成" key="已完成">
-                          已完成
-                        </MenuItem>
-                      </Select>
-                    </TableCell>
+                        {row.title}
+                      </Typography>
+                    </Stack>
+                  </TableCell>
 
-                    {/* 控制 */}
-                    <TableCell align="right">
+                  {/* Trend */}
+                  <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.trend}</TableCell>
 
-                      <Stack spacing={2} direction="row" justifyContent="flex-end">
-                        {/* Status Select */}
+                  {/* Created Time */}
+                  <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.createAt && format(parseISO(row.createAt), 'yyyy/M/d')}</TableCell>
 
-                        {/* Delete Button */}
-                        <IconButton
-                          sx={{ width: 50, height: 50 }}
-                          onClick={() => deleteManageActivities([row.id]).unwrap().then(() => toast.success('刪除成功'))}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                  {/* Add time */}
+                  <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.addTime && format(parseISO(row.addTime), 'yyyy/M/d')}</TableCell>
 
-                        <IconButton
-                          size="large"
-                          sx={{ width: 50, height: 50 }}
-                          onClick={() => navigate(`/detail/${row.id}`)}
-                        >
-                          <NearMeIcon />
-                        </IconButton>
+                  {/* 標籤 */}
+                  <TableCell align="left" sx={{ width: '20px' }}>
+                    <Stack spacing={2} direction="row">
+                      {row?.tags?.map((tag) => (
+                        <Chip
+                          key={tag.id}
+                          color={activityTypeToColor(tag.type)}
+                          icon={<TagIcon />}
+                          size="small"
+                          label={tag.text}
+                          variant="outlined"
+                        />
+                      ))}
+                    </Stack>
+                  </TableCell>
 
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={activityData?.totalData || 0}
-          rowsPerPage={activityData?.countPerPage || 5}
-          page={(activityData?.page || 1) - 1 || 0}
-          labelRowsPerPage="每頁筆數"
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </Box>
+                  <TableCell align="center">
+                    <Select
+                      inputProps={{ MenuProps: { disableScrollLock: true } }}
+                      autoWidth={false}
+                      defaultValue={row.status}
+                      onChange={(event) => updateStatus({
+                        id: row.id,
+                        status: event.target.value as statusUnion,
+                      })}
+                    >
+                      <MenuItem value="願望" key="願望">
+                        願望
+                      </MenuItem>
+                      <MenuItem value="已註冊" key="已註冊">
+                        已註冊
+                      </MenuItem>
+                      <MenuItem value="已完成" key="已完成">
+                        已完成
+                      </MenuItem>
+                    </Select>
+                  </TableCell>
+
+                  {/* 控制 */}
+                  <TableCell align="right">
+
+                    <Stack spacing={2} direction="row" justifyContent="flex-end">
+                      {/* Status Select */}
+
+                      {/* Delete Button */}
+                      <IconButton
+                        sx={{ width: 50, height: 50 }}
+                        onClick={() => deleteManageActivities([row.id]).unwrap().then(() => toast.success('刪除成功'))}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+
+                      <IconButton
+                        size="large"
+                        sx={{ width: 50, height: 50 }}
+                        onClick={() => navigate(`/detail/${row.id}`)}
+                      >
+                        <NearMeIcon />
+                      </IconButton>
+
+                    </Stack>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={activityData?.totalData || 0}
+        rowsPerPage={activityData?.countPerPage || 5}
+        page={(activityData?.page || 1) - 1 || 0}
+        labelRowsPerPage="每頁筆數"
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
   );
 }
 

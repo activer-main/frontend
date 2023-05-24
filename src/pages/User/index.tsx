@@ -15,6 +15,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  width: '100vw',
   marginLeft: `-${drawerWidth}px`,
   [theme.breakpoints.down('sm')]: {
     marginLeft: 0,
