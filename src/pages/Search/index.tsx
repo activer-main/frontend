@@ -1,6 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store';
 import {
   removeAllByType,
@@ -28,11 +28,13 @@ import {
   Pagination,
   Slide,
   Box,
+  Stack,
 } from '@mui/material';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+import HistoryIcon from '@mui/icons-material/History';
 import SearchIcon from '@mui/icons-material/Search';
-import { useGetSearchActivityQuery } from 'store/search/searchService';
 import { toast } from 'react-toastify';
+import { useGetSearchActivityQuery } from 'store/activity/activityService';
 import TagManage from './TagManage';
 import SearchResult from './components/SearchResult';
 import SearchTagSelect from './components/SearchTagSelect';
@@ -49,6 +51,7 @@ function Search() {
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchState = useAppSelector(selectSearchState);
+  const navigate = useNavigate();
 
   // search data by rtk query
   const { data: locationTagData, isLoading: isGettingLocationTag } = useGetTagsQuery({ type: ['location'] });
@@ -99,7 +102,7 @@ function Search() {
         <Grid container spacing={3} alignItems="center">
 
           {/* Keyword */}
-          <Grid item xs={12} md={7}>
+          <Grid item xs={11} md={6}>
 
             <TextField
               label="關鍵字"
@@ -121,10 +124,10 @@ function Search() {
           </Grid>
 
           {/* Date */}
-          <Grid item md={4}>
+          <Grid item md={3}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                value={dayjs(searchState.date, 'YYYY-MM-DD')}
+                value={searchState.date ? dayjs(searchState.date, 'YYYY-MM-DD') : null}
                 label="日期"
                 onChange={(newValue: dayjs.Dayjs | null) => {
                   dispatch(setValue({ key: 'date', value: newValue?.format('YYYY-MM-DD') }));
@@ -134,15 +137,23 @@ function Search() {
           </Grid>
 
           {/* Search Button */}
-          <Grid item xs={2} md={1}>
-            <Button
-              color="primary"
-              variant="contained"
-              sx={{ width: '100%', minWidth: 'initial' }}
-              type="submit"
-            >
-              <SearchIcon />
-            </Button>
+          <Grid item xs>
+            <Stack direction="row" spacing={1}>
+              <Button
+                color="primary"
+                type="button"
+                onClick={() => navigate('/user/history')}
+              >
+                <HistoryIcon />
+              </Button>
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+              >
+                <SearchIcon />
+              </Button>
+            </Stack>
           </Grid>
 
         </Grid>

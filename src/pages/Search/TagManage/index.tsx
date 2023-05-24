@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { addTag, selectSearchState } from 'store/search/searchSlice';
+import { addTag, selectSearchState, setTags } from 'store/search/searchSlice';
 import Chip from '@mui/material/Chip';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -46,13 +46,14 @@ export default function TransferList({ onClose, onSearch } : TransferListType) {
             options={allTagData ? _.sortBy(allTagData, ['type']) : []}
             groupBy={(option) => option.type}
             getOptionLabel={(option) => option.text}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
             sx={{ pt: 1 }}
             renderOption={(props, option) => (
               <Box component="li" {...props} onClick={() => dispatch(addTag(option))}>
                 <Checkbox
                   icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                   checkedIcon={<CheckBoxIcon />}
-                  checked={_.includes(selectedTags, option)}
+                  checked={!!(selectedTags.find((t) => t.id === option.id))}
                 />
                 {option.text}
               </Box>
@@ -86,6 +87,8 @@ export default function TransferList({ onClose, onSearch } : TransferListType) {
                 onDelete={() => dispatch(addTag(option))}
               />
             ))}
+            onChange={(e, value) => dispatch(setTags(value))}
+            disableCloseOnSelect
           />
 
           {/* Recommend tag */}
@@ -104,7 +107,16 @@ export default function TransferList({ onClose, onSearch } : TransferListType) {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={(event) => onSearch(event)} variant="contained">搜尋</Button>
+        <Button
+          onClick={(event) => {
+            onClose();
+            onSearch(event);
+          }}
+          variant="contained"
+        >
+          搜尋
+
+        </Button>
         <Button onClick={onClose}>關閉</Button>
       </DialogActions>
     </>

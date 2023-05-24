@@ -1,7 +1,8 @@
 import React from 'react';
 import { ActivityDataType } from 'types/data';
 import { MainCard } from 'components/Card';
-import { Grid, LinearProgress, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
+import Loading from 'components/Loading';
 
 interface SearchResultType {
   isLoading: boolean;
@@ -10,7 +11,7 @@ interface SearchResultType {
 
 function SearchResult({ isLoading, searchResultData }: SearchResultType) {
   if (isLoading) {
-    return <Grid item><LinearProgress /></Grid>;
+    return <Grid item xs={12} sx={{ height: '20em' }}><Loading /></Grid>;
   }
   if (!searchResultData) {
     return null;
