@@ -8,8 +8,7 @@ export interface ActivityTagDataType extends TagDataType {
 export interface TagDataType {
   id: number;
   type: string; // 'area' | 'location' | 'other'
-  // TODO: type nullable
-  text: string | null;
+  text: string;
 }
 
 export enum statusUnion {
@@ -55,4 +54,11 @@ export interface DateType {
   name: string | null;
   start: Date | null;
   end: Date | null;
+}
+
+export interface SearchHistoryDataType {
+  id: string;
+  keyword: string | null;
+  tags: TagDataType[] | null;
+  date: string | null
 }

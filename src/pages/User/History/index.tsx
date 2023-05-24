@@ -1,86 +1,50 @@
-import * as React from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
+import NearMeIcon from '@mui/icons-material/NearMe';
+import TagIcon from '@mui/icons-material/Tag';
+import {
+  Chip,
+  IconButton, Stack, Typography,
+} from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useDeleteManageActivityMutation, useGetManageActivityQuery, usePostActivityStatusMutation } from 'store/activity/activityService';
-import TagIcon from '@mui/icons-material/Tag';
-import NearMeIcon from '@mui/icons-material/NearMe';
-import { orderByUnion, sortByUnion } from 'types/request';
-import {
-  Chip,
-  IconButton, MenuItem, Select, Stack, Typography,
-} from '@mui/material';
-import { activityTypeToColor } from 'utils/activityTypeToColor';
-import { toast } from 'react-toastify';
-import {
-  LoaderFunction, redirect, useNavigate, useSearchParams,
-} from 'react-router-dom';
-import { times } from 'lodash';
-import { statusUnion } from 'types/data';
 import { format, parseISO } from 'date-fns';
-import ManageToolbar from './ManageToolbar';
-import ManageHead from './ManageHead';
-import ManageRowSkeleton from './ManageRowSkeleton';
+import { times } from 'lodash';
+import qs from 'qs';
+import * as React from 'react';
+import {
+  useNavigate, useSearchParams,
+} from 'react-router-dom';
+import { useGetSearchHistoryQuery } from 'store/user/userService';
+import { orderByUnion } from 'types/request';
+import { activityTypeToColor } from 'utils/activityTypeToColor';
+import HistoryToolbar from './components/HistoryToolbar';
+import HistoryRowSkeleton from './components/HistoryRowSkeleton';
+import HistoryHead from './components/HistoryHead';
 
-export const manageLoader:LoaderFunction = ({ request }) => {
-  const { searchParams } = new URL(request.url);
-  const orderBy = searchParams.get('orderBy');
-  const sortBy = searchParams.get('sortBy');
-  const isValidOrderBy = Object.values(orderByUnion).includes(orderBy as orderByUnion);
-  const isValidSortBy = Object.values(sortByUnion).includes(sortBy as sortByUnion);
-  if (!searchParams.get('page')) searchParams.set('page', '1');
-
-  if (!isValidOrderBy) {
-    if (orderBy) {
-      toast.warn('排序參數錯誤，已重新導向至降序');
-    }
-    searchParams.set('orderBy', orderByUnion.DESC);
-    return redirect(`/user/manage?${searchParams.toString()}`);
-  }
-
-  if (!isValidSortBy) {
-    if (sortBy) {
-      toast.warn('分類參數錯誤，已重新導向至熱門活動');
-    }
-    searchParams.set('sortBy', sortByUnion.TREND);
-    return redirect(`/user/manage?${searchParams.toString()}`);
-  }
-
-  return null;
-};
-
-function EnhancedTable() {
-  const [selected, setSelected] = React.useState<string[]>([]);
-  const [updateStatus] = usePostActivityStatusMutation();
-  const [deleteManageActivities] = useDeleteManageActivityMutation();
-  const navigate = useNavigate();
-
-  // fetch data by params
-  const [searchParams, setSearchParams] = useSearchParams();
-  const orderBy = searchParams.get('orderBy') as orderByUnion || orderByUnion.DESC;
-  const sortBy = searchParams.get('sortBy') as sortByUnion || sortByUnion.CREATEDAT;
-  const tags = searchParams.getAll('tags');
-  const status = searchParams.getAll('status');
-  const page = parseInt(searchParams.get('page') || '1', 10);
-  const countPerPage = parseInt(searchParams.get('countPerPage') || '5', 10);
-  const { data: activityData, isLoading: isGettingActivity } = useGetManageActivityQuery({
-    orderBy, sortBy, page, countPerPage, tags, status: status.length > 0 ? status : undefined,
+function History() {
+  const { data: historyData, isLoading: isGettingSearchHistory } = useGetSearchHistoryQuery({
+    orderBy: orderByUnion.DESC,
   });
+  const [selected, setSelected] = React.useState<string[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = activityData?.searchData?.map((n) => n.id);
+      const newSelected = historyData?.searchData?.map((n) => n.id);
       setSelected(newSelected || []);
       return;
     }
     setSelected([]);
   };
+
+  const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
     const selectedIndex = selected.indexOf(id);
@@ -117,33 +81,31 @@ function EnhancedTable() {
     });
   };
 
-  const isSelected = (id: string) => selected.indexOf(id) !== -1;
-
   return (
-    <Paper sx={{ p: 3, width: '100%' }}>
+    <Paper sx={{ width: '100%' }}>
       {/* Toolbar */}
-      <ManageToolbar
+      <HistoryToolbar
         numSelected={selected.length}
-        onDelete={() => deleteManageActivities(selected).unwrap().then(() => toast.success('刪除成功'))}
+        onDelete={() => console.log(selected)}
       />
 
       <TableContainer>
-        <Table>
+        <Table
+          sx={{ minWidth: 750 }}
+        >
 
           {/* Header */}
-          <ManageHead
+          <HistoryHead
             numSelected={selected.length}
-            orderBy={activityData?.orderBy || orderByUnion.DESC}
-            sortBy={activityData?.sortBy || sortByUnion.CREATEDAT}
             onSelectAllClick={handleSelectAllClick}
-            rowCount={activityData?.searchData?.length || 0}
+            rowCount={historyData?.searchData?.length || 0}
           />
 
           <TableBody>
-            {isGettingActivity
-              && times(5, (index) => <ManageRowSkeleton key={index} />)}
+            {isGettingSearchHistory
+              && times(parseInt(searchParams.get('countPerPage') || '5', 10), (index) => <HistoryRowSkeleton key={index} />)}
 
-            {activityData?.searchData?.map((row, index) => {
+            {historyData?.searchData?.map((row, index) => {
               const isItemSelected = isSelected(row.id);
               const labelId = `table-checkbox-${index}`;
 
@@ -153,7 +115,7 @@ function EnhancedTable() {
                   role="checkbox"
                   aria-checked={isItemSelected}
                   tabIndex={-1}
-                  key={row.title}
+                  key={row.keyword}
                   selected={isItemSelected}
                   sx={{ cursor: 'pointer' }}
                 >
@@ -169,7 +131,7 @@ function EnhancedTable() {
                     />
                   </TableCell>
 
-                  {/*  title */}
+                  {/*  Keyword */}
                   <TableCell
                     component="th"
                     id={labelId}
@@ -189,19 +151,10 @@ function EnhancedTable() {
                           WebkitLineClamp: 2,
                         }}
                       >
-                        {row.title}
+                        {row.keyword}
                       </Typography>
                     </Stack>
                   </TableCell>
-
-                  {/* Trend */}
-                  <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.trend}</TableCell>
-
-                  {/* Created Time */}
-                  <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.createAt && format(parseISO(row.createAt), 'yyyy/M/d')}</TableCell>
-
-                  {/* Add time */}
-                  <TableCell align="right" onClick={(event) => handleClick(event, row.id)}>{row.addTime && format(parseISO(row.addTime), 'yyyy/M/d')}</TableCell>
 
                   {/* 標籤 */}
                   <TableCell align="left" sx={{ width: '20px' }}>
@@ -219,38 +172,23 @@ function EnhancedTable() {
                     </Stack>
                   </TableCell>
 
-                  <TableCell align="center">
-                    <Select
-                      inputProps={{ MenuProps: { disableScrollLock: true } }}
-                      autoWidth={false}
-                      defaultValue={row.status}
-                      onChange={(event) => updateStatus({
-                        id: row.id,
-                        status: event.target.value as statusUnion,
-                      })}
-                    >
-                      <MenuItem value="願望" key="願望">
-                        願望
-                      </MenuItem>
-                      <MenuItem value="已註冊" key="已註冊">
-                        已註冊
-                      </MenuItem>
-                      <MenuItem value="已完成" key="已完成">
-                        已完成
-                      </MenuItem>
-                    </Select>
+                  {/* Date */}
+                  <TableCell
+                    align="right"
+                    onClick={(event) => handleClick(event, row.id)}
+                  >
+                    {row.date && format(parseISO(row.date), 'yyyy/M/d')}
                   </TableCell>
 
-                  {/* 控制 */}
+                  {/* Control */}
                   <TableCell align="right">
 
                     <Stack spacing={2} direction="row" justifyContent="flex-end">
-                      {/* Status Select */}
 
                       {/* Delete Button */}
                       <IconButton
                         sx={{ width: 50, height: 50 }}
-                        onClick={() => deleteManageActivities([row.id]).unwrap().then(() => toast.success('刪除成功'))}
+                        onClick={() => console.log('delete', row.id)}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -258,7 +196,11 @@ function EnhancedTable() {
                       <IconButton
                         size="large"
                         sx={{ width: 50, height: 50 }}
-                        onClick={() => navigate(`/detail/${row.id}`)}
+                        onClick={() => navigate(`/search?${qs.stringify({
+                          keyword: row.keyword,
+                          tags: row.tags?.map((t) => t.text),
+                          date: row.date && format(parseISO(row.date), 'yyyy-MM-dd'),
+                        }, { arrayFormat: 'repeat' })}`)}
                       >
                         <NearMeIcon />
                       </IconButton>
@@ -274,9 +216,9 @@ function EnhancedTable() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={activityData?.totalData || 0}
-        rowsPerPage={activityData?.countPerPage || 5}
-        page={(activityData?.page || 1) - 1 || 0}
+        count={historyData?.totalData || 0}
+        rowsPerPage={historyData?.countPerPage || 5}
+        page={(historyData?.page || 1) - 1 || 0}
         labelRowsPerPage="每頁筆數"
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
@@ -285,4 +227,4 @@ function EnhancedTable() {
   );
 }
 
-export default EnhancedTable;
+export default History;

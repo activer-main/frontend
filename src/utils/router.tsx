@@ -14,6 +14,7 @@ import User from 'pages/User';
 import MainRoute from 'routing/MainRoute';
 import Detail from 'pages/Detail';
 import Search from 'pages/Search';
+import History from 'pages/User/History';
 import Surf, { surfLoader } from 'pages/Surf';
 import Manage, { manageLoader } from 'pages/User/Manage';
 import ForgetPassword from 'pages/ForgetPassword';
@@ -83,6 +84,10 @@ const routerConfig: RouteObject[] = [
               path: 'manage',
               loader: manageLoader,
               element: <Manage />,
+            },
+            {
+              path: 'history',
+              element: <History />,
             },
           ],
         },

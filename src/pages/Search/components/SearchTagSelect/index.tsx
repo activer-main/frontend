@@ -31,7 +31,7 @@ function SearchTagSelect({
             componentsProps={{
               typography: { variant: 'caption' },
             }}
-            checked={_.some(selectedTags, (stateTag) => _.isEqual(stateTag, tag))}
+            checked={selectedTags?.some((t) => t.id === tag.id)}
             key={tag.id}
             control={<Checkbox />}
             label={tag.text}
@@ -39,7 +39,7 @@ function SearchTagSelect({
           />
         )) : (
           <Stack spacing={3} direction="row">
-            {_.times(5, () => <Skeleton variant="rectangular" width={40} />)}
+            {_.times(5, (index) => <Skeleton variant="rectangular" width={40} key={index} />)}
           </Stack>
         ) }
         <Button onClick={onClear}>清除選擇</Button>

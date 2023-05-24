@@ -4,14 +4,20 @@ import ImageSlide from 'components/ImageSlide';
 import { ActivityTagDataType, statusUnion } from 'types/data';
 import TagIcon from '@mui/icons-material/Tag';
 import { Buffer } from 'buffer';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import {
-  FcGraduationCap, FcList, FcPhone, FcReading, FcShare,
+  FcGraduationCap, FcList, FcShare,
 } from 'react-icons/fc';
 import Stack from '@mui/material/Stack';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import {
   Box,
   Checkbox,
-  Chip, CircularProgress, Container, Divider, Grid, Link, Skeleton, Tooltip, Typography,
+  Chip, CircularProgress,
+  Container,
+  Divider, Grid, Link, List,
+  ListItem, ListItemIcon, ListItemText,
+  ListSubheader, Skeleton, Tooltip, Typography,
 } from '@mui/material';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import {
@@ -129,6 +135,35 @@ function Detail() {
 
         <Grid item xs={12} md={6} sx={{ p: 2 }}>
           <BranchTabs branches={branches} />
+          <Divider />
+          <List sx={{ p: 2 }}>
+            {/* objective */}
+            <ListItem>
+              <ListItemIcon>
+                <PersonAddAlt1Icon />
+              </ListItemIcon>
+              <ListItemText>
+                活動對象
+              </ListItemText>
+              {(objectives && objectives.length > 0)
+                ? (
+                  <ListSubheader>{objectives.map((o) => o)}</ListSubheader>
+                ) : <ListSubheader>請查看下方活動內容</ListSubheader>}
+            </ListItem>
+            {/* connection */}
+            <ListItem>
+              <ListItemIcon>
+                <LocalPhoneIcon />
+              </ListItemIcon>
+              <ListItemText>
+                聯絡資訊
+              </ListItemText>
+              {(connections && connections.length > 0)
+                ? (
+                  <ListSubheader>{connections.map((o) => o)}</ListSubheader>
+                ) : <ListSubheader>請查看下方活動內容</ListSubheader>}
+            </ListItem>
+          </List>
         </Grid>
 
       </Grid>
@@ -137,22 +172,6 @@ function Detail() {
       <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
 
         {/* Object */}
-        {objectives
-        && objectives.length > 0
-          && (
-            <Box component="section">
-              <Typography variant="h5" component="h3">
-                <FcReading />
-                活動對象
-              </Typography>
-              <Divider />
-              {objectives.map((o) => (
-                <Typography variant="body1" component="p">
-                  {o}
-                </Typography>
-              ))}
-            </Box>
-          ) }
 
         {/* Content */}
         <Box component="section">
@@ -186,24 +205,6 @@ function Detail() {
                 >
                   {source}
                 </Link>
-              ))}
-            </Stack>
-          </Box>
-        )}
-
-        {/* Connection */}
-        {connections && connections.length !== 0 && (
-          <Box component="section">
-            <Typography variant="h5" component="h3">
-              <FcPhone />
-              聯絡資訊
-            </Typography>
-            <Divider />
-            <Stack direction="column">
-              {connections.map((item: string, index: number) => (
-                <Typography variant="body1" key={`detail-connection-${index}`}>
-                  {item}
-                </Typography>
               ))}
             </Stack>
           </Box>

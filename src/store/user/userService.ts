@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'utils/apiURL';
 import { UserInfoType, ProfessionType, LocationType } from 'types/user';
-import { UserUpdateRequestType } from '../../types/request';
+import { SearchHistoryResponseType } from 'types/response';
+import { UserUpdateRequestType, SearchHistoryRequestType } from '../../types/request';
 
 export const userApi = createApi({
   reducerPath: 'userApi',
@@ -16,7 +17,7 @@ export const userApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['User'],
+  tagTypes: ['User', 'SearchHistory'],
   endpoints: (builder) => ({
 
     // token login
@@ -55,6 +56,12 @@ export const userApi = createApi({
         method: 'GET',
       }),
     }),
+    getSearchHistory: builder.query<SearchHistoryResponseType, SearchHistoryRequestType>({
+      query: () => ({
+        url: 'search/history',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -62,6 +69,7 @@ export const {
   useGetAuthtokenQuery,
   useUpdateUserMutation,
   useUpdateAvatarMutation,
-  useGetProfessionsQuery,
-  useGetLocationsQuery,
+  useLazyGetLocationsQuery,
+  useLazyGetProfessionsQuery,
+  useGetSearchHistoryQuery,
 } = userApi;

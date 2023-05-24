@@ -2,8 +2,8 @@ import qs from 'qs';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'utils/apiURL';
 import { ActivityDataType } from 'types/data';
-import { ActivityResponseType, ManageFilterValueResponseType } from 'types/response';
-import { ActivityStatusRequestType, ActivitiesRequestType } from 'types/request';
+import { ActivityResponseType, ManageFilterValueResponseType, SearchResponseType } from 'types/response';
+import { ActivityStatusRequestType, ActivitiesRequestType, SearchRequestType } from 'types/request';
 import _ from 'lodash';
 
 export const activityApi = createApi({
@@ -49,7 +49,10 @@ export const activityApi = createApi({
         method: 'POST',
         params,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Activity', id: 'Manage' }, { type: 'Activity', id: 'List' }, { type: 'Activity', id }],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Activity', id: 'Manage' },
+        { type: 'Activity', id: 'List' },
+        { type: 'Activity', id }],
     }),
 
     // get manange page's activities
@@ -84,7 +87,14 @@ export const activityApi = createApi({
       }),
       providesTags: [{ type: 'Activity', id: 'Filter' }],
     }),
-
+    getSearchActivity: builder.query<SearchResponseType, SearchRequestType>({
+      query: (request) => ({
+        url: '',
+        method: 'GET',
+        params: request,
+      }),
+      providesTags: [{ type: 'Activity', id: 'List' }],
+    }),
   }),
 });
 
@@ -95,4 +105,5 @@ export const {
   usePostActivityStatusMutation,
   useDeleteManageActivityMutation,
   useGetFilterValueQuery,
+  useGetSearchActivityQuery,
 } = activityApi;

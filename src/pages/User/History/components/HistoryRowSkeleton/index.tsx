@@ -19,34 +19,12 @@ function ManageRowSkeleton() {
         />
       </TableCell>
 
-      {/* image and title */}
+      {/* Keyword */}
       <TableCell
         component="th"
         scope="row"
         padding="none"
       >
-        <Stack spacing={5} direction="row" alignItems="center" sx={{ p: 5 }}>
-          <Typography variant="body1">
-            <Skeleton />
-          </Typography>
-        </Stack>
-      </TableCell>
-      <TableCell align="right">
-        <Typography variant="body1">
-          <Skeleton />
-        </Typography>
-      </TableCell>
-      <TableCell align="right">
-        <Typography variant="body1">
-          <Skeleton />
-        </Typography>
-      </TableCell>
-      <TableCell align="right">
-        <Typography variant="body1">
-          <Skeleton />
-        </Typography>
-      </TableCell>
-      <TableCell align="right">
         <Typography variant="body1">
           <Skeleton />
         </Typography>
@@ -64,6 +42,13 @@ function ManageRowSkeleton() {
             </Skeleton>
           ))}
         </Stack>
+      </TableCell>
+
+      {/* Date */}
+      <TableCell>
+        <Typography variant="body1">
+          <Skeleton />
+        </Typography>
       </TableCell>
 
       {/* 控制 */}

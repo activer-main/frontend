@@ -160,7 +160,7 @@ export const selectUserInfo = (state: RootState) => state.user.userInfo;
 export const selectUpdateUserInfo = (state: RootState): UserUpdateRequestType => ({
   username: state.user.userInfo?.username,
   gender: state.user.userInfo?.gender,
-  profession: state.user.userInfo?.profession?.map((p) => p.profession),
+  professions: state.user.userInfo?.professions?.map((p) => p.profession),
   birthday: state.user.userInfo?.birthday,
   phone: state.user.userInfo?.phone,
   county: state.user.userInfo?.county,

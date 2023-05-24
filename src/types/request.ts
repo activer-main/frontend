@@ -20,7 +20,7 @@ export type UserUpdateRequestType = {
   username?: string | null;
   gender? : string | null;
   birthday?: string | null;
-  profession? : string[] | null;
+  professions? : string[] | null;
   phone?: string | null;
   county?: string | null;
   area?: string | null
@@ -32,8 +32,9 @@ export type VerifyRequestType = {
 
 export interface SearchRequestType extends SegmentRequestType {
   keyword: string,
-  tags: string[],
-  date: string,
+  tags?: string[],
+  date?: string,
+  orderBy?: orderByUnion,
 }
 
 export enum sortByUnion {
@@ -56,3 +57,12 @@ export type ResetPasswordRequestType = {
   token: string;
   password: string;
 };
+
+export interface TagsRequestType {
+  key?: string;
+  type?: string[];
+}
+
+export interface SearchHistoryRequestType extends SegmentRequestType {
+  orderBy: orderByUnion;
+}

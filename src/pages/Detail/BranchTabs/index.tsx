@@ -61,11 +61,13 @@ export default function BranchTabs({
                 <ListItemIcon><ShareLocationIcon /></ListItemIcon>
                 <ListItemText>活動地點</ListItemText>
                 {
-                  branch.location?.map((l, locationIndex) => (
-                    <ListSubheader key={`location-${locationIndex}`}>
-                      {l}
-                    </ListSubheader>
-                  ))
+                  (branch.location && branch.location.length > 0)
+                    ? branch.location.map((l, locationIndex) => (
+                      <ListSubheader key={`location-${locationIndex}`}>
+                        {l}
+                      </ListSubheader>
+                    ))
+                    : <ListSubheader> 請查看下方活動內容</ListSubheader>
                 }
               </ListItem>
 

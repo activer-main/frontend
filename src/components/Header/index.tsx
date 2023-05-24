@@ -20,7 +20,7 @@ function Haeder() {
   const navigate = useNavigate();
 
   return (
-    <Container maxWidth="lg" sx={{ p: 1 }}>
+    <Container maxWidth="xl" sx={{ p: 1 }}>
       <Box sx={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -30,7 +30,9 @@ function Haeder() {
         {/* Logo */}
 
         <Stack direction="row" alignItems="baseline" spacing={4}>
-          <Logo />
+          <Box sx={{ fontSize: '3em' }}>
+            <Logo />
+          </Box>
 
           {/* Navigation */}
           {!isMobile ? <Navigation />

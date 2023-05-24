@@ -4,7 +4,6 @@ import userReducer from './user/userSlice';
 import { userApi } from './user/userService';
 import searchReducer from './search/searchSlice';
 import { activityApi } from './activity/activityService';
-import { searchApi } from './search/searchService';
 import { tagApi } from './tag/tagService';
 
 const store = configureStore({
@@ -13,12 +12,10 @@ const store = configureStore({
     search: searchReducer,
     [userApi.reducerPath]: userApi.reducer,
     [activityApi.reducerPath]: activityApi.reducer,
-    [searchApi.reducerPath]: searchApi.reducer,
     [tagApi.reducerPath]: tagApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
     .concat(userApi.middleware)
-    .concat(searchApi.middleware)
     .concat(activityApi.middleware)
     .concat(tagApi.middleware),
 });
