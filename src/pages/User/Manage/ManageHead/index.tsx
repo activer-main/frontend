@@ -197,9 +197,9 @@ export default function ManageHead(props: EnhancedTableProps) {
             anchorEl={statusFilterAnchorEl}
             onClose={handleStatusFilterClose}
           >
-            {filterData?.status.map((st, index) => (
+            {filterData?.status.map((st) => (
               <MenuItem
-                key={index}
+                key={st}
                 onClick={(event) => handleStatusMenuItemClick(event, st)}
               >
                 <Checkbox checked={selectStatus.includes(st!)} />

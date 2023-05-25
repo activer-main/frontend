@@ -9,8 +9,8 @@ function Navigation() {
 
   return (
     <Stack component="nav" spacing={1} direction="row">
-      {navigations.map((nav, index) => (
-        <Button onClick={() => navigate(nav.link)} key={index}>{nav.label}</Button>
+      {navigations.map((nav) => (
+        <Button onClick={() => navigate(nav.link)} key={nav.id}>{nav.label}</Button>
       ))}
     </Stack>
   );

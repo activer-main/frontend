@@ -5,11 +5,13 @@ import { orderByUnion, sortByUnion } from 'types/request';
 
 const navigations = [
   {
+    id: 'nav-search',
     link: '/search',
     icon: <SearchIcon />,
     label: '搜尋活動',
   },
   {
+    id: 'nav-trend',
     link: `/surf?sortBy=${sortByUnion.TREND}&orderBy=${orderByUnion.DESC}`,
     icon: <FindInPageIcon />,
     label: '熱門活動',
