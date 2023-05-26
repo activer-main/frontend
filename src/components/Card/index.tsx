@@ -67,7 +67,7 @@ export default function ActionCard({
           image={imageSrc}
           alt={altText}
         />
-        <CardContent sx={{ flexGrow: 1, height: '100%' }}>
+        <CardContent sx={{ flexGrow: 1 }}>
           <Typography
             gutterBottom
             variant="h5"
@@ -81,16 +81,7 @@ export default function ActionCard({
           >
             {title || `Activity#${id.slice(0, 5)}...`}
           </Typography>
-          <Stack
-            spacing={{ xs: 1, sm: 2 }}
-            sx={{ mb: 1 }}
-            direction="row"
-            useFlexGap
-          >
-            {tags?.slice(0, 3).map((tag) => (
-              <Chip key={tag.id} icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
-            ))}
-          </Stack>
+
           <Typography
             variant="caption"
             color="primary.light"
@@ -106,10 +97,28 @@ export default function ActionCard({
           </Typography>
         </CardContent>
       </CardActionArea>
-
-      <CardActions>
+      <CardActions sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+        <Stack
+          spacing={{ xs: 1, sm: 2 }}
+          sx={{ mb: 1 }}
+          direction="row"
+          useFlexGap
+        >
+          {tags?.slice(0, 3).map((tag) => (
+            <Chip
+              key={tag.id}
+              icon={<TagIcon />}
+              label={tag.text}
+              size="small"
+              color={activityTypeToColor(tag.type)}
+              variant="outlined"
+              onClick={() => navigate(`/search?tags=${tag.text}`)}
+            />
+          ))}
+        </Stack>
         {control}
       </CardActions>
+
     </Card>
   );
 }

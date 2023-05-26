@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ImageSlide from 'components/ImageSlide';
 import { ActivityTagDataType, statusUnion } from 'types/data';
 import TagIcon from '@mui/icons-material/Tag';
@@ -30,6 +30,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import BranchTabs from './BranchTabs';
 
 function Detail() {
+  const navigate = useNavigate();
   const { id = '1' } = useParams();
   const { data, isLoading } = useGetActivityByIdQuery(id as string);
   const [updateStatus, { isLoading: isUpdating }] = usePostActivityStatusMutation();
@@ -103,7 +104,13 @@ function Detail() {
               {tags && (
                 <Stack flexWrap="wrap" spacing={3} direction="row">
                   {tags.map((tag: ActivityTagDataType) => (
-                    <Chip label={tag.text} color={activityTypeToColor(tag.type)} icon={<TagIcon />} variant="outlined" />
+                    <Chip
+                      label={tag.text}
+                      color={activityTypeToColor(tag.type)}
+                      icon={<TagIcon />}
+                      variant="outlined"
+                      onClick={() => navigate(`/search?tags=${tag.text}`)}
+                    />
                   )).slice(0, 5)}
                 </Stack>
               )}
