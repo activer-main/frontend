@@ -9,6 +9,7 @@ import {
   Container, Stack, Typography,
 } from '@mui/material';
 import Logo from './Logo';
+
 import Navigation from './Navigation';
 import UserAvatar from './UserAvatar';
 import MobileNavigation from './MobileNavigation';
@@ -30,20 +31,24 @@ function Haeder() {
         {/* Logo */}
 
         <Stack direction="row" alignItems="baseline" spacing={4}>
-          <Box sx={{
-            fontSize: '3em',
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'baseline',
-            gap: '0.3em',
-          }}
+          <Box
+            sx={{
+              fontSize: '3em',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'baseline',
+              gap: '0.3em',
+              cursor: 'pointer',
+            }}
+            component="a"
+            onClick={() => navigate('/')}
           >
             <Logo />
             <Typography
               variant="h4"
               sx={{
-                fontWeight: 800,
-                letterSpacing: '0.3em',
+                fontWeight: 700,
+                letterSpacing: '0.2em',
               }}
             >
               ctiver
@@ -69,6 +74,7 @@ function Haeder() {
             </Button>
           )}
       </Box>
+
     </Container>
   );
 }

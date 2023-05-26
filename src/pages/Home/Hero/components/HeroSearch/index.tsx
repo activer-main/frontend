@@ -26,8 +26,8 @@ function HeroSearch() {
     <Paper
       sx={{
         borderRadius: '3em',
-        height: '4em',
-        width: 'fitContent',
+        height: '2.5em',
+        width: '25em',
         maxWidth: '70%',
         display: 'flex',
         gap: '1em',
@@ -66,9 +66,8 @@ function HeroSearch() {
       />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          sx={{ width: '2' }}
+          slotProps={{ textField: { variant: 'standard', size: 'small' } }}
           value={searchState.date ? dayjs(searchState.date, 'YYYY-MM-DD') : null}
-          size=""
           label="日期"
           onChange={(newValue: dayjs.Dayjs | null) => {
             dispatch(setValue({ key: 'date', value: newValue?.format('YYYY-MM-DD') }));
