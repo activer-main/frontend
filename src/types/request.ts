@@ -46,8 +46,8 @@ export enum orderByUnion { DESC = 'descending', ASC = 'ascending'}
 export interface ActivitiesRequestType extends SegmentRequestType {
   tags?: string[];
   status?: string[] ;
-  sortBy: sortByUnion;
-  orderBy:orderByUnion;
+  sortBy?: sortByUnion;
+  orderBy?:orderByUnion;
 }
 
 export type ActivityStatusRequestType = { id: ActivityDataType['id']; status: ActivityDataType['status'] };
