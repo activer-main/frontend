@@ -37,3 +37,10 @@ export interface ManageFilterValueResponseType {
 export interface SearchHistoryResponseType extends Omit<SegmentResponseType, 'sortBy' > {
   searchData: SearchHistoryDataType[]
 }
+
+export interface ErrorResponseType {
+  data: {
+    statusCode: number;
+    message: string;
+  }
+}

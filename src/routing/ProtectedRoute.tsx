@@ -4,6 +4,7 @@ import { useAppSelector } from 'store';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useGetAuthtokenQuery } from 'store/user/userService';
 import Loading from 'components/Loading';
+import { toast } from 'react-toastify';
 
 function ProtectedRoute() {
   const { isLoading } = useGetAuthtokenQuery();
@@ -15,6 +16,7 @@ function ProtectedRoute() {
 
   // show unauthorized screen if no user is found in redux store
   if (!userInfo) {
+    toast.error('使用者未驗證，請先登入!');
     return (
       <Navigate to="/login" />
     );

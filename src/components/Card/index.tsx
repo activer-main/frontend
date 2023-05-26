@@ -18,6 +18,8 @@ import { useNavigate } from 'react-router-dom';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import { CardActionArea, CircularProgress, Skeleton } from '@mui/material';
 import { useDeleteManageActivityMutation, usePostActivityStatusMutation } from 'store/activity/activityService';
+import { toast } from 'react-toastify';
+import { ErrorResponseType } from 'types/response';
 
 export interface CardType {
   id: string;
@@ -135,7 +137,14 @@ export function MainCard({ ...props }: ActivityDataType) {
     if (status === statusUnion.DREAM) {
       deleteStatus([id]);
     } else if (status === null) {
-      updateStatus({ id, status: '願望' as statusUnion });
+      updateStatus({ id, status: '願望' as statusUnion })
+        .unwrap()
+        .catch((error: ErrorResponseType) => {
+          toast.error(error.data.message);
+          if (error.data.statusCode === 401) {
+            navigate('/login');
+          }
+        });
     }
   };
 

@@ -19,6 +19,11 @@ function Verify() {
   const [resendLoading, setResendLoading] = React.useState(false);
 
   React.useEffect(() => () => {
+    if (!userInfo) {
+      toast.error('使用者未驗證，請先登入!');
+      navigate('/login');
+    }
+
     if (userInfo?.emailVerified) {
       navigate('/user/profile');
     }
