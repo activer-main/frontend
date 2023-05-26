@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import LoginIcon from '@mui/icons-material/Login';
 import {
-  Container, Stack,
+  Container, Stack, Typography,
 } from '@mui/material';
 import Logo from './Logo';
 import Navigation from './Navigation';
@@ -30,8 +30,24 @@ function Haeder() {
         {/* Logo */}
 
         <Stack direction="row" alignItems="baseline" spacing={4}>
-          <Box sx={{ fontSize: '3em' }}>
+          <Box sx={{
+            fontSize: '3em',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'baseline',
+            gap: '0.3em',
+          }}
+          >
             <Logo />
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 800,
+                letterSpacing: '0.3em',
+              }}
+            >
+              ctiver
+            </Typography>
           </Box>
 
           {/* Navigation */}
