@@ -21,7 +21,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { IconButton, Link } from '@mui/material';
 import {
-  EMAIL_HELPERTEXT, EMAIL_PATTERN, PASSWORD_HELPERTEXT, PASSWORD_PATTERN,
+  EMAIL_HELPERTEXT, EMAIL_PATTERN,
 } from 'utils/pattern';
 
 export default function Login() {
