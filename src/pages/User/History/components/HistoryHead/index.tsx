@@ -51,7 +51,7 @@ export default function ManageHead(props: HistoryHeadType) {
           </Typography>
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell>
           <Typography variant="body1">
             控制
           </Typography>

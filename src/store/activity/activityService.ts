@@ -93,7 +93,7 @@ export const activityApi = createApi({
     }),
     getSearchActivity: builder.query<SearchResponseType, SearchRequestType>({
       query: (request) => ({
-        url: '',
+        url: 'search',
         method: 'GET',
         params: request,
       }),
