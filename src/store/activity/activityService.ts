@@ -2,9 +2,13 @@ import qs from 'qs';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'utils/apiURL';
 import { ActivityDataType } from 'types/data';
-import { ActivityResponseType, ManageFilterValueResponseType, SearchResponseType } from 'types/response';
+import {
+  ActivityCommentResponseType, ActivityResponseType,
+  ManageFilterValueResponseType, SearchResponseType,
+} from 'types/response';
 import { ActivityStatusRequestType, ActivitiesRequestType, SearchRequestType } from 'types/request';
 import _ from 'lodash';
+import { ActivityCommentPostRequestType, ActivityCommentRequestType } from '../../types/request';
 
 export const activityApi = createApi({
   reducerPath: 'activityApi',
@@ -95,6 +99,29 @@ export const activityApi = createApi({
       }),
       providesTags: [{ type: 'Activity', id: 'List' }],
     }),
+    getActivityComment: builder.query < ActivityCommentResponseType, ActivityCommentRequestType>({
+      query: (params) => ({
+        url: 'comment',
+        method: 'GET',
+        params,
+      }),
+      providesTags: [{ type: 'Activity', id: 'Comment' }],
+    }),
+    postActivityComment: builder.mutation<void, ActivityCommentPostRequestType>({
+      query: (body) => ({
+        url: 'comment',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [{ type: 'Activity', id: 'Comment' }],
+    }),
+    deleteActivityComment: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `comment/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [{ type: 'Activity', id: 'Comment' }],
+    }),
   }),
 });
 
@@ -106,4 +133,7 @@ export const {
   useDeleteManageActivityMutation,
   useGetFilterValueQuery,
   useGetSearchActivityQuery,
+  useGetActivityCommentQuery,
+  usePostActivityCommentMutation,
+  useDeleteActivityCommentMutation,
 } = activityApi;

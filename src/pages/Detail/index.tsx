@@ -19,15 +19,19 @@ import {
   ListItem, ListItemIcon, ListItemText,
   ListSubheader, Skeleton, Tooltip, Typography,
 } from '@mui/material';
+import CommentIcon from '@mui/icons-material/Comment';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import {
   useDeleteManageActivityMutation,
   useGetActivityByIdQuery,
+  useGetActivityCommentQuery,
   usePostActivityStatusMutation,
 } from 'store/activity/activityService';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import BranchTabs from './BranchTabs';
+import BranchTabs from './components/BranchTabs';
+import CommentItem from './components/CommentItem';
+import CommentDialog from './components/CommentDialog';
 
 function Detail() {
   const navigate = useNavigate();
@@ -35,6 +39,10 @@ function Detail() {
   const { data, isLoading } = useGetActivityByIdQuery(id as string);
   const [updateStatus, { isLoading: isUpdating }] = usePostActivityStatusMutation();
   const [deleteStatus, { isLoading: isDeleting }] = useDeleteManageActivityMutation();
+  const {
+    data: commentData,
+    isLoading: isLoadingComment,
+  } = useGetActivityCommentQuery({ activityId: id });
 
   const {
     id: activityId,
@@ -232,7 +240,29 @@ function Detail() {
             ))}
           </Box>
         )}
+        <Box component="section">
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="h5" component="h3">
+              <CommentIcon />
+              評論
+            </Typography>
+            <CommentDialog title={title || ''} />
+          </Stack>
+          <Stack spacing={3}>
+            {isLoadingComment && (
+              <Skeleton width="100%" height={20} />
+            )}
 
+            {(!isLoadingComment && commentData && commentData.searchData.length > 0)
+              ? commentData.searchData.map((prop) => (
+                <CommentItem
+                  key={prop.id}
+                  {...prop}
+                />
+              )) : <Typography>暫無評論</Typography>}
+
+          </Stack>
+        </Box>
       </Stack>
     </Container>
   );

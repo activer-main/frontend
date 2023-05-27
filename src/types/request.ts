@@ -66,3 +66,15 @@ export interface TagsRequestType {
 export interface SearchHistoryRequestType extends SegmentRequestType {
   orderBy: orderByUnion;
 }
+
+export interface ActivityCommentRequestType extends SegmentRequestType {
+  activityId: string;
+  orderBy?: orderByUnion;
+  sortBy?: sortByUnion
+}
+
+export interface ActivityCommentPostRequestType {
+  activityId: string;
+  rate: number;
+  content: string;
+}

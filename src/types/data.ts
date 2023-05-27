@@ -62,3 +62,13 @@ export interface SearchHistoryDataType {
   tags: TagDataType[] | null;
   date: string | null
 }
+
+export interface CommentDataType {
+  id: string;
+  userId: string;
+  username: string;
+  userAvatar: string;
+  rate: number;
+  content: string;
+  sequnce: number;
+}

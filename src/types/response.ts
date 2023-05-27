@@ -1,4 +1,4 @@
-import { SearchHistoryDataType, TagDataType } from 'types/data';
+import { CommentDataType, SearchHistoryDataType, TagDataType } from 'types/data';
 import { ActivityDataType } from './data';
 import { orderByUnion, sortByUnion } from './request';
 import { UserInfoType, TokenType } from './user';
@@ -43,4 +43,9 @@ export interface ErrorResponseType {
     statusCode: number;
     message: string;
   }
+}
+
+export interface ActivityCommentResponseType extends SegmentResponseType {
+  activityId: string;
+  searchData: CommentDataType[]
 }
