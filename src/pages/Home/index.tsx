@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { orderByUnion, sortByUnion } from 'types/request';
 import { times } from 'lodash';
-import { Skeleton } from '@mui/material';
+import { Paper, Skeleton } from '@mui/material';
 import CardSlide from 'components/CardSlide';
 import { useNavigate } from 'react-router-dom';
 import Hero from './Hero';
@@ -40,28 +40,26 @@ function Home() {
         maxWidth="xl"
       >
 
-        {/* Trend activity */}
-        {/* Trend header */}
-        <Box
-          component="title"
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            mt: 3,
-            mb: 3,
-          }}
-        >
-          <Typography component="h2" variant="h4">
-            <BookmarkIcon />
-            熱門活動
-          </Typography>
-          <Button endIcon={<NavigateNextIcon />} onClick={() => navigate(`/surf?sortBy=${sortByUnion.TREND}`)}>
-            更多熱門活動
-          </Button>
-        </Box>
+        <Paper sx={{ p: 2, mb: 4 }} elevation={3}>
+          <Box
+            component="title"
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              mt: 3,
+              mb: 3,
+            }}
+          >
+            <Typography component="h2" variant="h4">
+              <BookmarkIcon />
+              熱門活動
+            </Typography>
+            <Button endIcon={<NavigateNextIcon />} onClick={() => navigate(`/surf?sortBy=${sortByUnion.TREND}`)}>
+              更多熱門活動
+            </Button>
+          </Box>
 
-        {/* Trend cards */}
-        {isLoadingTrendData
+          {isLoadingTrendData
           && (
             <Grid container spacing={3} sx={{ mt: 1 }}>
               {times(4, (index) => (
@@ -71,33 +69,32 @@ function Home() {
               ))}
             </Grid>
           )}
-
-        {trendData?.searchData
+          {trendData?.searchData
            && (
              <CardSlide data={trendData.searchData} />
            )}
+        </Paper>
 
-        {/* Newest activity */}
-        {/* Newest header */}
-        <Box
-          component="title"
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            mt: 3,
-            mb: 3,
-          }}
-        >
-          <Typography component="h2" variant="h4">
-            <BookmarkIcon />
-            最新活動
-          </Typography>
-          <Button endIcon={<NavigateNextIcon />} onClick={() => navigate(`/surf?sortBy=${sortByUnion.CREATEDAT}`)}>
-            更多最新活動
-          </Button>
-        </Box>
+        <Paper sx={{ p: 2 }} elevation={3}>
+          <Box
+            component="title"
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              mt: 3,
+              mb: 3,
+            }}
+          >
+            <Typography component="h2" variant="h4">
+              <BookmarkIcon />
+              最新活動
+            </Typography>
+            <Button endIcon={<NavigateNextIcon />} onClick={() => navigate(`/surf?sortBy=${sortByUnion.CREATEDAT}`)}>
+              更多最新活動
+            </Button>
+          </Box>
 
-        {isLoadingNewestData
+          {isLoadingNewestData
           && (
             <Grid container spacing={3} sx={{ mt: 1 }}>
               {times(4, (index) => (
@@ -107,11 +104,11 @@ function Home() {
               ))}
             </Grid>
           )}
-        {/* Newest cards */}
-        {newestData?.searchData
+          {newestData?.searchData
            && (
              <CardSlide data={newestData.searchData} />
            )}
+        </Paper>
 
       </Container>
     </>

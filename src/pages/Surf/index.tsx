@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import {
-  Button, ButtonGroup, Grid, Pagination, Skeleton,
+  Button, Chip, Grid, Pagination, Skeleton, Stack,
 } from '@mui/material';
 import { useGetActivitiesQuery } from 'store/activity/activityService';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
@@ -52,38 +52,36 @@ function Surf() {
   });
 
   return (
-    <Container maxWidth="xl">
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography variant="h3" color="initial">所有活動</Typography>
+    <Container maxWidth="xl" sx={{ mt: 3 }}>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item xs={12} lg={2}>
+          <Typography variant="h4" color="initial">所有活動</Typography>
         </Grid>
 
         {/* sortBy button group */}
-        <Grid item xs={12} md>
-          <ButtonGroup>
-            <Button
+        <Grid item xs={12} lg>
+          <Stack spacing={2} direction="row">
+            <Chip
               onClick={() => {
                 setSearchParams((prevSearchParam) => {
                   prevSearchParam.set('sortBy', sortByUnion.TREND);
                   return prevSearchParam;
                 });
               }}
-              variant={searchParams.get('sortBy') === sortByUnion.TREND ? 'contained' : undefined}
-            >
-              熱門活動
-            </Button>
-            <Button
+              variant={searchParams.get('sortBy') === sortByUnion.TREND ? undefined : 'outlined'}
+              label="熱門活動"
+            />
+            <Chip
               onClick={() => {
                 setSearchParams((prevSearchParam) => {
                   prevSearchParam.set('sortBy', sortByUnion.CREATEDAT);
                   return prevSearchParam;
                 });
               }}
-              variant={searchParams.get('sortBy') === sortByUnion.CREATEDAT ? 'contained' : undefined}
-            >
-              最新活動
-            </Button>
-          </ButtonGroup>
+              variant={searchParams.get('sortBy') === sortByUnion.CREATEDAT ? undefined : 'outlined'}
+              label="最新活動"
+            />
+          </Stack>
         </Grid>
 
         {/* sorting button control */}
@@ -106,7 +104,7 @@ function Surf() {
               });
             }}
           >
-            {searchParams.get('orderBy')}
+            排序
           </Button>
         </Grid>
       </Grid>

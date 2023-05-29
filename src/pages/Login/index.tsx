@@ -134,7 +134,6 @@ export default function Login() {
             {...register('password', {
               required: true,
               pattern: PASSWORD_PATTERN,
-
             })}
           />
 

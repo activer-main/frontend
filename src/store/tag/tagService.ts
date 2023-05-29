@@ -30,4 +30,5 @@ export const tagApi = createApi({
 
 export const {
   useGetTagsQuery,
+  useLazyGetTagsQuery,
 } = tagApi;

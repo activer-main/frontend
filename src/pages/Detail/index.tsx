@@ -113,6 +113,7 @@ function Detail() {
                 <Stack flexWrap="wrap" spacing={3} direction="row">
                   {tags.map((tag: ActivityTagDataType) => (
                     <Chip
+                      key={`detail-tag-${tag.id}`}
                       label={tag.text}
                       color={activityTypeToColor(tag.type)}
                       icon={<TagIcon />}
@@ -211,12 +212,12 @@ function Detail() {
             </Typography>
             <Divider />
             <Stack direction="column" spacing={1} sx={{ padding: 1 }}>
-              {sources.map((source: string, index: number) => (
+              {sources.map((source: string, index) => (
                 <Link
                   href={source}
                   target="_blank"
+                  key={`source-${index}`}
                   rel="noreferrer"
-                  key={`detail-source-${index}`}
                 >
                   {source}
                 </Link>

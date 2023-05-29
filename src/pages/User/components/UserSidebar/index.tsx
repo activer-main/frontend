@@ -87,7 +87,7 @@ function UserDrawer({ setOpen, open } : UserDrawerType) {
       >
         {/* Header */}
         <DrawerHeader sx={{ justifyContent: 'space-between' }}>
-          <Stack alignItems="center" spacing={1} direction="row" component="a" href="/" sx={{ textDecoration: 'none' }}>
+          <Stack alignItems="center" spacing={1} direction="row" component="a" href="/" sx={{ textDecoration: 'none', ml: 1 }}>
             <Box sx={{ fontSize: '2em' }}>
               <Logo />
             </Box>

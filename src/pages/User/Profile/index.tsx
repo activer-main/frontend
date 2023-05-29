@@ -11,7 +11,6 @@ import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import {
   Box,
-  Container,
   FormControl, InputLabel, MenuItem, Paper, Typography,
 } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
@@ -55,7 +54,7 @@ function Profile() {
   useBeforeUnload(changed, '尚未儲存，請問是否離開此頁面?');
 
   return (
-    <Container maxWidth="xl" component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2 }}>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2 }}>
       <Stack spacing={3}>
 
         <Paper
@@ -171,7 +170,7 @@ function Profile() {
           <Button variant="outlined" type="button">取消</Button>
         </Stack>
       </Stack>
-    </Container>
+    </Box>
   );
 }
 

@@ -53,7 +53,7 @@ function UserHeader({ setOpen, open } : UserHeaderType) {
 
   return (
 
-    <AppBar position="fixed" open={open} color="primary">
+    <AppBar position="fixed" open={open} color="secondary">
       <Toolbar>
         <IconButton
           color="inherit"

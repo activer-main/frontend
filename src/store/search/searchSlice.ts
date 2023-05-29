@@ -101,7 +101,16 @@ const searchSlice = createSlice({
         }
       );
     },
-    setTags: (state, action: PayloadAction<TagDataType[]>) => {
+    setTags: (state, action: PayloadAction<TagDataType[] | null>) => {
+      if (!action.payload) {
+        return ({
+          ...state,
+          tags: [],
+          location: [],
+          area: [],
+        });
+      }
+
       const newState = cloneDeep(state);
       _.forEach(action.payload, (tag: TagDataType) => {
         if (tag.type === 'area') {

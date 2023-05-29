@@ -3,6 +3,13 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Outlet } from 'react-router-dom';
+import {
+  Avatar, Chip, CircularProgress, Grid, Paper, Stack, Typography,
+} from '@mui/material';
+import { useAppSelector } from 'store';
+import { selectUserInfo } from 'store/user/userSlice';
+import { useGetManageActivityQuery } from 'store/activity/activityService';
+import TagIcon from '@mui/icons-material/Tag';
 import UserSidebar, { DrawerHeader, drawerWidth } from './components/UserSidebar';
 import UserHeader from './components/UserHeader';
 
@@ -31,6 +38,8 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 
 export default function PersistentDrawerLeft() {
   const [open, setOpen] = React.useState(false);
+  const { avatar, username, professions } = useAppSelector(selectUserInfo)!;
+  const { data: activityData, isLoading: isGettingActivity } = useGetManageActivityQuery({});
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -41,6 +50,51 @@ export default function PersistentDrawerLeft() {
 
       <Main open={open}>
         <DrawerHeader />
+        <Paper elevation={3} sx={{ p: 4, mb: 3 }}>
+          <Grid container>
+            <Grid item xs={2}>
+              <Avatar
+                src={avatar || undefined}
+                sx={{
+                  width: 120,
+                  height: 120,
+                  border: '4px solid white',
+                  backgroundColor: 'white',
+                }}
+              />
+            </Grid>
+            <Grid item xs>
+              <Typography variant="h4">{username}</Typography>
+              <Stack direction="row" spacing={2}>
+                {professions?.map((p) => (
+                  <Chip
+                    key={p.id}
+                    label={p.profession}
+                    icon={<TagIcon />}
+                  />
+                ))}
+              </Stack>
+            </Grid>
+            <Grid item xs={1}>
+              <Stack>
+                <Typography
+                  variant="h5"
+                  color="secondary"
+                  sx={{ fontWeight: 'bold' }}
+                >
+                  目前收藏
+                </Typography>
+                {isGettingActivity ? <CircularProgress />
+                  : (
+                    <Typography variant="h1">
+                      {activityData?.searchData?.length}
+                    </Typography>
+                  )}
+              </Stack>
+            </Grid>
+          </Grid>
+        </Paper>
+
         <Outlet />
       </Main>
     </Box>

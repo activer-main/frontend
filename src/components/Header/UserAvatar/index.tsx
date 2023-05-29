@@ -4,14 +4,16 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { useAppDispatch, useAppSelector } from 'store';
 import { logout, selectUserInfo } from 'store/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { userNavigationItems } from 'pages/User/components/UserSidebar';
+import { Button, IconButton } from '@mui/material';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 
 export default function UserAvatar() {
   const dispatch = useAppDispatch();
@@ -29,17 +31,19 @@ export default function UserAvatar() {
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+        <IconButton onClick={() => navigate('/user/manage')}>
+          <BookmarkBorderIcon />
+        </IconButton>
         <Tooltip title="帳戶管理">
-          <IconButton
+          <Button
             onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
+            sx={{ pl: 2 }}
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
-          >
-            <Avatar sx={{ width: 32, height: 32 }} src={avatar || username || undefined} alt={username || 'avatar'} />
-          </IconButton>
+            endIcon={<ArrowDropDownIcon />}
+            startIcon={<Avatar sx={{ width: 32, height: 32 }} src={avatar || username || undefined} alt={username || 'avatar'} />}
+          />
         </Tooltip>
       </Box>
 

@@ -44,7 +44,7 @@ function CardSlide({ data }: CardSlideType) {
     >
       {
         data.map((activity) => (
-          <SwiperSlide>
+          <SwiperSlide key={`card-slide-${activity.id}`}>
             <MainCard {...activity} />
           </SwiperSlide>
         ))
