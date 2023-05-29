@@ -10,14 +10,16 @@ import {
 } from 'react-icons/fc';
 import Stack from '@mui/material/Stack';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import RateReviewIcon from '@mui/icons-material/RateReview';
 import {
   Box,
+  Button,
   Checkbox,
   Chip, CircularProgress,
   Container,
   Divider, Grid, Link, List,
   ListItem, ListItemIcon, ListItemText,
-  ListSubheader, Skeleton, Tooltip, Typography,
+  ListSubheader, MenuItem, Pagination, Select, Skeleton, Tooltip, Typography,
 } from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
@@ -29,6 +31,9 @@ import {
 } from 'store/activity/activityService';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+import { ActivityCommentRequestType, CommentSortbyUnion, orderByUnion } from 'types/request';
 import BranchTabs from './components/BranchTabs';
 import CommentItem from './components/CommentItem';
 import CommentDialog from './components/CommentDialog';
@@ -36,13 +41,30 @@ import CommentDialog from './components/CommentDialog';
 function Detail() {
   const navigate = useNavigate();
   const { id = '1' } = useParams();
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpenDialog = () => {
+    setOpen(true);
+  };
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
+
   const { data, isLoading } = useGetActivityByIdQuery(id as string);
   const [updateStatus, { isLoading: isUpdating }] = usePostActivityStatusMutation();
   const [deleteStatus, { isLoading: isDeleting }] = useDeleteManageActivityMutation();
+  const [commentRequestStatus, setCommentRequestStatus] = React.useState<
+  ActivityCommentRequestType>({
+    activityId: id,
+    orderBy: orderByUnion.DESC,
+    sortBy: CommentSortbyUnion.ModifiedAt,
+    page: 1,
+    countPerPage: 10,
+  });
   const {
     data: commentData,
     isLoading: isLoadingComment,
-  } = useGetActivityCommentQuery({ activityId: id });
+  } = useGetActivityCommentQuery(commentRequestStatus);
 
   const {
     id: activityId,
@@ -68,7 +90,7 @@ function Detail() {
   };
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" sx={{ pb: 2 }}>
       {/* Introduction */}
       <Grid container sx={{ mt: 2 }}>
 
@@ -241,30 +263,108 @@ function Detail() {
             ))}
           </Box>
         )}
-        <Box component="section">
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h5" component="h3">
-              <CommentIcon />
-              評論
-            </Typography>
-            <CommentDialog title={title || ''} />
-          </Stack>
-          <Stack spacing={3}>
-            {isLoadingComment && (
-              <Skeleton width="100%" height={20} />
-            )}
 
-            {(!isLoadingComment && commentData && commentData.searchData.length > 0)
-              ? commentData.searchData.map((prop) => (
-                <CommentItem
-                  key={prop.id}
-                  {...prop}
-                />
-              )) : <Typography>暫無評論</Typography>}
-
-          </Stack>
-        </Box>
       </Stack>
+
+      {/* Comment */}
+      <Box component="section">
+        <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
+          <Typography variant="h5" component="h3">
+            <CommentIcon />
+            評論
+          </Typography>
+          <Stack spacing={1} direction="row">
+
+            {/* Dialog */}
+            <Button
+              startIcon={<RateReviewIcon />}
+              onClick={handleOpenDialog}
+              color="secondary"
+            >
+              撰寫評論
+            </Button>
+
+            <CommentDialog
+              title={title || ''}
+              open={open}
+              onClose={handleCloseDialog}
+            />
+            <Select
+              sx={{ ml: 1 }}
+              variant="standard"
+              size="small"
+              value={commentRequestStatus.sortBy}
+              onChange={(event) => setCommentRequestStatus({
+                ...commentRequestStatus,
+                sortBy: event.target.value as CommentSortbyUnion,
+              })}
+            >
+              <MenuItem value={CommentSortbyUnion.ADDTIME}>
+                加入時間
+              </MenuItem>
+              <MenuItem value={CommentSortbyUnion.ModifiedAt}>
+                修改時間
+              </MenuItem>
+            </Select>
+            <Button
+              startIcon={
+                commentRequestStatus.orderBy === orderByUnion.DESC
+                  ? <KeyboardDoubleArrowDownIcon />
+                  : <KeyboardDoubleArrowUpIcon />
+              }
+              onClick={() => {
+                setCommentRequestStatus({
+                  ...commentRequestStatus,
+                  orderBy: commentRequestStatus.orderBy === orderByUnion.DESC
+                    ? orderByUnion.ASC
+                    : orderByUnion.DESC,
+                });
+              }}
+            >
+              排序
+            </Button>
+          </Stack>
+        </Stack>
+        <Stack spacing={3}>
+          {isLoadingComment && (
+            <Skeleton width="100%" height={20} />
+          )}
+
+          {(!isLoadingComment && commentData && commentData.searchData.length > 0)
+            ? (
+              <>
+                {commentData.searchData.map((prop) => (
+                  <CommentItem
+                    key={prop.id}
+                    onOpen={handleOpenDialog}
+                    {...prop}
+                  />
+                ))}
+                {/* Comment Pagination */}
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="center"
+                  alignContent="center"
+                  marginTop={1}
+                >
+                  <Pagination
+                    count={commentData.totalPage}
+                    onChange={(event, number) => {
+                      setCommentRequestStatus({
+                        ...commentRequestStatus,
+                        page: number,
+                      });
+                    }}
+
+                  />
+                </Grid>
+
+              </>
+            ) : <Typography>暫無評論</Typography>}
+
+        </Stack>
+      </Box>
     </Container>
   );
 }

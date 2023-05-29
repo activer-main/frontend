@@ -67,10 +67,15 @@ export interface SearchHistoryRequestType extends SegmentRequestType {
   orderBy: orderByUnion;
 }
 
+export enum CommentSortbyUnion {
+  ADDTIME = 'AddTime',
+  ModifiedAt = 'ModifiedAt',
+}
+
 export interface ActivityCommentRequestType extends SegmentRequestType {
   activityId: string;
   orderBy?: orderByUnion;
-  sortBy?: sortByUnion
+  sortBy?: CommentSortbyUnion
 }
 
 export interface ActivityCommentPostRequestType {

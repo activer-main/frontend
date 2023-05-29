@@ -71,4 +71,6 @@ export interface CommentDataType {
   rate: number;
   content: string;
   sequnce: number;
+  createdAt: string;
+  modifiedAt: string;
 }

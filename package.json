@@ -31,6 +31,7 @@
     "eslint-config-airbnb-typescript": "^17.0.0",
     "framer-motion": "^10.12.4",
     "lodash": "^4.17.21",
+    "material-ui-confirm": "^3.0.9",
     "msw": "^1.2.1",
     "qs": "^6.11.1",
     "react": "^18.2.0",
