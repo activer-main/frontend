@@ -24,6 +24,8 @@ import { useDeletSearchHistoryMutation as useDeleteSearchHistoryMutation, useGet
 import { orderByUnion } from 'types/request';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import { grey } from '@mui/material/colors';
+import { useConfirm } from 'material-ui-confirm';
+import { toast } from 'react-toastify';
 import HistoryToolbar from './components/HistoryToolbar';
 import HistoryRowSkeleton from './components/HistoryRowSkeleton';
 import HistoryHead from './components/HistoryHead';
@@ -40,6 +42,7 @@ function History() {
     countPerPage,
   });
   const [deleteHistory] = useDeleteSearchHistoryMutation();
+  const confirm = useConfirm();
 
   // select all
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,12 +92,20 @@ function History() {
     });
   };
 
+  const handleDeleteSearchHistory = (ids: string[]) => {
+    confirm({ title: '確定刪除此紀錄?' })
+      .then(() => deleteHistory({ ids })
+        .unwrap()
+        .then(() => setSelected([]))
+        .then(() => toast.success('成功刪除留言!')));
+  };
+
   return (
     <Paper sx={{ width: '100%' }}>
       {/* Toolbar */}
       <HistoryToolbar
         numSelected={selected.length}
-        onDelete={() => deleteHistory({ ids: selected })}
+        onDelete={() => handleDeleteSearchHistory(selected)}
       />
 
       <TableContainer>
@@ -196,7 +207,7 @@ function History() {
                       {/* Delete Button */}
                       <IconButton
                         sx={{ width: 50, height: 50 }}
-                        onClick={() => deleteHistory({ ids: [row.id] })}
+                        onClick={() => handleDeleteSearchHistory([row.id])}
                       >
                         <DeleteIcon />
                       </IconButton>
