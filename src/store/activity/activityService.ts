@@ -133,6 +133,7 @@ export const {
   useDeleteManageActivityMutation,
   useGetFilterValueQuery,
   useGetSearchActivityQuery,
+  useLazyGetSearchActivityQuery,
   useGetActivityCommentQuery,
   usePostActivityCommentMutation,
   useDeleteActivityCommentMutation,

@@ -1,12 +1,18 @@
 import React from 'react';
 import {
-  Typography, Grid, Box, Container,
+  Typography, Grid, Box, Container, useMediaQuery, useTheme,
 } from '@mui/material';
 import { blue } from '@mui/material/colors';
+import { useGetActivitiesQuery } from 'store/activity/activityService';
+import { orderByUnion, sortByUnion } from 'types/request';
 import { ReactComponent as Graphic } from './components/Graphic.svg';
 import HeroSearch from './components/HeroSearch';
+import HeroSwiper from './components/HeroSwiper';
 
 function HeroSection() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.up('md'));
+
   return (
     <Box
       sx={{
@@ -15,6 +21,7 @@ function HeroSection() {
         alignItems: 'center',
         bgcolor: 'primary',
         width: '100vw',
+        position: 'relative',
       }}
     >
       <Container maxWidth="xl" sx={{ padding: 5 }}>
@@ -25,7 +32,8 @@ function HeroSection() {
               <br />
               找尋屬於自己的活動
             </Typography>
-            <HeroSearch />
+            {isMobile
+            && <HeroSearch />}
           </Grid>
 
           {/* right graphic */}
@@ -44,6 +52,9 @@ function HeroSection() {
             />
           </Grid>
         </Grid>
+        {' '}
+        <HeroSwiper />
+
       </Container>
     </Box>
 

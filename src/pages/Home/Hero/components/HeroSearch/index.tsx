@@ -11,10 +11,22 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useAppDispatch, useAppSelector } from 'store';
 import { selectSearchState, setTags, setValue } from 'store/search/searchSlice';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
+import qs from 'qs';
+import { format, parseISO } from 'date-fns';
 
 function HeroSearch() {
   const searchState = useAppSelector(selectSearchState);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    navigate(`/search?${qs.stringify({
+      keyword: searchState.keyword,
+      tags: searchState.tags.map((t) => t.text),
+      date: format(parseISO(searchState.date), 'yyyy-MM-dd'),
+    }, { arrayFormat: 'repeat' })}`);
+  };
 
   const [getTag,
     {
@@ -27,7 +39,6 @@ function HeroSearch() {
       sx={{
         borderRadius: '3em',
         height: '2.5em',
-        width: '25em',
         maxWidth: '70%',
         display: 'flex',
         gap: '1em',
@@ -35,7 +46,8 @@ function HeroSearch() {
         justifyContent: 'space-between',
         p: 2,
       }}
-      elevation={10}
+      elevation={8}
+      component="form"
     >
       <TextField
         size="small"
@@ -44,10 +56,11 @@ function HeroSearch() {
         onChange={(event:React.ChangeEvent<HTMLInputElement>) => {
           dispatch(setValue({ key: 'keyword', value: event.target.value }));
         }}
+        onKeyDown={(event) => { if (event.key === 'Enter') { handleSubmit(); } }}
       />
 
       <Autocomplete
-        sx={{ width: '9em' }}
+        sx={{ width: '10em' }}
         options={locationTagData || []}
         getOptionLabel={(option) => option.text}
         loading={isGettingLocationTag}
@@ -75,7 +88,7 @@ function HeroSearch() {
         />
       </LocalizationProvider>
 
-      <IconButton>
+      <IconButton onClick={handleSubmit}>
         <SearchIcon />
       </IconButton>
     </Paper>
