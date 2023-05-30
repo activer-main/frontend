@@ -56,7 +56,7 @@ export default function ActionCard({
       }}
     >
       {/* Card image */}
-      <CardActionArea onClick={() => navigate(`/detail/${id}`)} sx={{ flexGrow: 1 }}>
+      <CardActionArea onClick={() => navigate(`/detail/${id}`)}>
         <CardMedia
           className="card-img"
           onLoad={handleLoad}
@@ -64,6 +64,7 @@ export default function ActionCard({
           sx={{
             height: '200px',
             transition: 'all 0.3s ease-in-out',
+            mt: 0,
           }}
           onError={handleImageError}
           image={imageSrc}
@@ -99,12 +100,14 @@ export default function ActionCard({
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+      <CardActions sx={{
+        flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-end', mb: 0, flexGrow: 1,
+      }}
+      >
         <Stack
           spacing={{ xs: 1, sm: 2 }}
           sx={{ mb: 1 }}
           direction="row"
-          useFlexGap
         >
           {tags?.slice(0, 3).map((tag) => (
             <Chip
