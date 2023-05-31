@@ -5,6 +5,8 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useGetAuthtokenQuery } from 'store/user/userService';
 import Loading from 'components/Loading';
 import { toast } from 'react-toastify';
+import { Divider } from '@mui/material';
+import Header from 'components/Header';
 
 function ProtectedRoute() {
   const { isLoading } = useGetAuthtokenQuery();
@@ -28,6 +30,12 @@ function ProtectedRoute() {
     );
   }
   // returns child route elements
-  return <Outlet />;
+  return (
+    <>
+      <Header />
+      <Divider sx={{ mb: 2 }} />
+      <Outlet />
+    </>
+  );
 }
 export default ProtectedRoute;

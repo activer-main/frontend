@@ -7,7 +7,7 @@ function MainRoute() {
   return (
     <>
       <Haeder />
-      <Divider />
+      <Divider sx={{ mb: 2 }} />
       <Outlet />
     </>
   );

@@ -11,9 +11,11 @@ import Logout from '@mui/icons-material/Logout';
 import { useAppDispatch, useAppSelector } from 'store';
 import { logout, selectUserInfo } from 'store/user/userSlice';
 import { useNavigate } from 'react-router-dom';
-import { userNavigationItems } from 'pages/User/components/UserSidebar';
 import { Button, IconButton } from '@mui/material';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import Person2Icon from '@mui/icons-material/Person2';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+import HistoryIcon from '@mui/icons-material/History';
 
 export default function UserAvatar() {
   const dispatch = useAppDispatch();
@@ -27,6 +29,27 @@ export default function UserAvatar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const userNavigationItems = React.useMemo(
+    () => ({
+      profile: {
+        label: '基本資料',
+        link: '/user/profile',
+        icon: <Person2Icon />,
+      },
+      manage: {
+        label: '活動管理',
+        link: '/user/manage',
+        icon: <ManageSearchIcon />,
+      },
+      history: {
+        label: '搜尋紀錄',
+        link: '/user/history',
+        icon: <HistoryIcon />,
+      },
+    }),
+    [],
+  );
 
   return (
     <>
