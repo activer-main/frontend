@@ -52,12 +52,12 @@ export default function PersistentDrawerLeft() {
         <DrawerHeader />
         <Paper elevation={3} sx={{ p: 4, mb: 3 }}>
           <Grid container>
-            <Grid item xs={2}>
+            <Grid item xs={1}>
               <Avatar
                 src={avatar || undefined}
                 sx={{
-                  width: 120,
-                  height: 120,
+                  width: '100%',
+                  height: 'auto',
                   border: '4px solid white',
                   backgroundColor: 'white',
                 }}
@@ -80,7 +80,7 @@ export default function PersistentDrawerLeft() {
                 <Typography
                   variant="h5"
                   color="secondary"
-                  sx={{ fontWeight: 'bold' }}
+                  sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}
                 >
                   目前收藏
                 </Typography>
