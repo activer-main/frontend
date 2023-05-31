@@ -19,24 +19,20 @@ import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import { useBeforeUnload } from 'hooks/useBeforeUnload';
-import { blue } from '@mui/material/colors';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   PHONE_HELPERTEXT,
   PHONE_PATTERN,
-  USERNAME_HELPERTEXT,
-  USERNAME_PATTERN,
 } from 'utils/pattern';
 import { UserUpdateRequestType } from 'types/request';
 import Location from './components/Location';
-import AvatarUpload from './components/AvatarUpload';
 import Profession from './components/Profession';
 
 function Profile() {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector(selectUserInfo);
   const {
-    username, email, phone, birthday, gender,
+    phone, birthday, gender,
   } = userInfo!;
   const { register, handleSubmit, formState: { errors } } = useForm<UserUpdateRequestType>();
   const [updateUser, { isLoading }] = useUpdateUserMutation();
@@ -57,57 +53,9 @@ function Profile() {
     <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2 }}>
       <Stack spacing={3}>
 
-        <Paper
-          sx={{
-            position: 'relative', p: 2,
-          }}
-          elevation={3}
-        >
-          <Box
-            sx={{
-              position: 'absolute',
-              backgroundColor: blue[100],
-              height: 200,
-              top: 0,
-              left: 0,
-              width: '100%',
-            }}
-          />
-          <Box sx={{ pt: 10 }}>
-            <AvatarUpload />
-            <Stack direction="column" spacing={3}>
-              <TextField
-                error={!!errors.username}
-                helperText={errors.username ? USERNAME_HELPERTEXT : undefined}
-                sx={{
-                  '& input': {
-                    fontSize: '2rem',
-                    fontWeight: 'bold',
-                  },
-                }}
-                variant="standard"
-                value={username || ''}
-                {...register('username', {
-                  required: true,
-                  pattern: USERNAME_PATTERN,
-                  onChange: (e) => dispatch(setUserInfo({ key: 'username', value: e.target.value })),
-                })}
-              />
-              <TextField
-                size="small"
-                variant="standard"
-                label="Email"
-                value={email}
-                disabled
-              />
-            </Stack>
-          </Box>
-
-        </Paper>
-
         <Paper sx={{ p: 2 }} elevation={3}>
           {/* Profession */}
-          <Typography variant="h5">
+          <Typography variant="h5" sx={{ mb: 1 }}>
             職業
           </Typography>
           <Profession />
