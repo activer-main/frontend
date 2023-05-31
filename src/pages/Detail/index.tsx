@@ -8,67 +8,39 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import Stack from '@mui/material/Stack';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import RateReviewIcon from '@mui/icons-material/RateReview';
 import {
   Box,
-  Button,
   Checkbox,
   Chip, CircularProgress,
   Container,
   Divider, Grid, Link, List,
   ListItem, ListItemIcon, ListItemText,
-  ListSubheader, MenuItem, Pagination,
-  Select, Skeleton, Tooltip, Typography, useMediaQuery, useTheme,
+  ListSubheader,
+  Skeleton, Tooltip, Typography, useMediaQuery, useTheme,
 } from '@mui/material';
-import CommentIcon from '@mui/icons-material/Comment';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import {
   useDeleteManageActivityMutation,
   useGetActivityByIdQuery,
-  useGetActivityCommentQuery,
   usePostActivityStatusMutation,
 } from 'store/activity/activityService';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import DnsIcon from '@mui/icons-material/Dns';
-import { ActivityCommentRequestType, CommentSortbyUnion, orderByUnion } from 'types/request';
 import _ from 'lodash';
 import BranchTabs from './components/BranchTabs';
-import CommentItem from './components/CommentItem';
-import CommentDialog from './components/CommentDialog';
+import Comment from './components/Comment';
 
 function Detail() {
   const navigate = useNavigate();
   const { id = '1' } = useParams();
-  const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const handleOpenDialog = () => {
-    setOpen(true);
-  };
-  const handleCloseDialog = () => {
-    setOpen(false);
-  };
 
   const { data, isLoading } = useGetActivityByIdQuery(id as string);
   const [updateStatus, { isLoading: isUpdating }] = usePostActivityStatusMutation();
   const [deleteStatus, { isLoading: isDeleting }] = useDeleteManageActivityMutation();
-  const [commentRequestStatus, setCommentRequestStatus] = React.useState<
-  ActivityCommentRequestType>({
-    activityId: id,
-    orderBy: orderByUnion.DESC,
-    sortBy: CommentSortbyUnion.ModifiedAt,
-    page: 1,
-    countPerPage: 10,
-  });
-  const {
-    data: commentData,
-    isLoading: isLoadingComment,
-  } = useGetActivityCommentQuery(commentRequestStatus);
 
   const {
     id: activityId,
@@ -288,109 +260,11 @@ function Detail() {
             ))}
           </Box>
         )}
-
       </Stack>
 
       {/* Comment */}
-      <Box component="section">
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="h5" component="h3" sx={{ display: 'flex', alignItems: 'center' }}>
-            <CommentIcon />
-            評論
-          </Typography>
-          <Stack spacing={1} direction="row">
+      <Comment />
 
-            {/* Dialog */}
-            <Button
-              startIcon={<RateReviewIcon />}
-              onClick={handleOpenDialog}
-              color="secondary"
-            >
-              撰寫評論
-            </Button>
-
-            <CommentDialog
-              title={title || ''}
-              open={open}
-              onClose={handleCloseDialog}
-            />
-            <Select
-              sx={{ ml: 1 }}
-              variant="standard"
-              size="small"
-              value={commentRequestStatus.sortBy}
-              onChange={(event) => setCommentRequestStatus({
-                ...commentRequestStatus,
-                sortBy: event.target.value as CommentSortbyUnion,
-              })}
-            >
-              <MenuItem value={CommentSortbyUnion.ADDTIME}>
-                加入時間
-              </MenuItem>
-              <MenuItem value={CommentSortbyUnion.ModifiedAt}>
-                修改時間
-              </MenuItem>
-            </Select>
-            <Button
-              startIcon={
-                commentRequestStatus.orderBy === orderByUnion.DESC
-                  ? <KeyboardDoubleArrowDownIcon />
-                  : <KeyboardDoubleArrowUpIcon />
-              }
-              onClick={() => {
-                setCommentRequestStatus({
-                  ...commentRequestStatus,
-                  orderBy: commentRequestStatus.orderBy === orderByUnion.DESC
-                    ? orderByUnion.ASC
-                    : orderByUnion.DESC,
-                });
-              }}
-            >
-              排序
-            </Button>
-          </Stack>
-        </Stack>
-        <Divider sx={{ mb: 1, mt: 0.5 }} />
-        <Stack spacing={3}>
-          {isLoadingComment && (
-            <Skeleton width="100%" height={20} />
-          )}
-
-          {(!isLoadingComment && commentData && commentData.searchData.length > 0)
-            ? (
-              <>
-                {commentData.searchData.map((prop) => (
-                  <CommentItem
-                    key={prop.id}
-                    onOpen={handleOpenDialog}
-                    {...prop}
-                  />
-                ))}
-                {/* Comment Pagination */}
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="center"
-                  alignContent="center"
-                  marginTop={1}
-                >
-                  <Pagination
-                    count={commentData.totalPage}
-                    onChange={(event, number) => {
-                      setCommentRequestStatus({
-                        ...commentRequestStatus,
-                        page: number,
-                      });
-                    }}
-
-                  />
-                </Grid>
-
-              </>
-            ) : <Typography>暫無評論</Typography>}
-
-        </Stack>
-      </Box>
     </Container>
   );
 }
