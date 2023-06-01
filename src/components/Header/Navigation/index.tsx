@@ -1,13 +1,18 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import { Stack } from '@mui/material';
+import navigations from '../navigations';
 
 function Navigation() {
+  const navigate = useNavigate();
+
   return (
-    <nav className="nav">
-      <NavLink to="/">搜尋活動</NavLink>
-      <NavLink to="/">熱門活動</NavLink>
-      <NavLink to="/">活動分類</NavLink>
-    </nav>
+    <Stack component="nav" spacing={1} direction="row">
+      {navigations.map((nav) => (
+        <Button onClick={() => navigate(nav.link)} key={nav.id}>{nav.label}</Button>
+      ))}
+    </Stack>
   );
 }
 

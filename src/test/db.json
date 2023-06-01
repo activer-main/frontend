@@ -1,0 +1,284 @@
+{
+  "location": [
+    {
+      "id": 1,
+      "type": "location",
+      "text": "基隆市"
+    },
+    {
+      "id": 2,
+      "type": "location",
+      "text": "台北市"
+    },
+    {
+      "id": 3,
+      "type": "location",
+      "text": "新北市"
+    },
+    {
+      "id": 4,
+      "type": "location",
+      "text": "桃園市"
+    },
+    {
+      "id": 5,
+      "type": "location",
+      "text": "新竹市"
+    },
+    {
+      "id": 6,
+      "type": "location",
+      "text": "新竹縣"
+    },
+    {
+      "id": 7,
+      "type": "location",
+      "text": "苗栗縣"
+    },
+    {
+      "id": 8,
+      "type": "location",
+      "text": "台中市"
+    },
+    {
+      "id": 9,
+      "type": "location",
+      "text": "彰化縣"
+    },
+    {
+      "id": 10,
+      "type": "location",
+      "text": "南投縣"
+    },
+    {
+      "id": 11,
+      "type": "location",
+      "text": "雲林縣"
+    },
+    {
+      "id": 12,
+      "type": "location",
+      "text": "嘉義市"
+    },
+    {
+      "id": 13,
+      "type": "location",
+      "text": "嘉義縣"
+    },
+    {
+      "id": 14,
+      "type": "location",
+      "text": "台南市"
+    },
+    {
+      "id": 15,
+      "type": "location",
+      "text": "高雄市"
+    },
+    {
+      "id": 16,
+      "type": "location",
+      "text": "屏東縣"
+    },
+    {
+      "id": 17,
+      "type": "location",
+      "text": "台東縣"
+    },
+    {
+      "id": 18,
+      "type": "location",
+      "text": "花蓮縣"
+    },
+    {
+      "id": 19,
+      "type": "location",
+      "text": "宜蘭縣"
+    },
+    {
+      "id": 20,
+      "type": "location",
+      "text": "澎湖縣"
+    },
+    {
+      "id": 21,
+      "type": "location",
+      "text": "金門縣"
+    },
+    {
+      "id": 22,
+      "type": "location",
+      "text": "連江縣"
+    }
+  ],
+  "field": [
+    {
+      "id": 1,
+      "type": "field",
+      "text": "教育"
+    },
+    {
+      "id": 2,
+      "type": "field",
+      "text": "藝術"
+    },
+    {
+      "id": 3,
+      "type": "field",
+      "text": "社科新聞"
+    },
+    {
+      "id": 4,
+      "type": "field",
+      "text": "商法管理"
+    },
+    {
+      "id": 5,
+      "type": "field",
+      "text": "自然科學"
+    },
+    {
+      "id": 6,
+      "type": "field",
+      "text": "資訊科技"
+    },
+    {
+      "id": 7,
+      "type": "field",
+      "text": "工程製造"
+    },
+    {
+      "id": 8,
+      "type": "field",
+      "text": "農林漁獸"
+    },
+    {
+      "id": 9,
+      "type": "field",
+      "text": "醫療社福"
+    },
+    {
+      "id": 10,
+      "type": "field",
+      "text": "服務"
+    },
+    {
+      "id": 11,
+      "type": "field",
+      "text": "其他"
+    }
+  ],
+  "search": [
+    {
+      "maxSegment": 5,
+      "minSegment": 1,
+      "currentSegment": 1,
+      "countPerSegment": 10,
+      "totalCount": 50,
+      "keyword": "test",
+      "tags": [
+        {
+          "id": 1,
+          "type": "location",
+          "text": "桃園市"
+        },
+        {
+          "id": 2,
+          "type": "location",
+          "text": "新竹市"
+        },
+        {
+          "id": 3,
+          "type": "location",
+          "text": "嘉義市"
+        }
+      ],
+      "date": "2000-01-01",
+      "searchResultData": [
+        {
+          "id": 1,
+          "title": "Test Activity 1",
+          "subTitle": null,
+          "images": [
+            "https://via.placeholder.com/150",
+            "https://via.placeholder.com/250"
+          ],
+          "tags": [
+            {
+              "id": 4,
+              "type": "other",
+              "text": "test1",
+              "tagVoteCount": 10,
+              "userVoted": true
+            },
+            {
+              "id": 5,
+              "type": "other",
+              "text": "test2",
+              "tagVoteCount": 5,
+              "userVoted": false
+            }
+          ],
+          "branches": [
+            {
+              "id": 1,
+              "branchName": "Test Branch 1",
+              "date": [
+                {
+                  "name": "Test Date 1",
+                  "start": "2023-05-01T00:00:00.000Z",
+                  "end": "2023-05-10T00:00:00.000Z"
+                },
+                {
+                  "name": "Test Date 2",
+                  "start": "2023-06-01T00:00:00.000Z",
+                  "end": "2023-06-10T00:00:00.000Z"
+                }
+              ],
+              "applyFee": [
+                "1000",
+                "2000"
+              ],
+              "location": [
+                "Taipei",
+                "Taoyuan"
+              ],
+              "status": "open"
+            },
+            {
+              "id": 2,
+              "branchName": "Test Branch 2",
+              "date": [
+                {
+                  "name": "Test Date 3",
+                  "start": "2023-07-01T00:00:00.000Z",
+                  "end": "2023-07-10T00:00:00.000Z"
+                },
+                {
+                  "name": "Test Date 4",
+                  "start": "2023-08-01T00:00:00.000Z",
+                  "end": "2023-08-10T00:00:00.000Z"
+                }
+              ],
+              "applyFee": [
+                "3000",
+                "4000"
+              ],
+              "location": [
+                "Taichung",
+                "Kaohsiung"
+              ],
+              "status": "closed"
+            }
+          ],
+          "content": "This is a test activity.",
+          "connection": null,
+          "holder": null,
+          "objective": null,
+          "sources": null,
+          "trend": 3
+        }
+      ]
+    }
+  ]
+}

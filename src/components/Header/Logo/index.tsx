@@ -1,10 +1,20 @@
 import React from 'react';
+import { SvgIcon } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { ReactComponent as LogoIcon } from './logo.svg';
 
 function Logo() {
+  const navigate = useNavigate();
+
   return (
-    <div className="logo">
-      <img src="/icon192.png" alt="activer-header-logo" width={64} />
-    </div>
+    <SvgIcon
+      color="secondary"
+      fontSize="inherit"
+      component={LogoIcon}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 31 32"
+      onClick={() => navigate('/')}
+    />
   );
 }
 
