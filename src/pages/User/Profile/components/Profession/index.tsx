@@ -33,9 +33,10 @@ export default function Profession() {
             index: number,
           ) => (
             <Chip
-              variant="outlined"
               label={option.profession}
+              variant="outlined"
               {...getTagProps({ index })}
+              key={`profession-option-${option.id}`}
             />
           ))
         }

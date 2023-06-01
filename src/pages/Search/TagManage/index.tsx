@@ -82,9 +82,10 @@ export default function TransferList({ onClose, onSearch } : TransferListType) {
             )}
             renderTags={(tagValue, getTagProps) => tagValue.map((option, index) => (
               <Chip
-                label={option.text}
                 {...getTagProps({ index })}
+                label={option.text}
                 onDelete={() => dispatch(addTag(option))}
+                key={`tag-manage-option-${option.id}`}
               />
             ))}
             onChange={(e, value) => dispatch(setTags(value))}
@@ -96,6 +97,7 @@ export default function TransferList({ onClose, onSearch } : TransferListType) {
           <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
             {searchState.recommendTags.map((tag) => (
               <Chip
+                key={tag.id}
                 label={tag.text}
                 icon={<TagIcon />}
                 deleteIcon={<AddCircleIcon />}
