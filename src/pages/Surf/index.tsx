@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import {
-  Button, Chip, Grid, Pagination, Skeleton, Stack,
+  Button, Chip, Grid, Pagination, Skeleton, Stack, useMediaQuery, useTheme,
 } from '@mui/material';
 import { useGetActivitiesQuery } from 'store/activity/activityService';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
@@ -41,9 +41,11 @@ export const surfLoader: LoaderFunction = ({ request }) => {
 
 function Surf() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // get data by activity service
-  const { data, isLoading } = useGetActivitiesQuery({
+  const { data, isFetching } = useGetActivitiesQuery({
     // params has already check in surfLoader some ignore tye check in here
     sortBy: searchParams.get('sortBy') as sortByUnion,
     orderBy: searchParams.get('orderBy') as orderByUnion,
@@ -59,7 +61,7 @@ function Surf() {
         </Grid>
 
         {/* sortBy button group */}
-        <Grid item xs={12} lg>
+        <Grid item xs lg>
           <Stack spacing={2} direction="row">
             <Chip
               onClick={() => {
@@ -85,7 +87,7 @@ function Surf() {
         </Grid>
 
         {/* sorting button control */}
-        <Grid item>
+        <Grid item xs sx={{ display: 'flex', justifyContent: isMobile ? 'flex-start' : 'flex-end' }}>
           <Button
             startIcon={
               searchParams.get('orderBy') === orderByUnion.DESC
@@ -113,7 +115,7 @@ function Surf() {
 
       <Grid item xs={12}>
         <Grid container spacing={3} sx={{ mt: 2, mb: 2 }}>
-          {isLoading && times(12, (index) => (
+          {(isFetching) && times(12, (index) => (
             <Grid item xs={12} sm={6} md={4} xl={3} key={index}>
               <Skeleton sx={{ height: 490 }} key={index} variant="rectangular" />
             </Grid>
