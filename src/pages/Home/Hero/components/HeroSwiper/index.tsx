@@ -58,7 +58,12 @@ export default function HeroSwiper() {
           ))
           : _.times(3, (index) => (
             <SwiperSlide>
-              <Skeleton sx={{ width: 798, marginRight: 16 }} key={`slide-skeleton-${index}`} />
+              <Box sx={{
+                position: 'relative', width: 798, overflow: 'hidden', borderRadius: '1.5em',
+              }}
+              >
+                <Skeleton sx={{ width: 798, height: 400, marginRight: 16 }} key={`slide-skeleton-${index}`} />
+              </Box>
             </SwiperSlide>
           ))}
       </Swiper>

@@ -3,8 +3,6 @@ import {
   Typography, Grid, Box, Container, useMediaQuery, useTheme,
 } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import { useGetActivitiesQuery } from 'store/activity/activityService';
-import { orderByUnion, sortByUnion } from 'types/request';
 import { ReactComponent as Graphic } from './components/Graphic.svg';
 import HeroSearch from './components/HeroSearch';
 import HeroSwiper from './components/HeroSwiper';
