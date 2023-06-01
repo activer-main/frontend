@@ -38,11 +38,12 @@ export default function Login() {
     dispatch(userLogin(data))
       .unwrap()
       .then(() => {
-        const next = localStorage.getItem('next');
+        const next = sessionStorage.getItem('next');
         if (next) {
           navigate(next);
+        } else {
+          navigate('/');
         }
-        navigate('/');
       })
       .catch((error: any) => {
         toast(error.message);

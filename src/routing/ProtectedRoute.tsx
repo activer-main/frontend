@@ -4,6 +4,9 @@ import { useAppSelector } from 'store';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useGetAuthtokenQuery } from 'store/user/userService';
 import Loading from 'components/Loading';
+import { toast } from 'react-toastify';
+import { Divider } from '@mui/material';
+import Header from 'components/Header';
 
 function ProtectedRoute() {
   const { isLoading } = useGetAuthtokenQuery();
@@ -15,6 +18,7 @@ function ProtectedRoute() {
 
   // show unauthorized screen if no user is found in redux store
   if (!userInfo) {
+    toast.error('使用者未驗證，請先登入!');
     return (
       <Navigate to="/login" />
     );
@@ -26,6 +30,12 @@ function ProtectedRoute() {
     );
   }
   // returns child route elements
-  return <Outlet />;
+  return (
+    <>
+      <Header />
+      <Divider sx={{ mb: 2 }} />
+      <Outlet />
+    </>
+  );
 }
 export default ProtectedRoute;

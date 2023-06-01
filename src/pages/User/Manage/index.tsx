@@ -120,7 +120,7 @@ function EnhancedTable() {
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
   return (
-    <Paper sx={{ p: 3, width: '100%' }}>
+    <Paper>
       {/* Toolbar */}
       <ManageToolbar
         numSelected={selected.length}

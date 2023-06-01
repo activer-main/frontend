@@ -20,21 +20,31 @@ import * as React from 'react';
 import {
   useNavigate, useSearchParams,
 } from 'react-router-dom';
-import { useGetSearchHistoryQuery } from 'store/user/userService';
+import { useDeletSearchHistoryMutation as useDeleteSearchHistoryMutation, useGetSearchHistoryQuery } from 'store/user/userService';
 import { orderByUnion } from 'types/request';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
+import { grey } from '@mui/material/colors';
+import { useConfirm } from 'material-ui-confirm';
+import { toast } from 'react-toastify';
 import HistoryToolbar from './components/HistoryToolbar';
 import HistoryRowSkeleton from './components/HistoryRowSkeleton';
 import HistoryHead from './components/HistoryHead';
 
 function History() {
-  const { data: historyData, isLoading: isGettingSearchHistory } = useGetSearchHistoryQuery({
-    orderBy: orderByUnion.DESC,
-  });
   const [selected, setSelected] = React.useState<string[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const countPerPage = parseInt(searchParams.get('countPerPage') || '5', 10);
   const navigate = useNavigate();
+  const { data: historyData, isLoading: isGettingSearchHistory } = useGetSearchHistoryQuery({
+    orderBy: orderByUnion.DESC,
+    page,
+    countPerPage,
+  });
+  const [deleteHistory] = useDeleteSearchHistoryMutation();
+  const confirm = useConfirm();
 
+  // select all
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelected = historyData?.searchData?.map((n) => n.id);
@@ -46,6 +56,7 @@ function History() {
 
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
+  // change selected when row is clicked
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: string[] = [];
@@ -81,12 +92,20 @@ function History() {
     });
   };
 
+  const handleDeleteSearchHistory = (ids: string[]) => {
+    confirm({ title: '確定刪除此紀錄?' })
+      .then(() => deleteHistory({ ids })
+        .unwrap()
+        .then(() => setSelected([]))
+        .then(() => toast.success('成功刪除留言!')));
+  };
+
   return (
     <Paper sx={{ width: '100%' }}>
       {/* Toolbar */}
       <HistoryToolbar
         numSelected={selected.length}
-        onDelete={() => console.log(selected)}
+        onDelete={() => handleDeleteSearchHistory(selected)}
       />
 
       <TableContainer>
@@ -105,7 +124,7 @@ function History() {
             {isGettingSearchHistory
               && times(parseInt(searchParams.get('countPerPage') || '5', 10), (index) => <HistoryRowSkeleton key={index} />)}
 
-            {historyData?.searchData?.map((row, index) => {
+            {historyData?.searchData && historyData.searchData.map((row, index) => {
               const isItemSelected = isSelected(row.id);
               const labelId = `table-checkbox-${index}`;
 
@@ -138,7 +157,7 @@ function History() {
                     onClick={(event) => handleClick(event, row.id)}
                     scope="row"
                     padding="none"
-                    sx={{ minWidth: '20em' }}
+                    sx={{ minWidth: '40vw' }}
                   >
                     <Stack spacing={2} direction="row" alignItems="center" sx={{ p: 5 }}>
 
@@ -149,15 +168,16 @@ function History() {
                           overflow: 'hidden',
                           WebkitBoxOrient: 'vertical',
                           WebkitLineClamp: 2,
+                          color: row.keyword ? 'inherit' : grey[300],
                         }}
                       >
-                        {row.keyword}
+                        {row.keyword ? row.keyword : '無'}
                       </Typography>
                     </Stack>
                   </TableCell>
 
                   {/* 標籤 */}
-                  <TableCell align="left" sx={{ width: '20px' }}>
+                  <TableCell align="left" sx={{ width: '20px' }} onClick={(event) => handleClick(event, row.id)}>
                     <Stack spacing={2} direction="row">
                       {row?.tags?.map((tag) => (
                         <Chip
@@ -174,21 +194,20 @@ function History() {
 
                   {/* Date */}
                   <TableCell
-                    align="right"
                     onClick={(event) => handleClick(event, row.id)}
                   >
                     {row.date && format(parseISO(row.date), 'yyyy/M/d')}
                   </TableCell>
 
                   {/* Control */}
-                  <TableCell align="right">
+                  <TableCell>
 
                     <Stack spacing={2} direction="row" justifyContent="flex-end">
 
                       {/* Delete Button */}
                       <IconButton
                         sx={{ width: 50, height: 50 }}
-                        onClick={() => console.log('delete', row.id)}
+                        onClick={() => handleDeleteSearchHistory([row.id])}
                       >
                         <DeleteIcon />
                       </IconButton>

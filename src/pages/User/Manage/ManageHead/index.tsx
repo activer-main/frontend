@@ -3,13 +3,18 @@ import TableHead from '@mui/material/TableHead';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import {
-  Box, Checkbox, IconButton, ListItemText, Menu, MenuItem, Stack, TableCell, TableRow, Typography,
+  Box, Button, Checkbox, IconButton,
+  InputAdornment,
+  ListItemText, Menu, MenuItem, Stack, TableCell, TableRow, TextField, Typography,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { useSearchParams } from 'react-router-dom';
 import { orderByUnion, sortByUnion } from 'types/request';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { useGetFilterValueQuery } from 'store/activity/activityService';
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 import _ from 'lodash';
+import { TagDataType } from 'types/data';
 
 interface HeadCell {
   disablePadding: boolean;
@@ -55,6 +60,12 @@ export default function ManageHead(props: EnhancedTableProps) {
   const { data: filterData } = useGetFilterValueQuery();
   const [selectTags, setSelectTags] = React.useState<string[]>(searchParams.getAll('tags'));
   const [selectStatus, setSelectStatus] = React.useState<string[]>(searchParams.getAll('status'));
+  const [filteredTags, setFilterTags] = React.useState<
+  TagDataType[] >([]);
+  const [filteredTagInput, setFilteredTagInput] = React.useState<string >('');
+
+  // init filterTags to all filterData.tags
+  React.useEffect(() => setFilterTags(filterData?.tags || []), [filterData]);
 
   const handleRequestSort = (
     property: sortByUnion,
@@ -108,6 +119,19 @@ export default function ManageHead(props: EnhancedTableProps) {
     } else {
       setSelectStatus([...selectStatus, text]);
     }
+  };
+
+  const handleFilterTagInputChange = (event :any) => {
+    const { value } = event.target;
+    setFilteredTagInput(value);
+
+    if (filteredTagInput === '') {
+      setFilterTags(filterData ? filterData.tags : []);
+      return;
+    }
+
+    const filtered = filterData?.tags.filter((tag) => tag.text.includes(value));
+    setFilterTags(filtered || []);
   };
 
   return (
@@ -171,7 +195,38 @@ export default function ManageHead(props: EnhancedTableProps) {
             anchorEl={tagFilterAnchorEl}
             onClose={handleTagFilterClose}
           >
-            {filterData?.tags.map((tag) => (
+            <Stack direction="row" alignItems="center">
+              <TextField
+                autoFocus
+                variant="standard"
+                size="small"
+                sx={{ p: 2 }}
+                value={filteredTagInput}
+                onChange={handleFilterTagInputChange}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        size="small"
+                        onClick={() => setFilteredTagInput('')}
+                        sx={{ width: 20, height: 20 }}
+                      >
+                        <CloseIcon fontSize="inherit" />
+                      </IconButton>
+                    </InputAdornment>),
+                }}
+              />
+              <Button
+                size="small"
+                sx={{ height: 'fit-content' }}
+                startIcon={<ClearAllIcon />}
+                onClick={() => setSelectTags([])}
+              >
+                清除
+              </Button>
+            </Stack>
+
+            {filteredTags.map((tag) => (
               <MenuItem
                 key={tag.id}
                 onClick={(event) => handleTagMenuItemClick(event, tag.text!)}
@@ -197,6 +252,7 @@ export default function ManageHead(props: EnhancedTableProps) {
             anchorEl={statusFilterAnchorEl}
             onClose={handleStatusFilterClose}
           >
+
             {filterData?.status.map((st) => (
               <MenuItem
                 key={st}

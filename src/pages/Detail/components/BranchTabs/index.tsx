@@ -6,7 +6,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { BranchDataType } from 'types/data';
 import {
-  List, ListItem, ListItemIcon, ListItemText, ListSubheader,
+  List, ListItem, ListItemIcon, ListItemText, ListSubheader, useMediaQuery, useTheme,
 } from '@mui/material';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import ShareLocationIcon from '@mui/icons-material/ShareLocation';
@@ -19,6 +19,8 @@ export default function BranchTabs({
   branches,
 }: BranchTabsType) {
   const [value, setValue] = React.useState('0');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -39,7 +41,7 @@ export default function BranchTabs({
           </TabList>
         </Box>
         {branches.map((branch, index) => (
-          <TabPanel value={index.toString()} key={index.toString()}>
+          <TabPanel value={index.toString()} key={index.toString()} sx={{ p: isMobile ? 0 : 2 }}>
             <List>
               {/* 日期 */}
               {
@@ -59,7 +61,7 @@ export default function BranchTabs({
               {/* 地點 */}
               <ListItem>
                 <ListItemIcon><ShareLocationIcon /></ListItemIcon>
-                <ListItemText>活動地點</ListItemText>
+                {isMobile ? null : <ListItemText>活動地點</ListItemText>}
                 {
                   (branch.location && branch.location.length > 0)
                     ? branch.location.map((l, locationIndex) => (

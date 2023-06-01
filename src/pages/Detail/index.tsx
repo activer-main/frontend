@@ -1,15 +1,13 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ImageSlide from 'components/ImageSlide';
 import { ActivityTagDataType, statusUnion } from 'types/data';
 import TagIcon from '@mui/icons-material/Tag';
 import { Buffer } from 'buffer';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import {
-  FcGraduationCap, FcList, FcShare,
-} from 'react-icons/fc';
 import Stack from '@mui/material/Stack';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {
   Box,
   Checkbox,
@@ -17,7 +15,8 @@ import {
   Container,
   Divider, Grid, Link, List,
   ListItem, ListItemIcon, ListItemText,
-  ListSubheader, Skeleton, Tooltip, Typography,
+  ListSubheader,
+  Skeleton, Tooltip, Typography, useMediaQuery, useTheme,
 } from '@mui/material';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import {
@@ -25,12 +24,20 @@ import {
   useGetActivityByIdQuery,
   usePostActivityStatusMutation,
 } from 'store/activity/activityService';
+import HandshakeIcon from '@mui/icons-material/Handshake';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import BranchTabs from './BranchTabs';
+import DnsIcon from '@mui/icons-material/Dns';
+import _ from 'lodash';
+import BranchTabs from './components/BranchTabs';
+import Comment from './components/Comment';
 
 function Detail() {
+  const navigate = useNavigate();
   const { id = '1' } = useParams();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const { data, isLoading } = useGetActivityByIdQuery(id as string);
   const [updateStatus, { isLoading: isUpdating }] = usePostActivityStatusMutation();
   const [deleteStatus, { isLoading: isDeleting }] = useDeleteManageActivityMutation();
@@ -51,15 +58,15 @@ function Detail() {
   } = data || {};
 
   const handleClickStatus = () => {
-    if (data?.status === statusUnion.DREAM && activityId) {
+    if (status === statusUnion.DREAM && activityId) {
       deleteStatus([activityId]);
-    } else if (data?.status === null && activityId) {
-      updateStatus({ id: activityId, status: '願望' as statusUnion });
+    } else {
+      updateStatus({ id: activityId!, status: '願望' as statusUnion });
     }
   };
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" sx={{ pb: 2 }}>
       {/* Introduction */}
       <Grid container sx={{ mt: 2 }}>
 
@@ -109,6 +116,7 @@ function Detail() {
                       color={activityTypeToColor(tag.type)}
                       icon={<TagIcon />}
                       variant="outlined"
+                      onClick={() => navigate(`/search?tags=${tag.text}`)}
                     />
                   )).slice(0, 5)}
                 </Stack>
@@ -122,10 +130,11 @@ function Detail() {
                   <Checkbox
                     icon={isUpdating ? <CircularProgress size="1em" /> : <FavoriteBorderIcon />}
                     checkedIcon={isDeleting ? <CircularProgress size="1em" /> : <FavoriteIcon />}
-                    checked={status === '願望'}
+                    checked={!!status}
                     onClick={handleClickStatus}
                     size="small"
                     color="warning"
+                    disabled={isDeleting}
                   />
                 </Tooltip>
                 <Chip
@@ -140,34 +149,56 @@ function Detail() {
         </Grid>
 
         <Grid item xs={12} md={6} sx={{ p: 2 }}>
+          {isLoading
+           && (
+             <Stack spacing={2} sx={{ p: 4, pl: 10 }}>
+               {_.times(3, (index) => (
+                 <Box
+                   key={`detail-branch-skeleton-${index}`}
+                   sx={{
+                     display: 'flex',
+                     justifyContent: 'space-between',
+                     gap: 20,
+                   }}
+                 >
+                   <Skeleton sx={{ flexGrow: 1, height: '1.5em' }} />
+                   <Skeleton sx={{ flexGrow: 3, height: '1.5em' }} />
+                 </Box>
+               ))}
+             </Stack>
+           )}
           <BranchTabs branches={branches} />
           <Divider />
-          <List sx={{ p: 2 }}>
+          <List sx={{ p: isMobile ? 0 : 2 }}>
             {/* objective */}
             <ListItem>
               <ListItemIcon>
                 <PersonAddAlt1Icon />
               </ListItemIcon>
-              <ListItemText>
-                活動對象
-              </ListItemText>
+              {isMobile ? null : (
+                <ListItemText>
+                  活動對象
+                </ListItemText>
+              )}
               {(objectives && objectives.length > 0)
                 ? (
                   <ListSubheader>{objectives.map((o) => o)}</ListSubheader>
-                ) : <ListSubheader>請查看下方活動內容</ListSubheader>}
+                ) : <ListSubheader>{isLoading ? <Skeleton /> : '請查看下方活動內容'}</ListSubheader>}
             </ListItem>
             {/* connection */}
             <ListItem>
               <ListItemIcon>
                 <LocalPhoneIcon />
               </ListItemIcon>
-              <ListItemText>
-                聯絡資訊
-              </ListItemText>
+              {isMobile ? null : (
+                <ListItemText>
+                  聯絡資訊
+                </ListItemText>
+              )}
               {(connections && connections.length > 0)
                 ? (
                   <ListSubheader>{connections.map((o) => o)}</ListSubheader>
-                ) : <ListSubheader>請查看下方活動內容</ListSubheader>}
+                ) : <ListSubheader>{isLoading ? <Skeleton /> : '請查看下方活動內容'}</ListSubheader>}
             </ListItem>
           </List>
         </Grid>
@@ -177,18 +208,16 @@ function Detail() {
       {/* main content */}
       <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
 
-        {/* Object */}
-
         {/* Content */}
         <Box component="section">
           <Typography variant="h5" component="h3">
-            <FcList />
+            <DnsIcon />
             活動內容
           </Typography>
           <Divider />
+          {isLoading && <Skeleton height={200} />}
           <Typography
             variant="body1"
-            component="p"
             dangerouslySetInnerHTML={{ __html: Buffer.from(html || '', 'base64').toString('utf-8') }}
           />
         </Box>
@@ -196,8 +225,8 @@ function Detail() {
         {/* Sources */}
         {sources && sources.length !== 0 && (
           <Box component="section">
-            <Typography variant="h5" component="h3">
-              <FcShare />
+            <Typography variant="h5" component="h3" sx={{ display: 'flex', alignItems: 'center' }}>
+              <OpenInNewIcon />
               原始來源
             </Typography>
             <Divider />
@@ -219,8 +248,8 @@ function Detail() {
         {/* Holder */}
         {holders && holders.length !== 0 && (
           <Box component="section">
-            <Typography variant="h5" component="h3">
-              <FcGraduationCap />
+            <Typography variant="h5" component="h3" sx={{ display: 'flex', alignItems: 'center' }}>
+              <HandshakeIcon />
               主辦單位
             </Typography>
             <Divider />
@@ -231,8 +260,11 @@ function Detail() {
             ))}
           </Box>
         )}
-
       </Stack>
+
+      {/* Comment */}
+      <Comment />
+
     </Container>
   );
 }

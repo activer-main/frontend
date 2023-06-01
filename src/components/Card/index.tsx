@@ -18,6 +18,8 @@ import { useNavigate } from 'react-router-dom';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import { CardActionArea, CircularProgress, Skeleton } from '@mui/material';
 import { useDeleteManageActivityMutation, usePostActivityStatusMutation } from 'store/activity/activityService';
+import { toast } from 'react-toastify';
+import { ErrorResponseType } from 'types/response';
 
 export interface CardType {
   id: string;
@@ -54,7 +56,7 @@ export default function ActionCard({
       }}
     >
       {/* Card image */}
-      <CardActionArea onClick={() => navigate(`/detail/${id}`)} sx={{ flexGrow: 1 }}>
+      <CardActionArea onClick={() => navigate(`/detail/${id}`)}>
         <CardMedia
           className="card-img"
           onLoad={handleLoad}
@@ -62,12 +64,13 @@ export default function ActionCard({
           sx={{
             height: '200px',
             transition: 'all 0.3s ease-in-out',
+            mt: 0,
           }}
           onError={handleImageError}
           image={imageSrc}
           alt={altText}
         />
-        <CardContent sx={{ flexGrow: 1, height: '100%' }}>
+        <CardContent sx={{ flexGrow: 1 }}>
           <Typography
             gutterBottom
             variant="h5"
@@ -81,16 +84,7 @@ export default function ActionCard({
           >
             {title || `Activity#${id.slice(0, 5)}...`}
           </Typography>
-          <Stack
-            spacing={{ xs: 1, sm: 2 }}
-            sx={{ mb: 1 }}
-            direction="row"
-            useFlexGap
-          >
-            {tags?.slice(0, 3).map((tag) => (
-              <Chip key={tag.id} icon={<TagIcon />} label={tag.text} size="small" color={activityTypeToColor(tag.type)} variant="outlined" />
-            ))}
-          </Stack>
+
           <Typography
             variant="caption"
             color="primary.light"
@@ -106,10 +100,30 @@ export default function ActionCard({
           </Typography>
         </CardContent>
       </CardActionArea>
-
-      <CardActions>
+      <CardActions sx={{
+        flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-end', mb: 0, flexGrow: 1,
+      }}
+      >
+        <Stack
+          spacing={{ xs: 1, sm: 2 }}
+          sx={{ mb: 1 }}
+          direction="row"
+        >
+          {tags?.slice(0, 3).map((tag) => (
+            <Chip
+              key={tag.id}
+              icon={<TagIcon />}
+              label={tag.text}
+              size="small"
+              color={activityTypeToColor(tag.type)}
+              variant="outlined"
+              onClick={() => navigate(`/search?tags=${tag.text}`)}
+            />
+          ))}
+        </Stack>
         {control}
       </CardActions>
+
     </Card>
   );
 }
@@ -126,7 +140,14 @@ export function MainCard({ ...props }: ActivityDataType) {
     if (status === statusUnion.DREAM) {
       deleteStatus([id]);
     } else if (status === null) {
-      updateStatus({ id, status: '願望' as statusUnion });
+      updateStatus({ id, status: '願望' as statusUnion })
+        .unwrap()
+        .catch((error: ErrorResponseType) => {
+          toast.error(error.data.message);
+          if (error.data.statusCode === 401) {
+            navigate('/login');
+          }
+        });
     }
   };
 

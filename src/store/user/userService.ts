@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { URL } from 'utils/apiURL';
 import { UserInfoType, ProfessionType, LocationType } from 'types/user';
 import { SearchHistoryResponseType } from 'types/response';
+import qs from 'qs';
 import { UserUpdateRequestType, SearchHistoryRequestType } from '../../types/request';
 
 export const userApi = createApi({
@@ -16,6 +17,7 @@ export const userApi = createApi({
       }
       return headers;
     },
+    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
   }),
   tagTypes: ['User', 'SearchHistory'],
   endpoints: (builder) => ({
@@ -57,10 +59,20 @@ export const userApi = createApi({
       }),
     }),
     getSearchHistory: builder.query<SearchHistoryResponseType, SearchHistoryRequestType>({
-      query: () => ({
+      query: (params) => ({
         url: 'search/history',
         method: 'GET',
+        params,
       }),
+      providesTags: ['SearchHistory'],
+    }),
+    deletSearchHistory: builder.mutation<void, { ids: string[] }>({
+      query: (params) => ({
+        url: 'search/history',
+        method: 'DELETE',
+        params,
+      }),
+      invalidatesTags: ['SearchHistory'],
     }),
   }),
 });
@@ -72,4 +84,5 @@ export const {
   useLazyGetLocationsQuery,
   useLazyGetProfessionsQuery,
   useGetSearchHistoryQuery,
+  useDeletSearchHistoryMutation,
 } = userApi;

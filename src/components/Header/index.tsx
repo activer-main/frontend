@@ -1,21 +1,28 @@
 import React from 'react';
-import useIsMobile from 'hooks/useIsMobile';
 import { useAppSelector } from 'store';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import LoginIcon from '@mui/icons-material/Login';
 import {
-  Container, Stack,
+  Container, Stack, Typography, useMediaQuery, useTheme,
 } from '@mui/material';
 import Logo from './Logo';
+
 import Navigation from './Navigation';
 import UserAvatar from './UserAvatar';
 import MobileNavigation from './MobileNavigation';
 
 function Haeder() {
-  const isMobile = useIsMobile();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { userInfo } = useAppSelector((state) => state.user);
+
+  // scroll to top
+  const location = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   const navigate = useNavigate();
 
@@ -30,8 +37,31 @@ function Haeder() {
         {/* Logo */}
 
         <Stack direction="row" alignItems="baseline" spacing={4}>
-          <Box sx={{ fontSize: '3em' }}>
+          <Box
+            sx={{
+              fontSize: '3em',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'baseline',
+              gap: '0.3em',
+              cursor: 'pointer',
+            }}
+            component="a"
+            onClick={() => navigate('/')}
+          >
             <Logo />
+            {!isMobile
+            && (
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: 700,
+                  letterSpacing: '0.2em',
+                }}
+              >
+                ctiver
+              </Typography>
+            ) }
           </Box>
 
           {/* Navigation */}
@@ -53,6 +83,7 @@ function Haeder() {
             </Button>
           )}
       </Box>
+
     </Container>
   );
 }

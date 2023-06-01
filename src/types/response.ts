@@ -1,4 +1,4 @@
-import { SearchHistoryDataType, TagDataType } from 'types/data';
+import { CommentDataType, SearchHistoryDataType, TagDataType } from 'types/data';
 import { ActivityDataType } from './data';
 import { orderByUnion, sortByUnion } from './request';
 import { UserInfoType, TokenType } from './user';
@@ -36,4 +36,16 @@ export interface ManageFilterValueResponseType {
 
 export interface SearchHistoryResponseType extends Omit<SegmentResponseType, 'sortBy' > {
   searchData: SearchHistoryDataType[]
+}
+
+export interface ErrorResponseType {
+  data: {
+    statusCode: number;
+    message: string;
+  }
+}
+
+export interface ActivityCommentResponseType extends SegmentResponseType {
+  activityId: string;
+  searchData: CommentDataType[]
 }

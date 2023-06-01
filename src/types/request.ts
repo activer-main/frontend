@@ -46,8 +46,8 @@ export enum orderByUnion { DESC = 'descending', ASC = 'ascending'}
 export interface ActivitiesRequestType extends SegmentRequestType {
   tags?: string[];
   status?: string[] ;
-  sortBy: sortByUnion;
-  orderBy:orderByUnion;
+  sortBy?: sortByUnion;
+  orderBy?:orderByUnion;
 }
 
 export type ActivityStatusRequestType = { id: ActivityDataType['id']; status: ActivityDataType['status'] };
@@ -65,4 +65,21 @@ export interface TagsRequestType {
 
 export interface SearchHistoryRequestType extends SegmentRequestType {
   orderBy: orderByUnion;
+}
+
+export enum CommentSortbyUnion {
+  ADDTIME = 'AddTime',
+  ModifiedAt = 'ModifiedAt',
+}
+
+export interface ActivityCommentRequestType extends SegmentRequestType {
+  activityId: string;
+  orderBy?: orderByUnion;
+  sortBy?: CommentSortbyUnion
+}
+
+export interface ActivityCommentPostRequestType {
+  activityId: string;
+  rate: number;
+  content: string;
 }

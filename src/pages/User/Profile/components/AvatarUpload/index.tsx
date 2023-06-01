@@ -224,17 +224,15 @@ export default function AvatarUpload() {
 
       {/* current avatar */}
       <Stack spacing={2} direction="row" alignItems="flex-end">
-        <Avatar
-          src={currentAvatar}
-          sx={{
-            width: 200, height: 200, border: '4px solid white', backgroundColor: 'white',
-          }}
-        />
-
-        {/* upload button */}
-        <Button component="label" onClick={() => setDisplay(true)}>
-          更改頭像
+        <Button onClick={() => setDisplay(true)}>
+          <Avatar
+            src={currentAvatar}
+            sx={{
+              width: '100%', height: 'auto', border: '4px solid white', backgroundColor: 'white',
+            }}
+          />
         </Button>
+
       </Stack>
     </>
   );
