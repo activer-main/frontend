@@ -69,7 +69,6 @@ export interface SearchHistoryRequestType extends SegmentRequestType {
 
 export enum CommentSortbyUnion {
   ADDTIME = 'AddTime',
-  ModifiedAt = 'ModifiedAt',
 }
 
 export interface ActivityCommentRequestType extends SegmentRequestType {

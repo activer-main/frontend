@@ -76,7 +76,10 @@ function Haeder() {
           : (
             <Button
               startIcon={<LoginIcon />}
-              onClick={() => navigate('/login')}
+              onClick={() => {
+                sessionStorage.setItem('next', location.pathname);
+                navigate('/login');
+              }}
               variant="text"
             >
               登入 / 註冊

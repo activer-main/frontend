@@ -122,6 +122,12 @@ export const activityApi = createApi({
       }),
       invalidatesTags: [{ type: 'Activity', id: 'Comment' }],
     }),
+    getCommentfilterValue: builder.query<string[], void>({
+      query: () => ({
+        url: 'commment/filterValue',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -137,4 +143,5 @@ export const {
   useGetActivityCommentQuery,
   usePostActivityCommentMutation,
   useDeleteActivityCommentMutation,
+  useGetCommentfilterValueQuery,
 } = activityApi;
