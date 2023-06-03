@@ -35,7 +35,7 @@ export default function PersistentDrawerLeft() {
   };
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" sx={{ pb: 2 }}>
       <Paper sx={{ p: 4, mb: 3 }} component="form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={2} md={1} sx={{ mr: 2 }}>

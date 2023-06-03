@@ -101,7 +101,7 @@ function History() {
   };
 
   return (
-    <Paper sx={{ width: '100%', p: 2, mb: 2 }}>
+    <Paper sx={{ width: '100%', p: 2 }}>
       {/* Toolbar */}
       <HistoryToolbar
         numSelected={selected.length}
