@@ -66,7 +66,7 @@ export const userApi = createApi({
       }),
       providesTags: ['SearchHistory'],
     }),
-    deletSearchHistory: builder.mutation<void, { ids: string[] }>({
+    deletSearchHistory: builder.mutation<void, { ids?: string[] }>({
       query: (params) => ({
         url: 'search/history',
         method: 'DELETE',

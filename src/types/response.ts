@@ -47,5 +47,6 @@ export interface ErrorResponseType {
 
 export interface ActivityCommentResponseType extends SegmentResponseType {
   activityId: string;
-  searchData: CommentDataType[]
+  searchData: CommentDataType[];
+  userComment: CommentDataType | null;
 }

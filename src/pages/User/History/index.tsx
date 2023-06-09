@@ -101,7 +101,7 @@ function History() {
   };
 
   return (
-    <Paper sx={{ width: '100%' }}>
+    <Paper sx={{ width: '100%', p: 2 }}>
       {/* Toolbar */}
       <HistoryToolbar
         numSelected={selected.length}
@@ -123,6 +123,12 @@ function History() {
           <TableBody>
             {isGettingSearchHistory
               && times(parseInt(searchParams.get('countPerPage') || '5', 10), (index) => <HistoryRowSkeleton key={index} />)}
+
+            {(!historyData?.searchData || !(historyData?.searchData.length > 0)) && (
+              <TableRow>
+                <TableCell colSpan={5} sx={{ textAlign: 'center' }}>暫無搜尋資料</TableCell>
+              </TableRow>
+            )}
 
             {historyData?.searchData && historyData.searchData.map((row, index) => {
               const isItemSelected = isSelected(row.id);
