@@ -1,6 +1,4 @@
-import qs from 'qs';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { URL } from 'utils/apiURL';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { ActivityDataType } from 'types/data';
 import {
   ActivityCommentResponseType, ActivityResponseType,
@@ -8,22 +6,13 @@ import {
 } from 'types/response';
 import { ActivityStatusRequestType, ActivitiesRequestType, SearchRequestType } from 'types/request';
 import _ from 'lodash';
+import customFetchBaseQuery from 'store/customFetchBaseQuery';
+import { URL } from 'utils/apiURL';
 import { ActivityCommentPostRequestType, ActivityCommentRequestType } from '../../types/request';
 
 export const activityApi = createApi({
   reducerPath: 'activityApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: URL.concat('/api/activity'),
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem('userToken');
-      if (token) {
-        // include token in req header
-        headers.set('Authorization', `Bearer ${token}`);
-      }
-      return headers;
-    },
-    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
-  }),
+  baseQuery: customFetchBaseQuery({ baseUrl: URL.concat('/api/activity') }),
   tagTypes: ['Activity'],
   endpoints: (builder) => ({
 

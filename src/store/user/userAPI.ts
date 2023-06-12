@@ -13,6 +13,26 @@ const userRequest = axios.create(
     headers: {
       Authorization: `Bearer ${localStorage.getItem('userToken')}`,
     },
+    transformResponse: [
+      (data) => {
+        let response;
+
+        try {
+          response = JSON.parse(data);
+        } catch (error) {
+          throw Error(`[requestClient] Error parsing response JSON data - ${JSON.stringify(error)}`);
+        }
+
+        if (response.Success) {
+          return response.Data;
+        }
+        return {
+          statusCode: response.StatusCode,
+          message: response.Message,
+          error: response.Error,
+        };
+      },
+    ],
   },
 );
 

@@ -1,24 +1,14 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { URL } from 'utils/apiURL';
+import { createApi } from '@reduxjs/toolkit/query/react';
+
 import { UserInfoType, ProfessionType, LocationType } from 'types/user';
 import { SearchHistoryResponseType } from 'types/response';
-import qs from 'qs';
+import customFetchBaseQuery from 'store/customFetchBaseQuery';
+import { URL } from 'utils/apiURL';
 import { UserUpdateRequestType, SearchHistoryRequestType } from '../../types/request';
 
 export const userApi = createApi({
   reducerPath: 'userApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: URL.concat('/api/user'),
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem('userToken');
-      if (token) {
-        // include token in req header
-        headers.set('Authorization', `Bearer ${token}`);
-      }
-      return headers;
-    },
-    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
-  }),
+  baseQuery: customFetchBaseQuery({ baseUrl: URL.concat('/api/user') }),
   tagTypes: ['User', 'SearchHistory'],
   endpoints: (builder) => ({
 

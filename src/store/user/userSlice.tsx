@@ -102,7 +102,8 @@ const userSlice = createSlice({
             changed: false,
             userToken: payload.token,
           });
-        },
+        }
+        ,
       )
 
     // Success: token login

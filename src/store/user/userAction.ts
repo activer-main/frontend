@@ -35,7 +35,7 @@ LoginRequestType
       const { data } = await postLogin(loginBody);
       return data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.data);
     }
   },
 );

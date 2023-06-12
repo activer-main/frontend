@@ -43,9 +43,9 @@ export default function HeroSwiper() {
         navigation
         modules={[Pagination, Navigation]}
       >
-        {trendData
-          ? trendData.searchData?.map((data) => (
-            <SwiperSlide style={{ width: 798, marginRight: 16 }} key={`slide-${data.id}`}>
+        {trendData && trendData.searchData
+          ? trendData.searchData.map((data, index) => (
+            <SwiperSlide style={{ width: 798, marginRight: 16 }} key={`slide-trend-${index}`}>
               <Link to={`/detail/${data.id}`}>
                 <Box sx={{
                   position: 'relative', width: 798, overflow: 'hidden', borderRadius: '1.5em',
