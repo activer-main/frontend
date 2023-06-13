@@ -3,6 +3,7 @@ import {
 } from '@reduxjs/toolkit/dist/query';
 import { FetchBaseQueryArgs } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import qs from 'qs';
+import { toast } from 'react-toastify';
 
 export type SuccessResponse = {
   Data:unknown
@@ -42,6 +43,8 @@ const customFetchBaseQuery = ({ ...props }:FetchBaseQueryArgs) => fetchBaseQuery
     if (parseResponse.Success) {
       return parseResponse.Data;
     }
+    console.log(parseResponse.Error.InnerException);
+    toast.error(parseResponse.Error.InnerException);
     return {
       statusCode: parseResponse.StatusCode,
       message: parseResponse.Message,

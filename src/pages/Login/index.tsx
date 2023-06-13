@@ -47,9 +47,6 @@ export default function Login() {
         } else {
           navigate('/');
         }
-      })
-      .catch((error: ErrorResponse) => {
-        toast(error.error.Message);
       });
   });
 

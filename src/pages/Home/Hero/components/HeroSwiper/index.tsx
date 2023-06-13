@@ -57,7 +57,7 @@ export default function HeroSwiper() {
             </SwiperSlide>
           ))
           : _.times(3, (index) => (
-            <SwiperSlide>
+            <SwiperSlide key={`slide-skeleton-${index}`}>
               <Box sx={{
                 position: 'relative', width: 798, overflow: 'hidden', borderRadius: '1.5em',
               }}

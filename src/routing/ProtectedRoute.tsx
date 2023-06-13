@@ -5,7 +5,6 @@ import { Navigate, Outlet } from 'react-router-dom';
 import Loading from 'components/Loading';
 import { toast } from 'react-toastify';
 import { Divider } from '@mui/material';
-import Header from 'components/Header';
 import { useTokenLoginQuery } from 'store/user/endpoints/tokenLogin';
 
 function ProtectedRoute() {
@@ -32,7 +31,7 @@ function ProtectedRoute() {
   // returns child route elements
   return (
     <>
-      <Header />
+
       <Divider sx={{ mb: 2 }} />
       <Outlet />
     </>
