@@ -7,16 +7,15 @@ import {
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'store';
 import { selectUpdateUserInfo, selectUserInfo, setUserInfo } from 'store/user/userSlice';
-import { useGetManageActivityQuery } from 'store/activity/activityService';
 import TagIcon from '@mui/icons-material/Tag';
 import { toast } from 'react-toastify';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { USERNAME_HELPERTEXT, USERNAME_PATTERN } from 'utils/pattern';
-import { UserUpdateRequestType } from 'types/request';
-import { useUpdateUserMutation } from 'store/user/userService';
+import { UserUpdateRequestType, useUpdateUserMutation } from 'store/user/endpoints/updateUser';
+import { useGetManageActivityQuery } from 'store/activity/endpoints/getActivities';
 import AvatarUpload from './Profile/components/AvatarUpload';
 
-export default function PersistentDrawerLeft() {
+export default function User() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const dispatch = useAppDispatch();

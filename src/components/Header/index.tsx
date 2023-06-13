@@ -1,5 +1,4 @@
 import React from 'react';
-import { useAppSelector } from 'store';
 import Button from '@mui/material/Button';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -7,8 +6,9 @@ import LoginIcon from '@mui/icons-material/Login';
 import {
   Container, Stack, Typography, useMediaQuery, useTheme,
 } from '@mui/material';
+import { useAppSelector } from 'store';
+import { selectUserInfo } from 'store/user/userSlice';
 import Logo from './Logo';
-
 import Navigation from './Navigation';
 import UserAvatar from './UserAvatar';
 import MobileNavigation from './MobileNavigation';
@@ -16,8 +16,7 @@ import MobileNavigation from './MobileNavigation';
 function Haeder() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { userInfo } = useAppSelector((state) => state.user);
-
+  const userInfo = useAppSelector(selectUserInfo);
   // scroll to top
   const location = useLocation();
   React.useEffect(() => {
@@ -69,8 +68,6 @@ function Haeder() {
             : <MobileNavigation />}
         </Stack>
 
-        {/* Login-out */}
-
         {userInfo
           ? <UserAvatar />
           : (
@@ -85,6 +82,7 @@ function Haeder() {
               登入 / 註冊
             </Button>
           )}
+
       </Box>
 
     </Container>

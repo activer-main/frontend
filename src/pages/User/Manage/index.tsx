@@ -8,7 +8,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useDeleteManageActivityMutation, useGetManageActivityQuery, usePostActivityStatusMutation } from 'store/activity/activityService';
 import TagIcon from '@mui/icons-material/Tag';
 import NearMeIcon from '@mui/icons-material/NearMe';
 import { orderByUnion, sortByUnion } from 'types/request';
@@ -24,6 +23,9 @@ import {
 import { times } from 'lodash';
 import { statusUnion } from 'types/data';
 import { format, parseISO } from 'date-fns';
+import { useGetManageActivityQuery } from 'store/activity/endpoints/getActivities';
+import { useDeleteManageActivityMutation } from 'store/activity/endpoints/deleteManageActivities';
+import { usePostActivityStatusMutation } from 'store/activity/endpoints/postActivityStatus';
 import ManageToolbar from './ManageToolbar';
 import ManageHead from './ManageHead';
 import ManageRowSkeleton from './ManageRowSkeleton';
@@ -55,14 +57,17 @@ export const manageLoader:LoaderFunction = ({ request }) => {
   return null;
 };
 
-function EnhancedTable() {
-  const [selected, setSelected] = React.useState<string[]>([]);
+function Manage() {
+  // hook init
+  const navigate = useNavigate();
   const [updateStatus] = usePostActivityStatusMutation();
   const [deleteManageActivities] = useDeleteManageActivityMutation();
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // table cell selected state
+  const [selected, setSelected] = React.useState<string[]>([]);
 
   // fetch data by params
-  const [searchParams, setSearchParams] = useSearchParams();
   const orderBy = searchParams.get('orderBy') as orderByUnion || orderByUnion.DESC;
   const sortBy = searchParams.get('sortBy') as sortByUnion || sortByUnion.CREATEDAT;
   const tags = searchParams.getAll('tags');
@@ -285,4 +290,4 @@ function EnhancedTable() {
   );
 }
 
-export default EnhancedTable;
+export default Manage;

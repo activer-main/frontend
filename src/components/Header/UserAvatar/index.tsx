@@ -20,7 +20,7 @@ import HistoryIcon from '@mui/icons-material/History';
 export default function UserAvatar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { username, avatar } = useAppSelector(selectUserInfo)!;
+  const userInfo = useAppSelector(selectUserInfo);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -65,7 +65,7 @@ export default function UserAvatar() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             endIcon={<ArrowDropDownIcon />}
-            startIcon={<Avatar sx={{ width: 32, height: 32 }} src={avatar || username || undefined} alt={username || 'avatar'} />}
+            startIcon={<Avatar sx={{ width: 32, height: 32 }} src={userInfo?.avatar || userInfo?.username || undefined} alt={userInfo?.username || 'avatar'} />}
           />
         </Tooltip>
       </Box>

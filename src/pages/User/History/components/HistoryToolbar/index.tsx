@@ -5,8 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { alpha } from '@mui/material/styles';
-import { useDeletSearchHistoryMutation } from 'store/user/userService';
 import { Button } from '@mui/material';
+import { useDeleteSearchHistoryMutation } from 'store/user/endpoints/deleteSearchHistory';
 
 interface HistoryToolbarType {
   numSelected: number;
@@ -15,7 +15,7 @@ interface HistoryToolbarType {
 
 export default function HistoryToolbar(props: HistoryToolbarType) {
   const { numSelected, onDelete } = props;
-  const [deleteHistory] = useDeletSearchHistoryMutation();
+  const [deleteHistory] = useDeleteSearchHistoryMutation();
 
   return (
     <Toolbar

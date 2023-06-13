@@ -6,12 +6,12 @@ import { useConfirm } from 'material-ui-confirm';
 import React from 'react';
 import { CommentDataType } from 'types/data';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { useDeleteActivityCommentMutation } from 'store/activity/activityService';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
 import { useAppSelector } from 'store';
 import { selectUserInfo } from 'store/user/userSlice';
 import { format, parseISO } from 'date-fns';
+import { useDeleteActivityCommentMutation } from 'store/activity/endpoints/comment';
 
 interface CommentItemType extends CommentDataType {
   onOpen: () => void

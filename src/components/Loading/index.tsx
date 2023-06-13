@@ -1,16 +1,17 @@
 import React from 'react';
 import './index.scss';
+import { Container } from '@mui/material';
 
 function Loading() {
   return (
-    <div className="loading-body">
+    <Container>
       <div className="wrap">
         <div className="loading">
           <div className="bounceball" />
           <div className="text">LOADING...</div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 }
 

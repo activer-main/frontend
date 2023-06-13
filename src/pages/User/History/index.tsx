@@ -20,12 +20,13 @@ import * as React from 'react';
 import {
   useNavigate, useSearchParams,
 } from 'react-router-dom';
-import { useDeletSearchHistoryMutation as useDeleteSearchHistoryMutation, useGetSearchHistoryQuery } from 'store/user/userService';
 import { orderByUnion } from 'types/request';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import { grey } from '@mui/material/colors';
 import { useConfirm } from 'material-ui-confirm';
 import { toast } from 'react-toastify';
+import { useGetSearchHistoryQuery } from 'store/user/endpoints/getSearchHistory';
+import { useDeleteSearchHistoryMutation } from 'store/user/endpoints/deleteSearchHistory';
 import HistoryToolbar from './components/HistoryToolbar';
 import HistoryRowSkeleton from './components/HistoryRowSkeleton';
 import HistoryHead from './components/HistoryHead';

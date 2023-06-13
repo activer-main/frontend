@@ -9,8 +9,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from 'store';
-import { userLogin } from 'store/user/userAction';
+import { useAppSelector } from 'store';
 import { toast } from 'react-toastify';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { selectUserInfo } from 'store/user/userSlice';
@@ -23,32 +22,33 @@ import { IconButton, Link } from '@mui/material';
 import {
   EMAIL_HELPERTEXT, EMAIL_PATTERN,
 } from 'utils/pattern';
+import { LoginRequest, useLoginMutation } from 'store/user/endpoints/login';
+import { ErrorResponse } from 'store/customFetchBaseQuery';
 
 export default function Login() {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userInfo = useAppSelector(selectUserInfo);
   const { loading } = useAppSelector((state) => state.user);
   const [showPassword, setShowPassword] = React.useState(false);
   const {
     register, handleSubmit, formState: { errors },
-  } = useForm();
+  } = useForm<LoginRequest>();
+  const [login] = useLoginMutation();
 
-  const onSubmit = (data: any) => {
-    dispatch(userLogin(data))
+  const onSubmit = handleSubmit((data) => {
+    login(data)
       .unwrap()
+      /* redirect if previous browsing */
       .then(() => {
         const next = sessionStorage.getItem('next');
         if (next) {
           navigate(next);
+          sessionStorage.removeItem('next');
         } else {
           navigate('/');
         }
-      })
-      .catch((error: any) => {
-        toast(error.message);
       });
-  };
+  });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -81,7 +81,7 @@ export default function Login() {
         </Typography>
         <Box
           component="form"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={onSubmit}
           sx={{ mt: 1 }}
         >
           <TextField

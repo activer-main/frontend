@@ -2,15 +2,12 @@ import {
   createSlice, isAnyOf, PayloadAction,
 } from '@reduxjs/toolkit';
 import { redirect } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import type { RootState } from 'store';
-import { LoginResponseType } from 'types/response';
-import { UserUpdateRequestType } from 'types/request';
 import { UserDataType, UserInfoType } from '../../types/user';
-import { userApi } from './userService';
-import {
-  registerUser, userLogin, verifyUser,
-} from './userAction';
+import { UserUpdateRequestType } from './endpoints/updateUser';
+import { tokenLoginApi } from './endpoints/tokenLogin';
+import { loginApi } from './endpoints/login';
+import { signupApi } from './endpoints/signup';
 
 // initialize userToken from local storage
 export const userToken = localStorage.getItem('userToken')
@@ -43,10 +40,6 @@ const userSlice = createSlice({
         changed: false,
       });
     },
-    setCredentials: (state, action: PayloadAction<LoginResponseType>) => ({
-      ...state,
-      userInfo: action.payload.user,
-    }),
     setUserInfo: (state, action: PayloadAction<{
       key: keyof UserInfoType,
       value:any
@@ -65,96 +58,28 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      // Success: Register
-      .addCase(registerUser.fulfilled, (state, { payload }) => {
+    // set token for login and signup
+      .addMatcher(isAnyOf(
+        signupApi.endpoints.signup.matchFulfilled,
+        loginApi.endpoints.login.matchFulfilled,
+      ), (state, { payload }) => {
         localStorage.setItem('userToken', payload.token.accessToken!);
-        toast.success('註冊成功');
-        return ({
-          ...state,
-          loading: false,
-          success: true,
-          userToken: payload.token,
-          userInfo: payload.user,
-        });
+        return state;
       })
-
-      // Success: verify
-      .addCase(
-        verifyUser.fulfilled,
-        (state, { payload }) => ({
-          ...state,
-          loading: false,
-          success: true,
-          userInfo: payload.user,
-          userToken: payload.token,
-        }),
-      )
-
-    // Success: login
-      .addCase(
-        userLogin.fulfilled,
-        (state, { payload }) => {
-          localStorage.setItem('userToken', payload.token.accessToken!);
-          return ({
-            ...state,
-            loading: false,
-            userInfo: payload.user,
-            changed: false,
-            userToken: payload.token,
-          });
-        },
-      )
 
     // Success: token login
       .addMatcher(
-        userApi.endpoints.getAuthtoken.matchFulfilled,
+        tokenLoginApi.endpoints.tokenLogin.matchFulfilled,
         (state, { payload }) => ({
           ...state,
           userInfo: payload,
           changed: false,
         }),
-      )
-
-      // Success: avatar upload
-      .addMatcher(
-        userApi.endpoints.updateAvatar.matchFulfilled,
-        (state) => {
-          toast.success('使用者頭像上傳成功');
-          return state;
-        },
-      )
-
-      // Pending:
-      .addMatcher(
-        isAnyOf(
-          registerUser.pending,
-          userLogin.pending,
-          verifyUser.pending,
-        ),
-        (state) => ({
-          ...state,
-          loading: true,
-          error: null,
-        }),
-      )
-
-      // reject
-      .addMatcher(isAnyOf(
-        registerUser.rejected,
-        userLogin.rejected,
-        verifyUser.rejected,
-      ), (state, { payload }) => {
-        toast.error(payload as any);
-        return ({
-          ...state,
-          loading: false,
-          error: payload,
-        });
-      });
+      );
   },
 });
 
-export const { logout, setCredentials, setUserInfo } = userSlice.actions;
+export const { logout, setUserInfo } = userSlice.actions;
 export const selectUserData = (state: RootState) => state.user;
 export const selectUserInfo = (state: RootState) => state.user.userInfo;
 export const selectUpdateUserInfo = (state: RootState): UserUpdateRequestType => ({

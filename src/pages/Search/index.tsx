@@ -34,7 +34,7 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import HistoryIcon from '@mui/icons-material/History';
 import SearchIcon from '@mui/icons-material/Search';
 import { toast } from 'react-toastify';
-import { useGetSearchActivityQuery } from 'store/activity/activityService';
+import { useSearchQuery } from 'store/activity/endpoints/search';
 import TagManage from './TagManage';
 import SearchResult from './components/SearchResult';
 import SearchTagSelect from './components/SearchTagSelect';
@@ -58,7 +58,7 @@ function Search() {
   const { data: areaTagData, isLoading: isGettingAreaTag } = useGetTagsQuery({ type: ['area'] });
   const {
     data: searchData, isLoading, isError, error,
-  } = useGetSearchActivityQuery({
+  } = useSearchQuery({
     keyword: searchParams.get('keyword') || '',
     tags: searchParams.getAll('tags') || [],
     date: searchParams.get('date') || '',

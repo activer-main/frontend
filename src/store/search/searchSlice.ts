@@ -3,7 +3,7 @@ import { RootState } from 'store';
 import { TagDataType } from 'types/data';
 import _, { cloneDeep, remove } from 'lodash';
 import { format } from 'date-fns';
-import { activityApi } from 'store/activity/activityService';
+import { searchApi } from 'store/activity/endpoints/search';
 
 interface SearchStateType {
   keyword: string;
@@ -131,7 +131,7 @@ const searchSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
-        activityApi.endpoints.getSearchActivity.matchFulfilled,
+        searchApi.endpoints.search.matchFulfilled,
         (state, { payload }) => {
           const newState: SearchStateType = {
             keyword: payload.keyword || '',

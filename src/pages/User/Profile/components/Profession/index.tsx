@@ -5,8 +5,8 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { useAppDispatch, useAppSelector } from 'store';
 import { selectUserInfo, setUserInfo } from 'store/user/userSlice';
-import { useLazyGetProfessionsQuery } from 'store/user/userService';
 import { CircularProgress } from '@mui/material';
+import { useLazyGetProfessionsQuery } from 'store/user/endpoints/getProfessions';
 
 export default function Profession() {
   const dispatch = useAppDispatch();

@@ -1,4 +1,4 @@
-const IP = 'danny10132024-andes.nord';
+const IP = 'danny10132024-alps.nord';
 const PORT = '5070';
 
 export const URL = `http://${IP}:${PORT}`;
