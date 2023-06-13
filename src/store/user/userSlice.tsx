@@ -5,12 +5,12 @@ import { redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { RootState } from 'store';
 import { LoginResponseType } from 'types/response';
-import { UserUpdateRequestType } from 'types/request';
 import { UserDataType, UserInfoType } from '../../types/user';
-import { userApi } from './userService';
 import {
   registerUser, userLogin, verifyUser,
 } from './userAction';
+import { authLoginApi } from './endpoints/authLogin';
+import { UserUpdateRequestType } from './endpoints/updateUser';
 
 // initialize userToken from local storage
 export const userToken = localStorage.getItem('userToken')
@@ -108,21 +108,12 @@ const userSlice = createSlice({
 
     // Success: token login
       .addMatcher(
-        userApi.endpoints.getAuthtoken.matchFulfilled,
+        authLoginApi.endpoints.authLogin.matchFulfilled,
         (state, { payload }) => ({
           ...state,
           userInfo: payload,
           changed: false,
         }),
-      )
-
-      // Success: avatar upload
-      .addMatcher(
-        userApi.endpoints.updateAvatar.matchFulfilled,
-        (state) => {
-          toast.success('使用者頭像上傳成功');
-          return state;
-        },
       )
 
       // Pending:

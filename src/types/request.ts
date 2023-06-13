@@ -16,16 +16,6 @@ export type LoginRequestType = {
   password: string,
 };
 
-export type UserUpdateRequestType = {
-  username?: string | null;
-  gender? : string | null;
-  birthday?: string | null;
-  professions? : string[] | null;
-  phone?: string | null;
-  county?: string | null;
-  area?: string | null
-};
-
 export type VerifyRequestType = {
   verifyCode: string,
 };
@@ -61,10 +51,6 @@ export type ResetPasswordRequestType = {
 export interface TagsRequestType {
   key?: string;
   type?: string[];
-}
-
-export interface SearchHistoryRequestType extends SegmentRequestType {
-  orderBy: orderByUnion;
 }
 
 export enum CommentSortbyUnion {

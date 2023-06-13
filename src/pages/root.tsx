@@ -5,11 +5,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ThemeProvider } from '@mui/material';
 import { ConfirmProvider } from 'material-ui-confirm';
 import { theme } from 'styles/theme';
-import { useGetAuthtokenQuery } from 'store/user/userService';
 import Loading from 'components/Loading';
+import { useAuthLoginQuery } from 'store/user/endpoints/authLogin';
 
 function Root() {
-  const { isLoading, isError } = useGetAuthtokenQuery(undefined, {
+  const { isLoading, isError } = useAuthLoginQuery(undefined, {
     pollingInterval: 2000000,
   });
 

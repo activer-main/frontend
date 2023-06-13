@@ -14,7 +14,6 @@ import {
   FormControl, InputLabel, MenuItem, Paper, Typography,
 } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import { useUpdateUserMutation } from 'store/user/userService';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
@@ -24,7 +23,7 @@ import {
   PHONE_HELPERTEXT,
   PHONE_PATTERN,
 } from 'utils/pattern';
-import { UserUpdateRequestType } from 'types/request';
+import { UserUpdateRequestType, useUpdateUserMutation } from 'store/user/endpoints/updateUser';
 import Location from './components/Location';
 import Profession from './components/Profession';
 
@@ -34,8 +33,8 @@ function Profile() {
   const {
     phone, birthday, gender,
   } = userInfo!;
-  const { register, handleSubmit, formState: { errors } } = useForm<UserUpdateRequestType>();
   const [updateUser, { isLoading }] = useUpdateUserMutation();
+  const { register, handleSubmit, formState: { errors } } = useForm<UserUpdateRequestType>();
 
   const updateUserInfo = useAppSelector(selectUpdateUserInfo);
   const { changed } = useAppSelector(selectUserData);

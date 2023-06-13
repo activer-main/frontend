@@ -1,9 +1,8 @@
-import { UserInfoType } from 'types/user';
 import axios from 'axios';
 import { LoginResponseType, RegisterResponseType } from 'types/response';
 import {
   RegisterRequestType, LoginRequestType,
-  UserUpdateRequestType, VerifyRequestType, ResetPasswordRequestType,
+  VerifyRequestType, ResetPasswordRequestType,
 } from 'types/request';
 import { URL } from 'utils/apiURL';
 
@@ -68,13 +67,6 @@ LoginResponseType>(
 // Resend Verify
 export const getResendVerifyEmail = () => userRequest.get<void>(
   'resendVerifyEmail',
-);
-
-export const patchUserData = (
-  newUserInfo : UserUpdateRequestType,
-) => userRequest.patch<UserInfoType>(
-  '',
-  newUserInfo,
 );
 
 export const forgetPassword = (email: string) => userRequest.get<void>(

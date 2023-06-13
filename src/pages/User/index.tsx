@@ -12,8 +12,7 @@ import TagIcon from '@mui/icons-material/Tag';
 import { toast } from 'react-toastify';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { USERNAME_HELPERTEXT, USERNAME_PATTERN } from 'utils/pattern';
-import { UserUpdateRequestType } from 'types/request';
-import { useUpdateUserMutation } from 'store/user/userService';
+import { UserUpdateRequestType, useUpdateUserMutation } from 'store/user/endpoints/updateUser';
 import AvatarUpload from './Profile/components/AvatarUpload';
 
 export default function PersistentDrawerLeft() {

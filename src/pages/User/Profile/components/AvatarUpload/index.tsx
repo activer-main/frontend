@@ -13,8 +13,8 @@ import ReactCrop, {
 import 'react-image-crop/dist/ReactCrop.css';
 import { toast } from 'react-toastify';
 import { useAppSelector } from 'store';
-import { useUpdateAvatarMutation } from 'store/user/userService';
 import { selectUserInfo } from 'store/user/userSlice';
+import { useUpdateAvatarMutation } from 'store/user/endpoints/updateAvatar';
 import { canvasPreview } from './canvasPreview';
 import { useDebounceEffect } from './useDebounceEffect';
 
@@ -84,6 +84,7 @@ export default function AvatarUpload() {
           formData.append('file', blob, 'avatar.png');
           updateAvatar(formData)
             .unwrap()
+            .then(() => toast.success('使用者頭像上傳成功'))
             .then(() => setCurrentAvatar(avatar?.concat(`?${new Date().getTime()}`)))
             .then(() => setDisplay(false));
         }

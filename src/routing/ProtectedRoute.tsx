@@ -2,14 +2,14 @@
 import React from 'react';
 import { useAppSelector } from 'store';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useGetAuthtokenQuery } from 'store/user/userService';
 import Loading from 'components/Loading';
 import { toast } from 'react-toastify';
 import { Divider } from '@mui/material';
 import Header from 'components/Header';
+import { useAuthLoginQuery } from 'store/user/endpoints/authLogin';
 
 function ProtectedRoute() {
-  const { isLoading } = useGetAuthtokenQuery();
+  const { isLoading } = useAuthLoginQuery();
 
   const { userInfo } = useAppSelector((state) => state.user);
 

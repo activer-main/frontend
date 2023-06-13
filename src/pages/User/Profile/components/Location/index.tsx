@@ -7,8 +7,8 @@ import {
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'store';
 import { selectUserInfo, setUserInfo } from 'store/user/userSlice';
-import { useLazyGetLocationsQuery } from 'store/user/userService';
 import { LocationType } from 'types/user';
+import { useLazyGetLocationsQuery } from 'store/user/endpoints/getLocations';
 
 function Location() {
   const { county, area } = useAppSelector(selectUserInfo)!;
