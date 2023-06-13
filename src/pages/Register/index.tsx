@@ -8,10 +8,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Container from '@mui/material/Container';
-import { useAppDispatch, useAppSelector } from 'store';
+import { useAppSelector } from 'store';
 import { selectUserData } from 'store/user/userSlice';
 import { toast } from 'react-toastify';
-import { registerUser } from 'store/user/userAction';
 import { useNavigate } from 'react-router-dom';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Link from '@mui/material/Link';
@@ -28,9 +27,9 @@ import {
   EMAIL_PATTERN, PASSWORD_HELPERTEXT, PASSWORD_PATTERN, USERNAME_HELPERTEXT, USERNAME_PATTERN,
 } from 'utils/pattern';
 import { useForm } from 'react-hook-form';
+import { SignupRequest, useSignupMutation } from 'store/user/endpoints/signup';
 
 export default function Register() {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -38,7 +37,8 @@ export default function Register() {
   const { loading } = useAppSelector(selectUserData);
   const {
     register, handleSubmit, watch, formState: { errors },
-  } = useForm();
+  } = useForm<SignupRequest>();
+  const [signup] = useSignupMutation();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
@@ -47,14 +47,14 @@ export default function Register() {
     event.preventDefault();
   };
 
-  const onSubmit = (data: any) => {
-    dispatch(registerUser(data))
+  const onSubmit = handleSubmit((data) => {
+    signup(data)
       .unwrap()
       .then(() => {
         navigate('/user/profile');
       })
       .catch((error: any) => toast.error(error.message));
-  };
+  });
 
   return (
     <Container component="main" maxWidth="xs">
@@ -73,7 +73,7 @@ export default function Register() {
         <Typography component="h1" variant="h4">
           註冊
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
+        <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField

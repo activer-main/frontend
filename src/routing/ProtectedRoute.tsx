@@ -6,10 +6,10 @@ import Loading from 'components/Loading';
 import { toast } from 'react-toastify';
 import { Divider } from '@mui/material';
 import Header from 'components/Header';
-import { useAuthLoginQuery } from 'store/user/endpoints/authLogin';
+import { useTokenLoginQuery } from 'store/user/endpoints/tokenLogin';
 
 function ProtectedRoute() {
-  const { isLoading } = useAuthLoginQuery();
+  const { isLoading } = useTokenLoginQuery();
 
   const { userInfo } = useAppSelector((state) => state.user);
 

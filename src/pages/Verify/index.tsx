@@ -1,22 +1,21 @@
-import { getResendVerifyEmail } from 'store/user/userAPI';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAppDispatch, useAppSelector } from 'store';
-import { verifyUser } from 'store/user/userAction';
+import { useAppSelector } from 'store';
 import {
   Container, Typography, TextField, Stack, Avatar, Box,
 } from '@mui/material';
-import { selectUserData, selectUserInfo } from 'store/user/userSlice';
+import { selectUserInfo } from 'store/user/userSlice';
 import { LoadingButton } from '@mui/lab';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useVerifyMutation } from 'store/user/endpoints/verify';
+import { useLazyResendVerifyEmailQuery } from 'store/user/endpoints/resendVerifyEmail';
 
 function Verify() {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userInfo = useAppSelector(selectUserInfo);
-  const { loading, error } = useAppSelector(selectUserData);
-  const [resendLoading, setResendLoading] = React.useState(false);
+  const [verify, { isLoading: isVerifying }] = useVerifyMutation();
+  const [resendVerify, { isLoading: isResending }] = useLazyResendVerifyEmailQuery();
 
   React.useEffect(() => () => {
     if (!userInfo) {
@@ -32,23 +31,16 @@ function Verify() {
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const target = event.target as typeof event.target & { verifyCode: { value: string } };
-    await dispatch(
-      verifyUser({
-        verifyCode: target.verifyCode.value,
-      }),
-    ).unwrap().then(() => toast.success('驗證成功'))
-      .catch(() => toast.error(error.message));
+    verify({
+      verifyCode: target.verifyCode.value,
+    })
+      .unwrap().then(() => toast.success('驗證成功'));
   };
 
-  const handleResend = async () => {
-    try {
-      setResendLoading(true);
-      await getResendVerifyEmail()
-        .then(() => setResendLoading(false));
-      toast.success('已發送驗證碼至信箱');
-    } catch (e: any) {
-      toast.error(e.message);
-    }
+  const handleResend = () => {
+    resendVerify({})
+      .unwrap()
+      .then(() => toast.success('已發送驗證碼至信箱'));
   };
 
   return (
@@ -86,14 +78,14 @@ function Verify() {
           <LoadingButton
             type="submit"
             variant="contained"
-            loading={loading}
+            loading={isVerifying}
           >
             驗證
 
           </LoadingButton>
 
           <LoadingButton
-            loading={resendLoading}
+            loading={isResending}
             type="button"
             variant="outlined"
             onClick={handleResend}

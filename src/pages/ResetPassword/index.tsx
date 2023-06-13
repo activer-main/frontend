@@ -9,33 +9,30 @@ import { LoadingButton } from '@mui/lab';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { PASSWORD_HELPERTEXT, PASSWORD_PATTERN } from 'utils/pattern';
-import { resetPassword } from 'store/user/userAPI';
+import { useLazyResetPasswordQuery } from 'store/user/endpoints/resetPassword';
+import { ResetPasswordRequestType } from 'types/request';
 
 function ResetPassword() {
   const {
     register, handleSubmit, formState: { errors },
-  } = useForm();
+  } = useForm<ResetPasswordRequestType>();
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [resetPassword, { isLoading: isSending }] = useLazyResetPasswordQuery();
   const searchParams = useSearchParams()[0];
 
-  const onSubmit = async (data: any) => {
-    setLoading(true);
+  const onSubmit = handleSubmit((data) => {
     if ((!searchParams.get('email')) || (!searchParams.get('token'))) {
       toast.error('參數錯誤，請提供token及電子郵件');
     } else {
-      await resetPassword({
+      resetPassword({
         email: searchParams.get('email')!,
         password: data.password,
         token: searchParams.get('token')!,
       })
-        .then(() => setLoading(false))
-        .then(() => toast.success('成功更新密碼!'))
-        .catch((e: any) => {
-          toast.error(e.response.data.message);
-        });
+        .unwrap()
+        .then(() => toast.success('成功更新密碼!'));
     }
-  };
+  });
 
   return (
     <Container component="main" maxWidth="xs">
@@ -56,7 +53,7 @@ function ResetPassword() {
         </Typography>
         <Box
           component="form"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={onSubmit}
           sx={{ mt: 1 }}
         >
           <TextField
@@ -77,7 +74,7 @@ function ResetPassword() {
           />
 
           <LoadingButton
-            loading={loading}
+            loading={isSending}
             type="submit"
             fullWidth
             variant="contained"

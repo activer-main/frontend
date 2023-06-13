@@ -5,21 +5,6 @@ export interface SegmentRequestType {
   countPerPage?: number;
 }
 
-export interface RegisterRequestType {
-  username: string,
-  email: string,
-  password: string
-}
-
-export type LoginRequestType = {
-  email: string,
-  password: string,
-};
-
-export type VerifyRequestType = {
-  verifyCode: string,
-};
-
 export interface SearchRequestType extends SegmentRequestType {
   keyword: string,
   tags?: string[],

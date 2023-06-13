@@ -1,9 +1,9 @@
 import { UserInfoType } from 'types/user';
 import { userApi } from '../userService';
 
-export const authLoginApi = userApi.injectEndpoints({
+export const tokenLoginApi = userApi.injectEndpoints({
   endpoints: (builder) => ({
-    authLogin: builder.query<UserInfoType, void>({
+    tokenLogin: builder.query<UserInfoType, void>({
       query: () => ({
         url: '',
         method: 'GET',
@@ -14,4 +14,4 @@ export const authLoginApi = userApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useAuthLoginQuery } = authLoginApi;
+export const { useTokenLoginQuery } = tokenLoginApi;

@@ -9,6 +9,7 @@ export const updateAvatarApi = userApi.injectEndpoints({
         body,
         responseHandler: (response) => response.text(),
       }),
+      invalidatesTags: ['User'],
     }),
   }),
   overrideExisting: false,

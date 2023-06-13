@@ -6,10 +6,10 @@ import { ThemeProvider } from '@mui/material';
 import { ConfirmProvider } from 'material-ui-confirm';
 import { theme } from 'styles/theme';
 import Loading from 'components/Loading';
-import { useAuthLoginQuery } from 'store/user/endpoints/authLogin';
+import { useTokenLoginQuery } from 'store/user/endpoints/tokenLogin';
 
 function Root() {
-  const { isLoading, isError } = useAuthLoginQuery(undefined, {
+  const { isLoading, isError } = useTokenLoginQuery(undefined, {
     pollingInterval: 2000000,
   });
 

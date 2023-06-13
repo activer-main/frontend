@@ -4,6 +4,19 @@ import {
 import { FetchBaseQueryArgs } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import qs from 'qs';
 
+export type SuccessResponse = {
+  Data:unknown
+};
+
+export type ErrorResponse = {
+  statusCode: number;
+  message: string;
+  error: {
+    InnerException: string;
+    Message: string;
+  }
+};
+
 const customFetchBaseQuery = ({ ...props }:FetchBaseQueryArgs) => fetchBaseQuery({
   ...props,
   prepareHeaders: (headers) => {
@@ -14,7 +27,9 @@ const customFetchBaseQuery = ({ ...props }:FetchBaseQueryArgs) => fetchBaseQuery
     }
     return headers;
   },
+  // use repeat format for array search params
   paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
+  // transform response
   responseHandler: async (response) => {
     const text = await response.text();
     let parseResponse;

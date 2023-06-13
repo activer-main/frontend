@@ -9,25 +9,20 @@ import { LoadingButton } from '@mui/lab';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { EMAIL_HELPERTEXT, EMAIL_PATTERN } from 'utils/pattern';
-import { forgetPassword } from 'store/user/userAPI';
+import { ForgetPasswrodRequest, useLazyForgetPasswordQuery } from 'store/user/endpoints/forgetPassword';
 
 function ForgetPassword() {
   const {
     register, handleSubmit, formState: { errors },
-  } = useForm();
+  } = useForm<ForgetPasswrodRequest>();
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [forgetPassword, { isLoading: isSending }] = useLazyForgetPasswordQuery();
 
-  const onSubmit = async (data: any) => {
-    setLoading(true);
-    await forgetPassword(data.email)
-      .then(() => setLoading(false))
-      .then(() => toast.success('若電子郵件地址正確，已將驗證信傳至信箱中!'))
-      .catch((e: any) => {
-        setLoading(false);
-        toast.error(e.data.message);
-      });
-  };
+  const onSubmit = handleSubmit((data) => {
+    forgetPassword(data)
+      .unwrap()
+      .then(() => toast.success('若電子郵件地址正確，已將驗證信傳至信箱中!'));
+  });
 
   return (
     <Container component="main" maxWidth="xs">
@@ -48,7 +43,7 @@ function ForgetPassword() {
         </Typography>
         <Box
           component="form"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={onSubmit}
           sx={{ mt: 1 }}
         >
           <TextField
@@ -71,7 +66,7 @@ function ForgetPassword() {
           />
 
           <LoadingButton
-            loading={loading}
+            loading={isSending}
             type="submit"
             fullWidth
             variant="contained"

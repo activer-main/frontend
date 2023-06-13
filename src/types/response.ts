@@ -23,12 +23,6 @@ export interface SearchResponseType extends SegmentResponseType {
   searchData: ActivityDataType[];
 }
 
-export interface LoginResponseType {
-  user: UserInfoType;
-  token: TokenType;
-}
-export type RegisterResponseType = LoginResponseType;
-
 export interface ManageFilterValueResponseType {
   tags: TagDataType[];
   status: string[];
