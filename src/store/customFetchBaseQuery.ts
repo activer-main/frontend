@@ -43,7 +43,6 @@ const customFetchBaseQuery = ({ ...props }:FetchBaseQueryArgs) => fetchBaseQuery
     if (parseResponse.Success) {
       return parseResponse.Data;
     }
-    console.log(parseResponse.Error.InnerException);
     toast.error(parseResponse.Error.InnerException);
     return {
       statusCode: parseResponse.StatusCode,

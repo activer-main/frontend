@@ -17,9 +17,10 @@ import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
 import { CardActionArea, CircularProgress, Skeleton } from '@mui/material';
-import { useDeleteManageActivityMutation, usePostActivityStatusMutation } from 'store/activity/activityService';
 import { toast } from 'react-toastify';
 import { ErrorResponseType } from 'types/response';
+import { usePostActivityStatusMutation } from 'store/activity/endpoints/postActivityStatus';
+import { useDeleteManageActivityMutation } from 'store/activity/endpoints/deleteManageActivities';
 
 export interface CardType {
   id: string;

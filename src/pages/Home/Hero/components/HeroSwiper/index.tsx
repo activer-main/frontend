@@ -10,9 +10,9 @@ import './index.scss';
 import { Pagination, Navigation } from 'swiper';
 
 import { Link } from 'react-router-dom';
-import { useGetActivitiesQuery } from 'store/activity/activityService';
 import { orderByUnion, sortByUnion } from 'types/request';
 import _ from 'lodash';
+import { useGetActivitiesQuery } from 'store/activity/endpoints/getActivities';
 
 export default function HeroSwiper() {
   const { data: trendData } = useGetActivitiesQuery({

@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import {
   Button, Chip, Grid, Pagination, Skeleton, Stack, useMediaQuery, useTheme,
 } from '@mui/material';
-import { useGetActivitiesQuery } from 'store/activity/activityService';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import { LoaderFunction, redirect, useSearchParams } from 'react-router-dom';
@@ -12,6 +11,7 @@ import { MainCard } from 'components/Card';
 import { sortByUnion, orderByUnion } from 'types/request';
 import { toast } from 'react-toastify';
 import { times } from 'lodash';
+import { useGetActivitiesQuery } from 'store/activity/endpoints/getActivities';
 
 export const surfLoader: LoaderFunction = ({ request }) => {
   const { searchParams } = new URL(request.url);

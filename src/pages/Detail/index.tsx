@@ -19,16 +19,14 @@ import {
   Skeleton, Tooltip, Typography, useMediaQuery, useTheme,
 } from '@mui/material';
 import { activityTypeToColor } from 'utils/activityTypeToColor';
-import {
-  useDeleteManageActivityMutation,
-  useGetActivityByIdQuery,
-  usePostActivityStatusMutation,
-} from 'store/activity/activityService';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DnsIcon from '@mui/icons-material/Dns';
 import _ from 'lodash';
+import { useGetActivityByIdQuery } from 'store/activity/endpoints/getActivityById';
+import { usePostActivityStatusMutation } from 'store/activity/endpoints/postActivityStatus';
+import { useDeleteManageActivityMutation } from 'store/activity/endpoints/deleteManageActivities';
 import BranchTabs from './components/BranchTabs';
 import Comment from './components/Comment';
 

@@ -1,16 +1,17 @@
 import React from 'react';
-import { ActivityCommentRequestType, CommentSortbyUnion, orderByUnion } from 'types/request';
+import { CommentSortbyUnion, orderByUnion } from 'types/request';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import CommentIcon from '@mui/icons-material/Comment';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import { useParams } from 'react-router-dom';
-import { useGetActivityByIdQuery, useGetActivityCommentQuery } from 'store/activity/activityService';
 import {
   Box, Button, Divider, Grid, MenuItem, Pagination, Select, Skeleton, Stack, Typography,
 } from '@mui/material';
 import { useAppSelector } from 'store';
 import { selectUserInfo } from 'store/user/userSlice';
+import { useGetActivityByIdQuery } from 'store/activity/endpoints/getActivityById';
+import { ActivityCommentRequestType, useGetActivityCommentQuery } from 'store/activity/endpoints/comment';
 import CommentDialog from './CommentDialog';
 import CommentItem from './CommentItem';
 

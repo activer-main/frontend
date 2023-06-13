@@ -13,7 +13,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppSelector } from 'store';
-import { usePostActivityCommentMutation } from 'store/activity/activityService';
+import { usePostActivityCommentMutation } from 'store/activity/endpoints/comment';
 import { selectUserInfo } from 'store/user/userSlice';
 
 interface CommentModalType {
