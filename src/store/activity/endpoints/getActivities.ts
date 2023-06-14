@@ -33,6 +33,7 @@ const getActivitiesApi = activityApi.injectEndpoints({
         method: 'GET',
         params,
       }),
+      providesTags: [{ type: 'Activity', id: 'List' }, { type: 'Activity', id: 'Manage' }],
     }),
 
     // get manange page's activities

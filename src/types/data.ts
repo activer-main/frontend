@@ -34,7 +34,8 @@ export interface ActivityDataType {
   sources: string[] | null;
   branches: BranchDataType[];
   tags: ActivityTagDataType[] | null;
-
+  totalUserVote:number;
+  userVote: number;
 }
 
 export interface ManageActivityDataType {

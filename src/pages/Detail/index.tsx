@@ -13,7 +13,7 @@ import {
   Checkbox,
   Chip, CircularProgress,
   Container,
-  Divider, Grid, Link, List,
+  Divider, Grid, IconButton, Link, List,
   ListItem, ListItemIcon, ListItemText,
   ListSubheader,
   Skeleton, Tooltip, Typography, useMediaQuery, useTheme,
@@ -27,6 +27,10 @@ import _ from 'lodash';
 import { useGetActivityByIdQuery } from 'store/activity/endpoints/getActivityById';
 import { usePostActivityStatusMutation } from 'store/activity/endpoints/postActivityStatus';
 import { useDeleteManageActivityMutation } from 'store/activity/endpoints/deleteManageActivities';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { useVoteActivityMutation } from 'store/activity/endpoints/voteActivity';
+import { toast } from 'react-toastify';
 import BranchTabs from './components/BranchTabs';
 import Comment from './components/Comment';
 
@@ -39,6 +43,7 @@ function Detail() {
   const { data, isLoading } = useGetActivityByIdQuery(id as string);
   const [updateStatus, { isLoading: isUpdating }] = usePostActivityStatusMutation();
   const [deleteStatus, { isLoading: isDeleting }] = useDeleteManageActivityMutation();
+  const [voteActivity] = useVoteActivityMutation();
 
   const {
     id: activityId,
@@ -53,6 +58,8 @@ function Detail() {
     holders,
     status,
     branches,
+    totalUserVote,
+    userVote,
   } = data || {};
 
   const handleClickStatus = () => {
@@ -61,6 +68,22 @@ function Detail() {
     } else {
       updateStatus({ id: activityId!, status: '願望' as statusUnion });
     }
+  };
+
+  const handleClickVote = (requestUserVote: number) => {
+    if (!activityId) {
+      toast.error('發生錯誤! 無活動ID!');
+      return;
+    }
+
+    voteActivity({
+      id: activityId,
+      userVote: requestUserVote,
+    })
+      .unwrap()
+      .then(() => toast.success(
+        '投票成功!',
+      ));
   };
 
   return (
@@ -92,7 +115,24 @@ function Detail() {
 
             {/* Title */}
             <Grid item xs>
-              <Typography variant="h4" component="h1">{ isLoading ? <Skeleton width="100%" /> : title}</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <IconButton size="large" onClick={() => handleClickVote(1)} color={userVote === 1 ? 'secondary' : undefined}>
+
+                    <ArrowDropUpIcon />
+                  </IconButton>
+                  <IconButton size="large" onClick={() => handleClickVote(0)} color={userVote === 0 ? 'secondary' : undefined}>
+
+                    <Typography>{totalUserVote}</Typography>
+                  </IconButton>
+                  <IconButton size="large" onClick={() => handleClickVote(-1)} color={userVote === -1 ? 'secondary' : undefined}>
+                    <ArrowDropDownIcon />
+                  </IconButton>
+                </Box>
+
+                <Typography variant="h4" component="h1">{ isLoading ? <Skeleton width="100%" /> : title}</Typography>
+
+              </Box>
             </Grid>
 
             {/* SubTitle */}
