@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router-dom';
+import {
+  useRouteError, isRouteErrorResponse, useNavigate, Navigate,
+} from 'react-router-dom';
 import Header from 'components/Header';
 import { Button, Container, Typography } from '@mui/material';
 
@@ -74,6 +76,12 @@ function ErrorBoundary() {
     // eslint-disable-next-line
     console.error(error);
   }, []);
+
+  if (errorCode === 401) {
+    return (
+      <Navigate to="/login" />
+    );
+  }
 
   return (
     <div className="error">

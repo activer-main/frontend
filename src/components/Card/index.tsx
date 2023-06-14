@@ -19,8 +19,6 @@ import { activityTypeToColor } from 'utils/activityTypeToColor';
 import { CardActionArea, CircularProgress, Skeleton } from '@mui/material';
 import { usePostActivityStatusMutation } from 'store/activity/endpoints/postActivityStatus';
 import { useDeleteManageActivityMutation } from 'store/activity/endpoints/deleteManageActivities';
-import { useAppSelector } from 'store';
-import { selectUserInfo } from 'store/user/userSlice';
 
 export interface CardType {
   id: string;
@@ -133,16 +131,11 @@ export function MainCard({ ...props }: ActivityDataType) {
   const {
     title, tags, images, trend, id, content, status,
   } = props;
-  const userInfo = useAppSelector(selectUserInfo);
   const navigate = useNavigate();
   const [updateStatus, { isLoading: isUpdating }] = usePostActivityStatusMutation();
   const [deleteStatus, { isLoading: isDeleting }] = useDeleteManageActivityMutation();
 
   const handleClickStatus = () => {
-    if (!userInfo) {
-      navigate('/login');
-    }
-
     if (status === statusUnion.DREAM) {
       deleteStatus([id]);
     } else if (status === null) {

@@ -5,6 +5,7 @@ import { userApi } from './user/userService';
 import searchReducer from './search/searchSlice';
 import { activityApi } from './activity/activityService';
 import { tagApi } from './tag/tagService';
+import { authErrorMiddleware } from './authErrorMiddleware';
 
 const store = configureStore({
   reducer: {
@@ -15,9 +16,11 @@ const store = configureStore({
     [tagApi.reducerPath]: tagApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+    .concat(authErrorMiddleware)
     .concat(userApi.middleware)
     .concat(activityApi.middleware)
     .concat(tagApi.middleware),
+
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

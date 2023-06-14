@@ -10,7 +10,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useForm } from 'react-hook-form';
 import { useAppSelector } from 'store';
-import { toast } from 'react-toastify';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { selectUserInfo } from 'store/user/userSlice';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -23,7 +22,6 @@ import {
   EMAIL_HELPERTEXT, EMAIL_PATTERN,
 } from 'utils/pattern';
 import { LoginRequest, useLoginMutation } from 'store/user/endpoints/login';
-import { ErrorResponse } from 'store/customFetchBaseQuery';
 
 export default function Login() {
   const navigate = useNavigate();
