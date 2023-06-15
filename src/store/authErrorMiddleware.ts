@@ -9,7 +9,7 @@ export const authErrorMiddleware: Middleware = () => (next) => (action) => {
     }
 
     if (action.payload && action.payload.originalStatus === 401) {
-      window.location.replace('/login');
+      window.location.href = '/login';
     }
     return next(action);
   }
