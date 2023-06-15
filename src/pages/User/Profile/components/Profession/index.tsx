@@ -15,6 +15,7 @@ export default function Profession() {
   return (
     <Stack spacing={3} sx={{ width: '100%' }}>
       <Autocomplete
+        filterSelectedOptions
         onOpen={() => {
           getProfessionData(undefined, true);
         }}
