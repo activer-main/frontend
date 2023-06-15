@@ -1,10 +1,10 @@
-import { userApi } from '../userService';
+import { api, userBaseUrl } from '../../service';
 
-export const updateAvatarApi = userApi.injectEndpoints({
+export const updateAvatarApi = api.injectEndpoints({
   endpoints: (builder) => ({
     updateAvatar: builder.mutation<void, FormData >({
       query: (body) => ({
-        url: 'avatar',
+        url: `${userBaseUrl}avatar`,
         method: 'POST',
         body,
         responseHandler: (response) => response.text(),

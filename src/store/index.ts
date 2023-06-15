@@ -1,26 +1,19 @@
 import { PreloadedState, combineReducers, configureStore } from '@reduxjs/toolkit';
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import userReducer from './user/userSlice';
-import { userApi } from './user/userService';
 import searchReducer from './search/searchSlice';
-import { activityApi } from './activity/activityService';
-import { tagApi } from './tag/tagService';
 import { authErrorMiddleware } from './authErrorMiddleware';
+import { api } from './service';
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     search: searchReducer,
-    [userApi.reducerPath]: userApi.reducer,
-    [activityApi.reducerPath]: activityApi.reducer,
-    [tagApi.reducerPath]: tagApi.reducer,
+    [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
     .concat(authErrorMiddleware)
-    .concat(userApi.middleware)
-    .concat(activityApi.middleware)
-    .concat(tagApi.middleware),
-
+    .concat(api.middleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
@@ -37,9 +30,7 @@ export default store;
 // for test
 const rootReducer = combineReducers({
   auth: userReducer,
-  [userApi.reducerPath]: userApi.reducer,
-  [activityApi.reducerPath]: activityApi.reducer,
-  [tagApi.reducerPath]: tagApi.reducer,
+  [api.reducerPath]: api.reducer,
 });
 
 export function setupStore(preloadedState?: PreloadedState<TestRootState>) {
@@ -47,9 +38,7 @@ export function setupStore(preloadedState?: PreloadedState<TestRootState>) {
     reducer: rootReducer,
     preloadedState,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
-      .concat(userApi.middleware)
-      .concat(tagApi.middleware)
-      .concat(activityApi.middleware),
+      .concat(api.middleware),
   });
 }
 

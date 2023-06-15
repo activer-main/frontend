@@ -1,11 +1,11 @@
 import { ProfessionType } from 'types/user';
-import { userApi } from '../userService';
+import { api, userBaseUrl } from '../../service';
 
-export const getProfessionsApi = userApi.injectEndpoints({
+export const getProfessionsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getProfessions: builder.query<ProfessionType[], void>({
       query: () => ({
-        url: 'professions',
+        url: `${userBaseUrl}professions`,
         method: 'GET',
       }),
     }),

@@ -1,10 +1,10 @@
-import { userApi } from '../userService';
+import { api, userBaseUrl } from '../../service';
 
-const resendVerifyEmailApi = userApi.injectEndpoints({
+const resendVerifyEmailApi = api.injectEndpoints({
   endpoints: (builder) => ({
     resendVerifyEmail: builder.query({
       query: () => ({
-        url: 'resendVerifyEmail',
+        url: `${userBaseUrl}resendVerifyEmail`,
       }),
     }),
   }),

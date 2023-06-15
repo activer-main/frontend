@@ -1,7 +1,7 @@
 import { SegmentResponseType } from 'types/response';
 import { CommentDataType } from 'types/data';
 import { CommentSortbyUnion, SegmentRequestType, orderByUnion } from 'types/request';
-import { activityApi } from '../activityService';
+import { activityBaseUrl, api } from '../../service';
 
 export interface ActivityCommentResponseType extends SegmentResponseType {
   activityId: string;
@@ -21,11 +21,11 @@ export interface ActivityCommentPostRequestType {
   content: string;
 }
 
-const commentApi = activityApi.injectEndpoints({
+const commentApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getActivityComment: builder.query <ActivityCommentResponseType, ActivityCommentRequestType>({
       query: (params) => ({
-        url: 'comment',
+        url: `${activityBaseUrl}comment`,
         method: 'GET',
         params,
       }),
@@ -33,7 +33,7 @@ const commentApi = activityApi.injectEndpoints({
     }),
     postActivityComment: builder.mutation<void, ActivityCommentPostRequestType>({
       query: (body) => ({
-        url: 'comment',
+        url: `${activityBaseUrl}comment`,
         method: 'POST',
         body,
       }),
@@ -41,7 +41,7 @@ const commentApi = activityApi.injectEndpoints({
     }),
     deleteActivityComment: builder.mutation<void, string>({
       query: (id) => ({
-        url: `comment/${id}`,
+        url: `${activityBaseUrl}comment/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: [{ type: 'Activity', id: 'Comment' }],

@@ -1,11 +1,11 @@
 import { UserInfoType } from 'types/user';
-import { userApi } from '../userService';
+import { api, userBaseUrl } from '../../service';
 
-export const tokenLoginApi = userApi.injectEndpoints({
+export const tokenLoginApi = api.injectEndpoints({
   endpoints: (builder) => ({
     tokenLogin: builder.query<UserInfoType, void>({
       query: () => ({
-        url: '',
+        url: `${userBaseUrl}`,
         method: 'GET',
       }),
       providesTags: ['User'],

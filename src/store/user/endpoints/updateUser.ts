@@ -1,5 +1,5 @@
 import { UserInfoType } from 'types/user';
-import { userApi } from '../userService';
+import { userBaseUrl, api } from '../../service';
 
 export type UserUpdateRequestType =
 {
@@ -12,11 +12,11 @@ export type UserUpdateRequestType =
   area?: string | null
 };
 
-export const updataUserApi = userApi.injectEndpoints({
+export const updataapi = api.injectEndpoints({
   endpoints: (builder) => ({
     updateUser: builder.mutation<UserInfoType, UserUpdateRequestType>({
       query: (body) => ({
-        url: '',
+        url: `${userBaseUrl}`,
         method: 'PATCH',
         body,
       }),
@@ -26,4 +26,4 @@ export const updataUserApi = userApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useUpdateUserMutation } = updataUserApi;
+export const { useUpdateUserMutation } = updataapi;

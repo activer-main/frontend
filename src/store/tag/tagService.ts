@@ -1,21 +1,18 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { TagDataType } from 'types/data';
-import customFetchBaseQuery from 'store/customFetchBaseQuery';
-import { URL } from 'utils/apiURL';
+import { api, tagBaseUrl } from 'store/service';
 import { TagsRequestType } from '../../types/request';
 
-export const tagApi = createApi({
-  reducerPath: 'tagApi',
-  baseQuery: customFetchBaseQuery({ baseUrl: URL.concat('/api/tag') }),
+export const tagApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getTags: builder.query<TagDataType[], TagsRequestType>({
       query: (params) => ({
-        url: '',
+        url: `${tagBaseUrl}`,
         method: 'GET',
         params,
       }),
     }),
   }),
+  overrideExisting: false,
 });
 
 export const {

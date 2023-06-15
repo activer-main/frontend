@@ -1,10 +1,10 @@
-import { activityApi } from '../activityService';
+import { activityBaseUrl, api } from '../../service';
 
-const getCommentFilterApi = activityApi.injectEndpoints({
+const getCommentFilterApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getCommentfilterValue: builder.query<string[], void>({
       query: () => ({
-        url: 'commment/filterValue',
+        url: `${activityBaseUrl}commment/filterValue`,
         method: 'GET',
       }),
     }),

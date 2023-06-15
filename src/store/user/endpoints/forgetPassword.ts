@@ -1,14 +1,14 @@
-import { userApi } from '../userService';
+import { api, userBaseUrl } from '../../service';
 
 export type ForgetPasswrodRequest = {
   email: string
 };
 
-const forgetPasswordApi = userApi.injectEndpoints({
+const forgetPasswordApi = api.injectEndpoints({
   endpoints: (builder) => ({
     forgetPassword: builder.query<void, ForgetPasswrodRequest>({
       query: (params) => ({
-        url: 'resetPassword',
+        url: `${userBaseUrl}resetPassword`,
         params,
       }),
     }),

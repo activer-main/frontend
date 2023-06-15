@@ -35,6 +35,8 @@ import HistoryIcon from '@mui/icons-material/History';
 import SearchIcon from '@mui/icons-material/Search';
 import { toast } from 'react-toastify';
 import { useSearchQuery } from 'store/activity/endpoints/search';
+import { getSearchHistoryApi } from 'store/user/endpoints/getSearchHistory';
+import { orderByUnion } from 'types/request';
 import TagManage from './TagManage';
 import SearchResult from './components/SearchResult';
 import SearchTagSelect from './components/SearchTagSelect';
@@ -84,6 +86,7 @@ function Search() {
       prevSearchParam.set('date', searchState.date);
       return prevSearchParam;
     });
+    getSearchHistoryApi.util.updateQueryData('getSearchHistory', { orderBy: orderByUnion.DESC }, () => {});
   };
 
   React.useEffect(() => {

@@ -1,7 +1,7 @@
 import { ActivityDataType, TagDataType } from 'types/data';
 import { SegmentRequestType, orderByUnion } from 'types/request';
 import { SegmentResponseType } from 'types/response';
-import { activityApi } from '../activityService';
+import { activityBaseUrl, api } from '../../service';
 
 export interface SearchResponseType extends SegmentResponseType {
   keyword: string | null;
@@ -17,11 +17,11 @@ export interface SearchRequestType extends SegmentRequestType {
   orderBy?: orderByUnion,
 }
 
-export const searchApi = activityApi.injectEndpoints({
+export const searchApi = api.injectEndpoints({
   endpoints: (builder) => ({
     search: builder.query<SearchResponseType, SearchRequestType>({
       query: (request) => ({
-        url: 'search',
+        url: `${activityBaseUrl}search`,
         method: 'GET',
         params: request,
       }),

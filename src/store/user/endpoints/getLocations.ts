@@ -1,11 +1,11 @@
 import { LocationType } from 'types/user';
-import { userApi } from '../userService';
+import { api, userBaseUrl } from '../../service';
 
-export const getLocationApi = userApi.injectEndpoints({
+export const getLocationApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getLocations: builder.query<LocationType[], void>({
       query: () => ({
-        url: 'locations',
+        url: `${userBaseUrl}locations`,
         method: 'GET',
       }),
     }),

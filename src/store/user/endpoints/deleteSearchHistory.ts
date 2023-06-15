@@ -1,14 +1,14 @@
-import { userApi } from '../userService';
+import { api, userBaseUrl } from '../../service';
 
 type DeleteSearchHistoryRequest = {
   ids?: string[]
 };
 
-export const deleteSearchHistoryApi = userApi.injectEndpoints({
+export const deleteSearchHistoryApi = api.injectEndpoints({
   endpoints: (builder) => ({
     deleteSearchHistory: builder.mutation<void, DeleteSearchHistoryRequest >({
       query: (params) => ({
-        url: 'search/history',
+        url: `${userBaseUrl}search/history`,
         method: 'DELETE',
         params,
       }),

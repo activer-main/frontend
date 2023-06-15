@@ -1,5 +1,5 @@
 import { TokenType, UserInfoType } from 'types/user';
-import { userApi } from '../userService';
+import { api, userBaseUrl } from '../../service';
 
 export type LoginResponse = {
   user: UserInfoType;
@@ -11,11 +11,11 @@ export type LoginRequest = {
   password: string,
 };
 
-export const loginApi = userApi.injectEndpoints({
+export const loginApi = api.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({
-        url: 'login',
+        url: `${userBaseUrl}login`,
         method: 'POST',
         body,
       }),

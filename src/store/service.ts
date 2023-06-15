@@ -4,6 +4,8 @@ import {
 import { FetchBaseQueryArgs } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import qs from 'qs';
 import { toast } from 'react-toastify';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { URL } from 'utils/apiURL';
 
 export type SuccessResponse = {
   Data:unknown
@@ -52,4 +54,17 @@ const customFetchBaseQuery = ({ ...props }:FetchBaseQueryArgs) => fetchBaseQuery
   },
 });
 
-export default customFetchBaseQuery;
+export const userBaseUrl = 'api/user/';
+export const activityBaseUrl = 'api/activity/';
+export const tagBaseUrl = 'api/tag/';
+
+export const api = createApi({
+  reducerPath: 'api',
+  baseQuery: customFetchBaseQuery({ baseUrl: URL }),
+  tagTypes: [
+    'User',
+    'SearchHistory',
+    'Activity',
+  ],
+  endpoints: () => ({}),
+});

@@ -1,12 +1,12 @@
 import { ActivityDataType } from 'types/data';
-import { activityApi } from '../activityService';
+import { activityBaseUrl, api } from '../../service';
 
-const getActivityById = activityApi.injectEndpoints({
+const getActivityById = api.injectEndpoints({
   endpoints: (builder) => ({
     // get activity by id
     getActivityById: builder.query<ActivityDataType, string>({
       query: (id) => ({
-        url: `${id}`,
+        url: `${activityBaseUrl}${id}`,
         method: 'GET',
       }),
       providesTags: (result, error, id) => [{ type: 'Activity', id }],

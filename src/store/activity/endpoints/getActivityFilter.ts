@@ -1,17 +1,17 @@
 import { TagDataType } from 'types/data';
-import { activityApi } from '../activityService';
+import { activityBaseUrl, api } from '../../service';
 
 export interface ManageFilterValueResponseType {
   tags: TagDataType[];
   status: string[];
 }
 
-const getActivityFilter = activityApi.injectEndpoints({
+const getActivityFilter = api.injectEndpoints({
   endpoints: (builder) => ({
     // get manage page's filter
     getFilterValue: builder.query<ManageFilterValueResponseType, void>({
       query: () => ({
-        url: 'activityFilterValue',
+        url: `${activityBaseUrl}activityFilterValue`,
         method: 'GET',
       }),
       providesTags: [{ type: 'Activity', id: 'Filter' }],

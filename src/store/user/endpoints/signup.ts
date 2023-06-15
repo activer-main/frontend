@@ -1,4 +1,4 @@
-import { userApi } from '../userService';
+import { api, userBaseUrl } from '../../service';
 import { LoginResponse } from './login';
 
 export type SignupRequest = {
@@ -10,11 +10,11 @@ export type SignupRequest = {
 
 export type SignupResponse = LoginResponse;
 
-export const signupApi = userApi.injectEndpoints({
+export const signupApi = api.injectEndpoints({
   endpoints: (builder) => ({
     signup: builder.mutation<SignupResponse, SignupRequest>({
       query: (body) => ({
-        url: 'signup',
+        url: `${userBaseUrl}signup`,
         method: 'POST',
         body: {
           username: body.username,

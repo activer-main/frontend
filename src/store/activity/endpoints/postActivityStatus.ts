@@ -1,17 +1,17 @@
 import { ActivityDataType } from 'types/data';
-import { activityApi } from '../activityService';
+import { activityBaseUrl, api } from '../../service';
 
 export type ActivityStatusRequestType = {
   id: ActivityDataType['id'];
   status: ActivityDataType['status']
 };
 
-const postActivityStatusApi = activityApi.injectEndpoints({
+const postActivityStatusApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // update activitiy's status
     postActivityStatus: builder.mutation<void, ActivityStatusRequestType>({
       query: (params) => ({
-        url: 'activityStatus',
+        url: `${activityBaseUrl}activityStatus`,
         method: 'POST',
         params,
       }),

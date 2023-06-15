@@ -1,15 +1,15 @@
-import { activityApi } from '../activityService';
+import { activityBaseUrl, api } from '../../service';
 
 export type VoteRequest = {
   id: string;
   userVote: number;
 };
 
-const voteActivityApi = activityApi.injectEndpoints({
+const voteapi = api.injectEndpoints({
   endpoints: (builder) => ({
     voteActivity: builder.mutation<void, VoteRequest>({
       query: (body) => ({
-        url: `vote/${body.id}`,
+        url: `${activityBaseUrl}vote/${body.id}`,
         body: {
           userVote: body.userVote,
         },
@@ -23,4 +23,4 @@ const voteActivityApi = activityApi.injectEndpoints({
 
 export const {
   useVoteActivityMutation,
-} = voteActivityApi;
+} = voteapi;

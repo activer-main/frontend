@@ -1,7 +1,7 @@
 import { SegmentResponseType } from 'types/response';
 import { SegmentRequestType, orderByUnion, sortByUnion } from 'types/request';
 import { ActivityDataType } from 'types/data';
-import { activityApi } from '../activityService';
+import { activityBaseUrl, api } from '../../service';
 
 export type ActivitiesRequestType = {
   tags?: string[];
@@ -14,12 +14,12 @@ export type ActivityResponseType = {
   searchData: ActivityDataType[] | null;
 } & SegmentResponseType;
 
-const getActivitiesApi = activityApi.injectEndpoints({
+const getActivitiesApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // get multiple activities
     getActivities: builder.query<ActivityResponseType, ActivitiesRequestType>({
       query: (params) => ({
-        url: '',
+        url: `${activityBaseUrl}`,
         method: 'GET',
         params,
       }),
@@ -29,7 +29,7 @@ const getActivitiesApi = activityApi.injectEndpoints({
     // get recommend activities
     getRecommendActivity: builder.query<ActivityResponseType, ActivitiesRequestType>({
       query: (params) => ({
-        url: 'recommend',
+        url: `${activityBaseUrl}recommend`,
         method: 'GET',
         params,
       }),
@@ -39,7 +39,7 @@ const getActivitiesApi = activityApi.injectEndpoints({
     // get manange page's activities
     getManageActivity: builder.query <ActivityResponseType, ActivitiesRequestType>({
       query: (params) => ({
-        url: 'manage',
+        url: `${activityBaseUrl}manage`,
         method: 'GET',
         params,
       }),
